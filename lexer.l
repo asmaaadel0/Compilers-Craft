@@ -71,8 +71,11 @@
 \"[^\"]*\"             { printf("string: %s - line %d\n", yytext, line_number); yylval.str = strdup(yytext); yylval.str = strdup(yytext); return STRING; }
 
 [0-9]+                 { printf("int: %s - line %d\n", yytext, line_number); yylval.num = atoi(yytext); yylval.num = atoi(yytext); return NUM; }
-[0-9]+\.[0-9]+         { printf("foat: %s - line %d\n", yytext, line_number); yylval.float_val= atof(yytext); yylval.float_val= atof(yytext); return FLOAT_DIGIT;}
+[0-9]+\.[0-9]*         { printf("foat: %s - line %d\n", yytext, line_number); yylval.float_val= atof(yytext); yylval.float_val= atof(yytext); return FLOAT;}
 
 [ \t]+                 { /* Ignore spaces */ }                    
 \n                     {numchar++;    line_number++;}
 %%
+int yywrap() {
+    return 1;
+}
