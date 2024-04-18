@@ -1,0 +1,13 @@
+
+
+	PUSH 	 $5
+	PUSH 	 a
+	OVER
+	STORE
+	DROP
+	PUSH 	 a
+	DUP
+	PUSH 	 $1
+	ADD
+	STORE
+¶·¸¹º»¼½¾¿
