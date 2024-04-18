@@ -192,7 +192,7 @@
 
 %%
 PROGRAM:                                                    
-                PROGRAM STATEMENT           {printf("\n Finish Parsing Succesful \n");}
+                PROGRAM STATEMENT           {printf("\nFinish Parsing Line %d Succesfully\n", number_of_line);}
                 |
                 ;
 
@@ -211,9 +211,9 @@ STATEMENT:
                 | ENUM_CALL_STT        
                 | BLOCK
                 | BREAK SEMICOLON_MISS  {StAssJmp("JMP", "END", &SMLabel_End, 0, 0);}
-                | error SEMICOLON       {printf("\n\n=====ERROR====\n ERRONOUS STATEMENT at line %d\n\n", yylineno);pErr(yylineno);}
-                | error '}'             {printf("\n\n=====ERROR====\n ERRONOUS STATEMENT at line %d\n\n", yylineno);pErr(yylineno);}
-                | error ')'             {printf("\n\n=====ERROR====\n ERRONOUS STATEMENT at line %d\n\n", yylineno);pErr(yylineno);}
+                | error SEMICOLON       {printf("\n\nError: ERRONOUS STATEMENT at line %d\n\n", yylineno);pErr(yylineno);}
+                | error '}'             {printf("\n\nError: ERRONOUS STATEMENT at line %d\n\n", yylineno);pErr(yylineno);}
+                | error ')'             {printf("\n\nError: ERRONOUS STATEMENT at line %d\n\n", yylineno);pErr(yylineno);}
                 ;
 
 SEMICOLON_MISS:
@@ -228,8 +228,8 @@ TYPE:
                 ;
 
 DECLARATION_STT:                                                            
-                TYPE    IDENTIFIER  {st_insert($1, $2,"var",0);   assign_index= st_index-1; strcpy(IdentifierHolder, $2);}   DECLARATION_TAIL            { assign_index =-1; printf("#[Parsed_Declaration]# "); }
-                | TYPE  CONSTANT    {st_insert($1, $2,"const",0); assign_index= st_index-1; strcpy(IdentifierHolder, $2);}   DECLARATION_TAIL            {assign_index =-1; printf("#[Parsed_CONST_Declaration]# "); }
+                TYPE    IDENTIFIER  {st_insert($1, $2,"var",0);   assign_index= st_index-1; strcpy(IdentifierHolder, $2);}   DECLARATION_TAIL            { assign_index =-1; }
+                | TYPE  CONSTANT    {st_insert($1, $2,"const",0); assign_index= st_index-1; strcpy(IdentifierHolder, $2);}   DECLARATION_TAIL            { assign_index =-1; }
                 | error IDENTIFIER    SEMICOLON_MISS                                             {printf("\n\n=====ERROR====\n MISSING variable type at line %d\n\n", yylineno);pErr(yylineno);}//Error handler
                 | error CONSTANT      SEMICOLON_MISS                                             {printf("\n\n=====ERROR====\n MISSING constant type at line %d\n\n", yylineno);pErr(yylineno);}//Error handler
                 | TYPE  IDENTIFIER    IDENTIFIER SEMICOLON_MISS                                  {printf("\n\n=====ERROR====\n unexpected identifier %s at line %d\n\n",$3, yylineno);pErr(yylineno);}
