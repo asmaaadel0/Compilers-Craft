@@ -1,6 +1,0 @@
-ID, Line, Scope, Name, Type, DataType, isInit, Value, Args
-0, 1, 0, a, var, int, 0, -, -
-=============
-ID, Line, Scope, Name, Type, DataType, isInit, Value, Args
-0, 1, 0, a, var, int, 1, 5, -
-=============

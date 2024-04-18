@@ -16,22 +16,22 @@
 "enum"                   { printf("Type: %s - line %d\n", yytext, number_of_line);  num_of_words++; num_of_char+=yyleng;  return ENUM;}
 "bool"                   { printf("Type: %s - line %d\n", yytext, number_of_line);  num_of_words++; num_of_char+=yyleng;  return BOOL;}
 
-"print"                  { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return PRINT;}
-"void"                   { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return VOID;}
-"return"                 { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return RETURN;}
+"print"                  { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return PRINT;}
+"void"                   { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return VOID;}
+"return"                 { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return RETURN;}
 
-"switch"                 { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return SWITCH;}
-"break"                  { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return BREAK;}
+"switch"                 { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return SWITCH;}
+"break"                  { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return BREAK;}
 
-"case"                   { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return CASE;}
-"default"                { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return DEFAULT;}
+"case"                   { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return CASE;}
+"default"                { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return DEFAULT;}
 
-"if"                     { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return IF;}
-"else"                   { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return ELSE;}
+"if"                     { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return IF;}
+"else"                   { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return ELSE;}
 
-"for"                    { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return FOR;}
-"while"                  { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return WHILE;}
-"do"                     { printf(" %s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return DO;}
+"for"                    { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return FOR;}
+"while"                  { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return WHILE;}
+"do"                     { printf("%s - line %d\n", yytext, number_of_line); num_of_words++; num_of_char+=yyleng;        return DO;}
 
 "true"                   { printf("Boolean: %s - line %d\n", yytext, number_of_line);  num_of_words++; num_of_char+=yyleng; yylval.bool_val = true; return BOOL_LITERAL;}
 "false"                  { printf("Boolean: %s - line %d\n", yytext, number_of_line);  num_of_words++; num_of_char+=yyleng; yylval.bool_val = false;return BOOL_LITERAL;}     
