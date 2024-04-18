@@ -35,43 +35,38 @@
 "default"         { numwords++; numchar+=yyleng; return DEFAULT; }
 "break"           { numwords++; numchar+=yyleng; return BREAK; }
 
-"true"            { numwords++; numchar+=yyleng; printf("bool: %s - line %d\n", yytext, line_number); yylval.bool_val = true; return TRUE; }
-"false"           { numwords++; numchar+=yyleng; printf("bool: %s - line %d\n", yytext, line_number); yylval.bool_val = false; return FALSE; }
+"true"            { numwords++; numchar+=yyleng; printf("bool: %s - line %d\n", yytext, line_number); yylval.bool_val = true; return BOOL_LITERAL; }
+"false"           { numwords++; numchar+=yyleng; printf("bool: %s - line %d\n", yytext, line_number); yylval.bool_val = false; return BOOL_LITERAL; }
 
-"=="              { numwords++; numchar+=yyleng; return EQ; }
+"=="              { numwords++; numchar+=yyleng; return EQUALITY; }
 "--"              { numwords++; numchar+=yyleng; return DEC; }
 "++"              { numwords++; numchar+=yyleng; return INC; }
-"!="              { numwords++; numchar+=yyleng; return NEQ; }
+"!="              { numwords++; numchar+=yyleng; return NEG_EQUALITY; }
 
 ">"               { numwords++; numchar+=yyleng; return GT; }
 ">="              { numwords++; numchar+=yyleng; return GTE; }
 "<"               { numwords++; numchar+=yyleng; return LT; }
 "<="              { numwords++; numchar+=yyleng; return LTE; }
-"="               { numwords++; numchar+=yyleng; return ASSIGN; }
+"="               { numwords++; numchar+=yyleng; return EQ; }
 ";"               { numwords++; numchar+=yyleng; return SEMICOLON; }
 "%"               { numwords++; numchar+=yyleng; yylval.str = strdup(yytext); return MODULO; }
 "+"               { numwords++; numchar+=yyleng; yylval.str = strdup(yytext); return PLUS; }
 "-"               { numwords++; numchar+=yyleng; return MINUS; }
-"*"               { numwords++; numchar+=yyleng; return MULTIPLY; }
-"/"               { numwords++; numchar+=yyleng; return DIVIDE; }
-"^"               { numwords++; numchar+=yyleng; return POWER; }
+"*"               { numwords++; numchar+=yyleng; return MUL; }
+"/"               { numwords++; numchar+=yyleng; return DIV; }
+"^"               { numwords++; numchar+=yyleng; return POW; }
 
 "!"               { numwords++; numchar+=yyleng; return NOT; }
 "&&"              { numwords++; numchar+=yyleng; return AND; }
 "||"              { numwords++; numchar+=yyleng; return OR; }
 
-"("               { numwords++; numchar+=yyleng; yylval.str = strdup(yytext); return LPAREN; }
-")"               { numwords++; numchar+=yyleng; yylval.str = strdup(yytext); return RPAREN; }
-"{"               { numwords++; numchar+=yyleng; yylval.str = strdup(yytext); return LBRACE; }
-"}"               { numwords++; numchar+=yyleng; yylval.str = strdup(yytext); return RBRACE; }
-","               { numwords++; numchar+=yyleng; yylval.str = strdup(yytext); return COMMA; }
-":"               { numwords++; numchar+=yyleng; yylval.str = strdup(yytext); return COLON; }
+[(){},:]          { numwords++; numchar+=yyleng; yylval.str = strdup(yytext); return *yytext; }
 
-[a-zA-Z_][a-zA-Z0-9_]* { printf("var: %s - line %d\n", yytext, line_number); yylval.str = strdup(yytext); yylval.str = strdup(yytext); return IDENT; }
-\"[^\"]*\"             { printf("string: %s - line %d\n", yytext, line_number); yylval.str = strdup(yytext); yylval.str = strdup(yytext); return STRING; }
+[a-zA-Z_][a-zA-Z0-9_]* { printf("var: %s - line %d\n", yytext, line_number); yylval.str = strdup(yytext); yylval.str = strdup(yytext); return IDENTIFIER; }
+\"[^\"]*\"             { printf("string: %s - line %d\n", yytext, line_number); yylval.str = strdup(yytext); yylval.str = strdup(yytext); return STRING_LITERAL; }
 
-[0-9]+                 { printf("int: %s - line %d\n", yytext, line_number); yylval.num = atoi(yytext); yylval.num = atoi(yytext); return NUM; }
-[0-9]+\.[0-9]*         { printf("foat: %s - line %d\n", yytext, line_number); yylval.float_val= atof(yytext); yylval.float_val= atof(yytext); return FLOAT;}
+[0-9]+                 { printf("int: %s - line %d\n", yytext, line_number); yylval.num = atoi(yytext); yylval.num = atoi(yytext); return DIGIT; }
+[0-9]+\.[0-9]*         { printf("foat: %s - line %d\n", yytext, line_number); yylval.float_val= atof(yytext); yylval.float_val= atof(yytext); return FLOAT_DIGIT;}
 
 [ \t]+                 { /* Ignore spaces */ }                    
 \n                     {numchar++;    line_number++;}
