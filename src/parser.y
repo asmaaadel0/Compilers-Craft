@@ -353,19 +353,21 @@ EXPRESSION:
                 | FLOAT_DIGIT                   
                 | BOOL_LITERAL                  
                 | STRING_LITERAL                
-                | CONSTANT                     
-                | SUB EXPRESSION             
-                | EXPRESSION INC               
-                | EXPRESSION DEC                
-                | EXPRESSION PLUS              
-                | EXPRESSION MODULO            
-                | EXPRESSION SUB                
-                
-                | EXPRESSION MUL                
-                | EXPRESSION DIV                
+                | CONSTANT  
 
-                | EXPRESSION POW              
-                | COMPARISONSTT
+                | COMPARISON
+
+                | EXPRESSION INC               
+                | EXPRESSION DEC     
+
+                | EXPRESSION MODULO EXPRESSION         
+                | EXPRESSION PLUS EXPRESSION           
+                | SUB EXPRESSION             
+                | EXPRESSION SUB EXPRESSION             
+                | EXPRESSION MUL EXPRESSION             
+                | EXPRESSION DIV EXPRESSION              
+                | EXPRESSION POW EXPRESSION
+                            
                 | FUNC_CALL                                
                 | '(' EXPRESSION ')'
                 | ERROR_EXPRESSION           {printf("\nError Expression error at line %d\n", yylineno);pErr(yylineno);}
@@ -378,23 +380,23 @@ ERROR_EXPRESSION:
                 | error POW EXPRESSION          
                 ;
 
-
-
-
-COMPARISONSTT:
+COMPARISON:
                 EXPRESSION GT EXPRESSION                
                 | EXPRESSION LT EXPRESSION              
                 | EXPRESSION LT EQ EXPRESSION           
-                | EXPRESSION GT EQ EXPRESSION          
+                | EXPRESSION GT EQ EXPRESSION  
+
                 | EXPRESSION EQUALITY EXPRESSION       
-                | EXPRESSION NEG_EQUALITY EXPRESSION    
+                | EXPRESSION NEG_EQUALITY EXPRESSION  
+
                 | EXPRESSION LOGIC_AND EXPRESSION     
                 | EXPRESSION LOGIC_OR EXPRESSION        
-                | LOGIC_NOT EXPRESSION               
-                | ERROR_COMPARISONSTT
+                | LOGIC_NOT EXPRESSION   
+                            
+                | ERROR_COMPARISON
                 ;
 
-ERROR_COMPARISONSTT:
+ERROR_COMPARISON:
                 error GT EXPRESSION                                 {printf("\nError Missing left operand before '>' at line %d\n", yylineno);pErr(yylineno);}
                 | EXPRESSION GT error   %prec GT                    {printf("\nError Missing right operand after '>' at line %d\n", yylineno);pErr(yylineno);}
                 | error LT EXPRESSION                               {printf("\nError Missing left operand before '<' at line %d\n", yylineno);pErr(yylineno);}
