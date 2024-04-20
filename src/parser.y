@@ -322,50 +322,26 @@ ENUM_CALL_STATEMENT:
                 ;
 
 //________________________________________________ IF STATEMENT ________________________________________________
-IF_STATEMENT_HELPER:
-                IF EXPRESSION
-                ;
-IF_STATEMENT_HELPER1:
-                ':' BLOCK                                 
-                ;
 IF_STATEMENT:
-                IF_STATEMENT_HELPER IF_STATEMENT_HELPER1                 
-                | IF_STATEMENT_HELPER IF_STATEMENT_HELPER1 ELSE BLOCK    
-                | ERROR_IF_STATEMENT
-                ;
-ERROR_IF_STATEMENT:
-                IF_STATEMENT_HELPER IF_STATEMENT_HELPER1 ELSE error '}' {printf("\nError Missing '{' for the ELSE statement at line %d\n", yylineno);pErr(yylineno);}
-                | IF_STATEMENT_HELPER                               {printf("\nError Missing ':' for the IF statement at line %d\n", yylineno);pErr(yylineno);}        BLOCK
-                | IF       ':'                                {printf("\nError Missing expression for the IF statement at line %d\n", yylineno);pErr(yylineno);} BLOCK
-                | IF_STATEMENT_HELPER ':' error '}'                 {printf("\nError Missing '{' for the IF statement at line %d\n", yylineno);pErr(yylineno);}
+                IF EXPRESSION BLOCK                 
+                | IF EXPRESSION BLOCK ELSE BLOCK    
                 ;
 
 //________________________________________________ WHILE STATEMENT ________________________________________________
 WHILE_STATEMENT:
-                WHILE EXPRESSION WHILEMISS_COLON BLOCK 
-
-                ;
-WHILEMISS_COLON:
-                ':'
-                | ERROR_WHILEMISS_COLON
-                ;
-ERROR_WHILEMISS_COLON:
-                {printf("\nError Missing ':' for the WHILE loop at line %d\n", yylineno);pErr(yylineno);}
+                WHILE EXPRESSION BLOCK 
                 ;
 //________________________________________________ DO WHILE STATEMENT ________________________________________________
 DO_WHILE_STATEMENT:
-                DO BLOCK WHILE '(' EXPRESSION ')'
+                DO BLOCK WHILE '(' EXPRESSION ')' SEMICOLON
                 | ERROR_DO_WHILE
                 ;
 ERROR_DO_WHILE:
-                DO   error                          {printf("\nError Missing DO-Block for the DO-WHILE loop at line %d\n", yylineno);pErr(yylineno);}                              WHILE '(' EXPRESSION ')'
-                | DO BLOCK WHILE error              {printf("\nError Missing opening parenthesis '(' for the DO-WHILE loop at line %d\n", yylineno);pErr(yylineno);}               EXPRESSION ')'
-                | DO BLOCK error                    {printf("\nError Missing WHILE DO-WHILE loop at line %d\n", yylineno);pErr(yylineno);}                                         '(' EXPRESSION ')'
-                | DO error                          {printf("\nError Missing opening curly braces '{' for the DO-Block for DO-WHILE loop at line %d\n", yylineno);pErr(yylineno);} '}' WHILE '(' EXPRESSION ')'
-                | DO BLOCK WHILE '{' EXPRESSION '}' {printf("\nError DO-WHILE loop accepts braces () not curly braces {} at line %d\n", yylineno);pErr(yylineno);}
+                DO error WHILE '(' EXPRESSION ')'SEMICOLON    {printf("\nError Missing DO-Block for the DO-WHILE loop at line %d\n", yylineno);pErr(yylineno);} 
+                | DO BLOCK WHILE error EXPRESSION ')'SEMICOLON{printf("\nError Missing opening parenthesis '(' for the DO-WHILE loop at line %d\n", yylineno);pErr(yylineno);}
+                | DO BLOCK error                              {printf("\nError Missing WHILE DO-WHILE loop at line %d\n", yylineno);pErr(yylineno);}
+                | DO BLOCK WHILE '{' EXPRESSION '}' SEMICOLON {printf("\nError DO-WHILE loop accepts braces () not curly braces {} at line %d\n", yylineno);pErr(yylineno);}
                 ;
-
-
 //________________________________________________ FOR STATEMENT ________________________________________________
 FOR_STATEMENT:
                 FOR '(' STATEMENT STATEMENT STATEMENT ')' BLOCK 
@@ -376,18 +352,15 @@ ERROR_FOR_LOOP:
                 | FOR '(' ';' STATEMENT STATEMENT STATEMENT ')'{printf("\nError unexpected semicolon in the FOR loop at line %d\n", yylineno);pErr(yylineno);}        BLOCK
                 ;
 
-
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
-HELPER_ASSIGNMENT_RULE:
-                IDENTIFIER  EQ                                   
-                | CONSTANT EQ                                 {printf("\nError CONSTANTS must not be reassigned %d\n", yylineno);pErr(yylineno);}
-                ;
 ASSIGNMENT_STATEMENT:
-                HELPER_ASSIGNMENT_RULE EXPRESSION SEMICOLON   {printf("Parsed Assignment\n");}
+                IDENTIFIER  EQ  EXPRESSION SEMICOLON   {printf("Parsed Assignment\n");}
+                | CONSTANT  EQ  EXPRESSION SEMICOLON   {printf("Parsed Assignment\n");}
                 | ERROR_ASSIGNMENT_STATEMENT
                 ;
 ERROR_ASSIGNMENT_STATEMENT:
-                HELPER_ASSIGNMENT_RULE SEMICOLON                { printf("\nError expected expression in assignment statement at line %d\n", yylineno);pErr(yylineno);}
+                IDENTIFIER  EQ SEMICOLON              { printf("\nError expected expression in assignment statement at line %d\n", yylineno);pErr(yylineno);}
+                | CONSTANT  EQ SEMICOLON              { printf("\nError expected expression in assignment statement at line %d\n", yylineno);pErr(yylineno);}
                 | IDENTIFIER  error  EXPRESSION SEMICOLON     {printf("\nError expected '=' in assignment statement at line %d\n", yylineno);pErr(yylineno);}
                 ;
 
@@ -400,19 +373,19 @@ BLOCK:
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-                IDENTIFIER '(' USED_ARGS  ')' { printf("Parsed Funciton Call\n");}
+                IDENTIFIER '(' ARGUMENTS  ')' { printf("Parsed Funciton Call\n");}
                 | ERROR_FUNC_CALL
                 ;
 ERROR_FUNC_CALL:
                 IDENTIFIER error ')'        {printf("\nError unhandled function parenthesis at line %d\n", yylineno);pErr(yylineno);}
                 ;       
-USED_ARGS:      
-                EXPRESSION ',' USED_ARGS 
+ARGUMENTS:      
+                EXPRESSION ',' ARGUMENTS 
                 | EXPRESSION 
-                | ERROR_USED_ARGS
+                | ERROR_ARGUMENTS
                 ;
-ERROR_USED_ARGS:
-                |error ',' USED_ARGS                       {printf("\nError Missing first argument in function's argument list or erronous ',' at line %d\n", yylineno);pErr(yylineno);}
+ERROR_ARGUMENTS:
+                |error ',' ARGUMENTS                       {printf("\nError Missing first argument in function's argument list or erronous ',' at line %d\n", yylineno);pErr(yylineno);}
                 ;
 %%
 
