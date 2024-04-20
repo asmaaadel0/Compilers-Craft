@@ -101,7 +101,8 @@ PROGRAM:
                 ;
 //________________________________________________ STATEMENT ________________________________________________
 STATEMENT:
-                DECLARATION_STATEMENT
+                PRINT_STATEMENT                            {printf("Parsed print statement\n");}
+                | DECLARATION_STATEMENT
                 | ASSIGNMENT_STATEMENT
                 | EXPRESSION SEMICOLON
                 
@@ -127,6 +128,17 @@ ERROR_STATEMENT:
                 | error ')'                               {printf("\nError STATEMENT at line %d\n", yylineno);pErr(yylineno);}
                 ;
 
+//________________________________________________ PRINT STATEMENT ________________________________________________
+PRINT_STATEMENT:
+                PRINT '('EXPRESSION')' SEMICOLON
+                | PRINT '('EXPRESSION ',' EXPRESSION')' SEMICOLON
+                | ERROR_PRINT_STATEMENT
+                ;
+ERROR_PRINT_STATEMENT: 
+                PRINT '('EXPRESSION')' error {printf("\nError missing semicolon ';', error at line %d\n", yylineno); pErr(yylineno);}
+                | PRINT '('EXPRESSION ',' ')' SEMICOLON {printf("\nError colon ',', error at line %d\n", yylineno); pErr(yylineno);}
+                | PRINT '('EXPRESSION ',' EXPRESSION ',' ')' SEMICOLON {printf("\nError colon ',', error at line %d\n", yylineno); pErr(yylineno);}
+                ;               
 //________________________________________________ TYPE ________________________________________________
 TYPE:
                 INT         { $$ = "int";   }
@@ -381,11 +393,11 @@ ERROR_FUNC_CALL:
                 ;       
 ARGUMENTS:      
                 EXPRESSION ',' ARGUMENTS 
-                | EXPRESSION 
+                | EXPRESSION    
                 | ERROR_ARGUMENTS
                 ;
 ERROR_ARGUMENTS:
-                |error ',' ARGUMENTS                       {printf("\nError Missing first argument in function's argument list or erronous ',' at line %d\n", yylineno);pErr(yylineno);}
+                | error ',' ARGUMENTS                       {printf("\nError Missing first argument in function's argument list or erronous ',' at line %d\n", yylineno);pErr(yylineno);}
                 ;
 %%
 

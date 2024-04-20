@@ -7,7 +7,7 @@
 %option yylineno
 
 %%
-#[\s\t]*.*[\s\t]*#       { /* Ignore comments */ }
+#[\s\t]*.*[\s\t]*        {/* Ignore comments */ }
 
 "int"                    { num_of_words++; num_of_char+=yyleng;  return INT;}
 "float"                  { num_of_words++; num_of_char+=yyleng;  return FLOAT;}
