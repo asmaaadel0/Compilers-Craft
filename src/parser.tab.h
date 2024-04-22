@@ -70,39 +70,40 @@ extern int yydebug;
     RETURN = 265,                  /* RETURN  */
     SWITCH = 266,                  /* SWITCH  */
     BREAK = 267,                   /* BREAK  */
-    CASE = 268,                    /* CASE  */
-    DEFAULT = 269,                 /* DEFAULT  */
-    IF = 270,                      /* IF  */
-    ELSE = 271,                    /* ELSE  */
-    FOR = 272,                     /* FOR  */
-    WHILE = 273,                   /* WHILE  */
-    DO = 274,                      /* DO  */
-    BOOL_LITERAL = 275,            /* BOOL_LITERAL  */
-    LOGIC_AND = 276,               /* LOGIC_AND  */
-    LOGIC_OR = 277,                /* LOGIC_OR  */
-    LOGIC_NOT = 278,               /* LOGIC_NOT  */
-    NOT = 279,                     /* NOT  */
-    EQUALITY = 280,                /* EQUALITY  */
-    NEG_EQUALITY = 281,            /* NEG_EQUALITY  */
-    DEC = 282,                     /* DEC  */
-    INC = 283,                     /* INC  */
-    GT = 284,                      /* GT  */
-    LT = 285,                      /* LT  */
-    SHR = 286,                     /* SHR  */
-    SHL = 287,                     /* SHL  */
-    EQ = 288,                      /* EQ  */
-    SEMICOLON = 289,               /* SEMICOLON  */
-    MODULO = 290,                  /* MODULO  */
-    PLUS = 291,                    /* PLUS  */
-    SUB = 292,                     /* SUB  */
-    MUL = 293,                     /* MUL  */
-    DIV = 294,                     /* DIV  */
-    POW = 295,                     /* POW  */
-    CONSTANT = 296,                /* CONSTANT  */
-    IDENTIFIER = 297,              /* IDENTIFIER  */
-    STRING_LITERAL = 298,          /* STRING_LITERAL  */
-    DIGIT = 299,                   /* DIGIT  */
-    FLOAT_DIGIT = 300              /* FLOAT_DIGIT  */
+    CONTINUE = 268,                /* CONTINUE  */
+    CASE = 269,                    /* CASE  */
+    DEFAULT = 270,                 /* DEFAULT  */
+    IF = 271,                      /* IF  */
+    ELSE = 272,                    /* ELSE  */
+    FOR = 273,                     /* FOR  */
+    WHILE = 274,                   /* WHILE  */
+    DO = 275,                      /* DO  */
+    BOOL_LITERAL = 276,            /* BOOL_LITERAL  */
+    LOGIC_AND = 277,               /* LOGIC_AND  */
+    LOGIC_OR = 278,                /* LOGIC_OR  */
+    LOGIC_NOT = 279,               /* LOGIC_NOT  */
+    NOT = 280,                     /* NOT  */
+    EQUALITY = 281,                /* EQUALITY  */
+    NEG_EQUALITY = 282,            /* NEG_EQUALITY  */
+    DEC = 283,                     /* DEC  */
+    INC = 284,                     /* INC  */
+    GT = 285,                      /* GT  */
+    LT = 286,                      /* LT  */
+    SHR = 287,                     /* SHR  */
+    SHL = 288,                     /* SHL  */
+    EQ = 289,                      /* EQ  */
+    SEMICOLON = 290,               /* SEMICOLON  */
+    MODULO = 291,                  /* MODULO  */
+    PLUS = 292,                    /* PLUS  */
+    SUB = 293,                     /* SUB  */
+    MUL = 294,                     /* MUL  */
+    DIV = 295,                     /* DIV  */
+    POW = 296,                     /* POW  */
+    CONSTANT = 297,                /* CONSTANT  */
+    IDENTIFIER = 298,              /* IDENTIFIER  */
+    STRING_LITERAL = 299,          /* STRING_LITERAL  */
+    DIGIT = 300,                   /* DIGIT  */
+    FLOAT_DIGIT = 301              /* FLOAT_DIGIT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -118,7 +119,7 @@ union YYSTYPE
  float float_val;
  bool bool_val;
 
-#line 122 "parser.tab.h"
+#line 123 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

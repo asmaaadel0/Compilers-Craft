@@ -28,7 +28,7 @@
 %token INT FLOAT STRING ENUM BOOL 
 
 %token PRINT VOID RETURN
-%token SWITCH BREAK
+%token SWITCH BREAK CONTINUE
 %token CASE DEFAULT
 
 %token IF ELSE
@@ -66,6 +66,11 @@ PROGRAM:
                 PROGRAM STATEMENT           {printf("Parsed Line %d Succesfully\n\n", number_of_line);}        
                 |
                 ;
+//________________________________________________ BLOCK ________________________________________________
+BLOCK:
+                '{' PROGRAM '}'               
+                ;
+
 //________________________________________________ STATEMENT ________________________________________________
 STATEMENT:
                 PRINT_STATEMENT                             {printf("Parsed print statement\n");}
@@ -82,6 +87,7 @@ STATEMENT:
                 | DO_WHILE_STATEMENT                        {printf("Parsed Do While LOOP\n");}
                 | SWITCH_STATEMENT                          {printf("Parsed Switch Statement\n");}
                 | BREAK SEMICOLON
+                | CONTINUE SEMICOLON
                 
                 | RETURN_STATEMENT SEMICOLON
                 | BLOCK                                     {printf("Parsed Block\n");}
@@ -113,7 +119,7 @@ EXPRESSION:
 
                 | EXPRESSION LOGIC_AND EXPRESSION     
                 | EXPRESSION LOGIC_OR EXPRESSION  
-                      
+
                 | LOGIC_NOT EXPRESSION  
                 | NOT EXPRESSION
 
@@ -127,6 +133,9 @@ EXPRESSION:
 
                 | EXPRESSION INC               
                 | EXPRESSION DEC     
+
+                | INC EXPRESSION                
+                | DEC EXPRESSION 
 
                 | EXPRESSION MODULO EXPRESSION         
                 | EXPRESSION PLUS EXPRESSION           
@@ -159,10 +168,8 @@ RETURN_STATEMENT:
                 ;
 
 //________________________________________________ SWITCH STATEMENT ________________________________________________
-HELPER_SWITCH:   SWITCH IDENTIFIER ':' '{'
-                ;
 SWITCH_STATEMENT:
-                HELPER_SWITCH CASES  '}' 
+                SWITCH IDENTIFIER ':' '{' CASES  '}' 
                 ;
 DEFAULTCASE:
                 DEFAULT ':' BLOCK
@@ -235,13 +242,6 @@ ASSIGNMENT_STATEMENT:
                 IDENTIFIER  EQ  EXPRESSION SEMICOLON   
                 | CONSTANT  EQ  EXPRESSION SEMICOLON   
                 ;
-
-//________________________________________________ BLOCK ________________________________________________
-BLOCK:
-                '{' PROGRAM '}'               
-                ;
-
-
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
