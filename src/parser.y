@@ -8,43 +8,8 @@
     
     void yyerror(char* );
     int yylex();
-    void yyerror();
-    extern int yylineno;
     extern FILE *yyin;
-    extern FILE *yyout;
     extern int number_of_line;
-    extern int yy_flex_debug;
-
-
-
-
-//____________________________________________________________ CODE GEN ____________________________________________________________________
-    #include <fcntl.h>             //for creating file
-    #include <errno.h>             //for checking for file
-    int codeGen = 1;
-    char* VirtualStack [1000];
-    int VirtualSP = -1;
-    int tempNumber = 0;
-    int labelNumber = 0;
-    int endlabelNumber=0;
-    char temp_label[50] = "L";
-    char temp_endlabel[50] = "END";
-    char temp_var[50] = "t";
-    int SMLabel = 0;
-    int SMLabel_Else = 0;
-    int SMLabel_End = 0;
-    int ForHeaderLabel = 0;
-    int ForHelperLabel = 0;
-    char IdentifierHolder[10];
-    char* argumentList[20];
-    int argPointer = 0;
-    int enumCNT = 1;
-    void prepend(char* s, const char* t)    {size_t len = strlen(t);memmove(s + len, s, strlen(s) + 1);memcpy(s, t, len);}
-    char switcher[50];
-    void pErr(int num);
-    int AStack = -1;
-//==================================================================================================================================================
-
 %}
 
 %union { 
@@ -103,11 +68,11 @@ PROGRAM:
 STATEMENT:
                 PRINT_STATEMENT                            {printf("Parsed print statement\n");}
                 | DECLARATION_STATEMENT
-                | ASSIGNMENT_STATEMENT
+                | ASSIGNMENT_STATEMENT                     {printf("Parsed Assignment statement\n");}
                 | EXPRESSION SEMICOLON
                 
                 | ENUM_DECLARATION_STATEMENT                {printf("Parsed Enum Declaration\n");}
-                | ENUM_CALL_STATEMENT                       {printf("Parsed Enum Usage\n");}
+                | ENUM_CALL_STATEMENT                       {printf("Parsed Enum Call\n");}
                 
                 | IF_STATEMENT                              {printf("Parsed if statement\n");}
                 | WHILE_STATEMENT                           {printf("Parsed While LOOP\n");}
@@ -117,28 +82,15 @@ STATEMENT:
                 | BREAK SEMICOLON
                 
                 | RETURN_STATEMENT SEMICOLON
-                | BLOCK
+                | BLOCK                                     {printf("Parsed Block\n");}
                 | FUNC_DECLARATION_STATEMENT                {printf("Parsed Function Declaration\n");}
-                
-                | ERROR_STATEMENT
-                ;
-ERROR_STATEMENT:
-                error SEMICOLON                           {printf("\nError STATEMENT at line %d\n", yylineno);pErr(yylineno);}
-                | error '}'                               {printf("\nError STATEMENT at line %d\n", yylineno);pErr(yylineno);}
-                | error ')'                               {printf("\nError STATEMENT at line %d\n", yylineno);pErr(yylineno);}
                 ;
 
 //________________________________________________ PRINT STATEMENT ________________________________________________
 PRINT_STATEMENT:
                 PRINT '('EXPRESSION')' SEMICOLON
                 | PRINT '('EXPRESSION ',' EXPRESSION')' SEMICOLON
-                | ERROR_PRINT_STATEMENT
-                ;
-ERROR_PRINT_STATEMENT: 
-                PRINT '('EXPRESSION')' error {printf("\nError missing semicolon ';', error at line %d\n", yylineno); pErr(yylineno);}
-                | PRINT '('EXPRESSION ',' ')' SEMICOLON {printf("\nError colon ',', error at line %d\n", yylineno); pErr(yylineno);}
-                | PRINT '('EXPRESSION ',' EXPRESSION ',' ')' SEMICOLON {printf("\nError colon ',', error at line %d\n", yylineno); pErr(yylineno);}
-                ;               
+                ;             
 //________________________________________________ TYPE ________________________________________________
 TYPE:
                 INT         { $$ = "int";   }
@@ -171,13 +123,6 @@ EXPRESSION:
                             
                 | FUNC_CALL                                
                 | '(' EXPRESSION ')'
-                | ERROR_EXPRESSION           {printf("\nError Expression error at line %d\n", yylineno);pErr(yylineno);}
-                ;
-ERROR_EXPRESSION:
-                error PLUS EXPRESSION             
-                | error MUL EXPRESSION          
-                | error DIV EXPRESSION          
-                | error POW EXPRESSION          
                 ;
 //________________________________________________ COMPARISON ________________________________________________
 COMPARISON:
@@ -192,48 +137,16 @@ COMPARISON:
                 | EXPRESSION LT EQ EXPRESSION           
                 | EXPRESSION GT EXPRESSION                
                 | EXPRESSION GT EQ EXPRESSION  
-
-                | ERROR_COMPARISON
-                ;
-ERROR_COMPARISON:
-                error GT EXPRESSION                                 {printf("\nError Missing left operand before '>' at line %d\n", yylineno);pErr(yylineno);}
-                | EXPRESSION GT error   %prec GT                    {printf("\nError Missing right operand after '>' at line %d\n", yylineno);pErr(yylineno);}
-                | error LT EXPRESSION                               {printf("\nError Missing left operand before '<' at line %d\n", yylineno);pErr(yylineno);}
-                | EXPRESSION LT error   %prec LT                    {printf("\nError Missing right operand after '<' at line %d\n", yylineno);pErr(yylineno);}
-                | error EQUALITY EXPRESSION                         {printf("\nError Missing left operand before '==' at line %d\n", yylineno);pErr(yylineno);}
-                | EXPRESSION EQUALITY error   %prec EQUALITY        {printf("\nError Missing right operand after '==' at line %d\n", yylineno);pErr(yylineno);}
-                | error NEG_EQUALITY EXPRESSION                     {printf("\nError Missing left operand before '!=' at line %d\n", yylineno);pErr(yylineno);}
-                | EXPRESSION NEG_EQUALITY error   %prec NEG_EQUALITY{printf("\nError Missing right operand after '!=' at line %d\n", yylineno);pErr(yylineno);}
-                | LOGIC_NOT error   %prec EQ                        {printf("\nError Missing right operand after the negating operator '!' at line %d\n", yylineno);pErr(yylineno);}
-                | error LOGIC_AND EXPRESSION                        {printf("\nError Missing left operand before 'and' operator at line %d\n", yylineno);pErr(yylineno);}
-                | EXPRESSION LOGIC_AND error   %prec LOGIC_AND      {printf("\nError Missing right operand after 'and' operator at line %d\n", yylineno);pErr(yylineno);}
-                | error LOGIC_OR EXPRESSION                         {printf("\nError Missing left operand before 'or' operator at line %d\n", yylineno);pErr(yylineno);}
-                | EXPRESSION LOGIC_OR error   %prec LOGIC_OR        {printf("\nError Missing right operand after 'or' operator at line %d\n", yylineno);pErr(yylineno);}
-                | error LT EQ EXPRESSION                            {printf("\nError Missing left operand before '<=' operator at line %d\n", yylineno);pErr(yylineno);}
-                | EXPRESSION LT EQ error   %prec LT                 {printf("\nError Missing right operand after '<=' operator at line %d\n", yylineno);pErr(yylineno);}
-                | error GT EQ EXPRESSION                            {printf("\nError Missing left operand before '>=' operator at line %d\n", yylineno);pErr(yylineno);}
-                | EXPRESSION GT EQ error   %prec GT                 {printf("\nError Missing right operand after '>=' operator at line %d\n", yylineno);pErr(yylineno);}
                 ;
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
                 TYPE IDENTIFIER DECLARATION_TAIL            { printf("Parsed Declaration\n"); }
                 | TYPE CONSTANT DECLARATION_TAIL            { printf("Parsed Const Declaration\n"); }
-                | ERROR_DECLARATION_STATEMENT
-                ;
-ERROR_DECLARATION_STATEMENT:
-                error CONSTANT SEMICOLON                {printf("\nError Missing constant type at line %d\n", yylineno);pErr(yylineno);}
-                | error IDENTIFIER SEMICOLON            {printf("\nError Missing variable type at line %d\n", yylineno);pErr(yylineno);}
-                | TYPE  IDENTIFIER IDENTIFIER SEMICOLON {printf("\nError unexpected identifier %s at line %d\n",$3, yylineno);pErr(yylineno);}
                 ;
 DECLARATION_TAIL:
-                EQ EXPRESSION SEMICOLON                                
+                EQ EXPRESSION SEMICOLON                 
                 | SEMICOLON 
-                | ERROR_DECLARATION_TAIL
-                ;
-ERROR_DECLARATION_TAIL:
-                error EXPRESSION SEMICOLON        {printf("\nError Missing '=' at line %d\n", yylineno);pErr(yylineno);}
-                | EQ error SEMICOLON              {printf("\nError Missing second operand at line %d\n", yylineno);pErr(yylineno);}
                 ;
 
 RETURN_STATEMENT:
@@ -242,55 +155,30 @@ RETURN_STATEMENT:
                 ;
 
 //________________________________________________ SWITCH STATEMENT ________________________________________________
-HELPER_SWITCH:   SWITCH IDENTIFIER ':' '{' {strcpy(switcher, $2);}
+HELPER_SWITCH:   SWITCH IDENTIFIER ':' '{'
                 ;
 SWITCH_STATEMENT:
                 HELPER_SWITCH CASES  '}' 
-                | ERROR_SWITCH_STATEMENT
                 ;
 DEFAULTCASE:
                 DEFAULT ':' BLOCK
-                | ERROR_DEFAULTCASE
-                ;
-ERROR_DEFAULTCASE:
-                DEFAULT BLOCK {printf("\nError missing colon ':' at DEFAULT CASE of switch, error at line %d\n", yylineno); pErr(yylineno);}
                 ;
 CASES:
                 CASE EXPRESSION ':' BLOCK CASES
                 | DEFAULTCASE
                 | 
-                | ERROR_CASES
-                ;
-ERROR_CASES:
-                DEFAULTCASE                 {printf("\nError DEFAULT CASE must be written at the end of the switch statement, error at line %d\n", yylineno); pErr(yylineno);} CASE EXPRESSION BLOCK             
-                | DEFAULTCASE DEFAULTCASE   {printf("\nError only 1 DEFAULT CASE is allowed in the switch statement error, at line %d\n", yylineno); pErr(yylineno);}
-                ;
-ERROR_SWITCH_STATEMENT:
-                SWITCH error                    {printf("\nError Missing identifier for switch statement at line %d\n", yylineno);pErr(yylineno);}                            ':' '{' CASES '}'      
-                | SWITCH IDENTIFIER error       {printf("\nError unexpected identifier '%s' at switch statement at line %d\n",yylval, yylineno); pErr(yylineno);}             ':'  '{' CASES '}'  
-                | SWITCH IDENTIFIER error       {printf("\nError Missing colon ':' for switch statement (switchs must have a colon) at line %d\n", yylineno);pErr(yylineno);} '{' CASES '}'
-                | SWITCH IDENTIFIER ':' error   {printf("\nError Missing '{' for switch statement at line %d\n", yylineno);pErr(yylineno);}                                   CASES '}'   
-                | HELPER_SWITCH CASES error      {printf("\nError unclosed '}' for switch statement at line %d\n", yylineno);pErr(yylineno);}    
                 ;
 
 //________________________________________________ FUNCTION DECLARATION STATEMENT ________________________________________________
 FUNC_DECLARATION_STATEMENT:
                 TYPE IDENTIFIER '(' ARGS ')'      BLOCK                                   
                 | VOID IDENTIFIER '(' ARGS ')'    BLOCK 
-                | TYPE IDENTIFIER '(' ')'          BLOCK                                   
-                | VOID IDENTIFIER '(' ')'          BLOCK 
-                | ERROR_FUNC_DECLARATION_STATEMENT BLOCK
-                ;
-ERROR_FUNC_DECLARATION_STATEMENT:
-                TYPE IDENTIFIER   {printf("\nError unhandled function parenthesis at line %d for function %s\n", yylineno, $2);pErr(yylineno);}                    ARGS ')'       
+                | TYPE IDENTIFIER '(' ')'         BLOCK                                   
+                | VOID IDENTIFIER '(' ')'         BLOCK 
                 ;
 ARGS:
                 ARG_DECL ',' ARGS
                 | ARG_DECL
-                | ERROR_ARGS
-                ;
-ERROR_ARGS:
-                ',' ARGS   {printf("\nError unexpected ',' in argument list of function declaration at line %d\n", yylineno);pErr(yylineno);}
                 ;
 ARG_DECL:
                 TYPE IDENTIFIER                             
@@ -299,33 +187,18 @@ ARG_DECL:
 //________________________________________________ ENUM DECLARATION STATEMENT ________________________________________________
 ENUM_DECLARATION_STATEMENT:
                 ENUM IDENTIFIER  '{' ENUM_HELPER '}'          
-                | ERROR_ENUM_DECLARATION_STATEMENT
-                ;
-ERROR_ENUM_DECLARATION_STATEMENT:
-                ENUM error '{' ENUM_HELPER '}'             {printf("\nError missing identifier for ENUM statement at line %d\n", yylineno);pErr(yylineno);}
-                | ENUM IDENTIFIER ENUM_HELPER '}'          {printf("\nError missing opening curly braces for ENUM statement at line %d\n", yylineno);pErr(yylineno);}
-                | ENUM IDENTIFIER '{' error '}'            {printf("\nError missing arguments in the ENUM statement at line %d\n", yylineno);pErr(yylineno);}
-                | ENUM IDENTIFIER error '{' ENUM_HELPER '}'{printf("\nError UnExpected IDENTIFIER in the ENUM statement at line %d\n", yylineno);pErr(yylineno);}
-                ;                
+                ;               
 ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
 ENUM_ARGS:
 
                 IDENTIFIER   ',' ENUM_ARGS  
                 | IDENTIFIER 
-
                 ;
             
 ENUM_DEFINED_ARGS:
 
-                IDENTIFIER EQ DIGIT    ',' ENUM_DEFINED_ARGS 
+                IDENTIFIER EQ DIGIT ',' ENUM_DEFINED_ARGS 
                 | IDENTIFIER EQ DIGIT  
-                | ERROR_ENUM_DEFINED_ARGS
-                ;
-ERROR_ENUM_DEFINED_ARGS:
-                IDENTIFIER EQ error ','                   {printf("\nError WRONG arguments in the ENUM statement at line %d\n", yylineno);pErr(yylineno);}
-                | IDENTIFIER EQ FLOAT_DIGIT               {printf("\nError WRONG arguments in the ENUM statement at line %d\n", yylineno);pErr(yylineno);}
-                | IDENTIFIER EQ STRING_LITERAL            {printf("\nError WRONG arguments in the ENUM statement at line %d\n", yylineno);pErr(yylineno);}
-                | IDENTIFIER EQ BOOL_LITERAL              {printf("\nError WRONG arguments in the ENUM statement at line %d\n", yylineno);pErr(yylineno);}
                 ;
 
 ENUM_CALL_STATEMENT:
@@ -346,82 +219,46 @@ WHILE_STATEMENT:
 //________________________________________________ DO WHILE STATEMENT ________________________________________________
 DO_WHILE_STATEMENT:
                 DO BLOCK WHILE '(' EXPRESSION ')' SEMICOLON
-                | ERROR_DO_WHILE
-                ;
-ERROR_DO_WHILE:
-                DO error WHILE '(' EXPRESSION ')'SEMICOLON    {printf("\nError Missing DO-Block for the DO-WHILE loop at line %d\n", yylineno);pErr(yylineno);} 
-                | DO BLOCK WHILE error EXPRESSION ')'SEMICOLON{printf("\nError Missing opening parenthesis '(' for the DO-WHILE loop at line %d\n", yylineno);pErr(yylineno);}
-                | DO BLOCK error                              {printf("\nError Missing WHILE DO-WHILE loop at line %d\n", yylineno);pErr(yylineno);}
-                | DO BLOCK WHILE '{' EXPRESSION '}' SEMICOLON {printf("\nError DO-WHILE loop accepts braces () not curly braces {} at line %d\n", yylineno);pErr(yylineno);}
                 ;
 //________________________________________________ FOR STATEMENT ________________________________________________
 FOR_STATEMENT:
                 FOR '(' STATEMENT STATEMENT STATEMENT ')' BLOCK 
-                | ERROR_FOR_LOOP
-                ;
-ERROR_FOR_LOOP:
-                FOR error STATEMENT STATEMENT STATEMENT ')'    {printf("\nError Missing opening braces '(' in the FOR loop at line %d\n", yylineno);pErr(yylineno);}  BLOCK
-                | FOR '(' ';' STATEMENT STATEMENT STATEMENT ')'{printf("\nError unexpected semicolon in the FOR loop at line %d\n", yylineno);pErr(yylineno);}        BLOCK
                 ;
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
-                IDENTIFIER  EQ  EXPRESSION SEMICOLON   {printf("Parsed Assignment\n");}
-                | CONSTANT  EQ  EXPRESSION SEMICOLON   {printf("Parsed Assignment\n");}
-                | ERROR_ASSIGNMENT_STATEMENT
-                ;
-ERROR_ASSIGNMENT_STATEMENT:
-                IDENTIFIER  EQ SEMICOLON              { printf("\nError expected expression in assignment statement at line %d\n", yylineno);pErr(yylineno);}
-                | CONSTANT  EQ SEMICOLON              { printf("\nError expected expression in assignment statement at line %d\n", yylineno);pErr(yylineno);}
-                | IDENTIFIER  error  EXPRESSION SEMICOLON     {printf("\nError expected '=' in assignment statement at line %d\n", yylineno);pErr(yylineno);}
+                IDENTIFIER  EQ  EXPRESSION SEMICOLON 
+                | CONSTANT  EQ  EXPRESSION SEMICOLON
                 ;
 
 //________________________________________________ BLOCK ________________________________________________
 BLOCK:
-                '{' PROGRAM '}'               {printf("Parsed Block\n");}
+                | '{' '}'     
+                '{' PROGRAM '}'
                 ;
 
 
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-                IDENTIFIER '(' ARGUMENTS  ')' { printf("Parsed Funciton Call\n");}
-                | ERROR_FUNC_CALL
-                ;
-ERROR_FUNC_CALL:
-                IDENTIFIER error ')'        {printf("\nError unhandled function parenthesis at line %d\n", yylineno);pErr(yylineno);}
+                IDENTIFIER '(' ARGUMENTS  ')' { printf("Parsed Function Call\n");}
                 ;       
 ARGUMENTS:      
-                EXPRESSION ',' ARGUMENTS 
+                EXPRESSION ',' ARGUMENTS
                 | EXPRESSION    
-                | ERROR_ARGUMENTS
-                ;
-ERROR_ARGUMENTS:
-                | error ',' ARGUMENTS                       {printf("\nError Missing first argument in function's argument list or erronous ',' at line %d\n", yylineno);pErr(yylineno);}
                 ;
 %%
 
 void yyerror(char *s) { 
- fprintf(stderr, "line %d: %s\n", yylineno, s); 
+ fprintf(stderr, "line %d: %s\n", number_of_line, s); 
 } 
 int yywrap()
 {
     return 1;
 }
 
-
-void pErr(int lineNUMM)
-{
-    FILE *assfile = fopen("ParsingErrors.txt", "a");
-    char buf [50];
-    itoa(lineNUMM, buf,10);
-    fprintf(assfile, "%s ", buf);
-    fclose (assfile);
-};
-
 int main(int argc, char *argv[])
-{ 
-    yy_flex_debug = 1;
+{
     yyin = fopen(argv[1], "r");
     yyparse();
 

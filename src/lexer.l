@@ -4,7 +4,6 @@
     int num_of_char;
     int num_of_words;
 %}
-%option yylineno
 
 %%
 #[\s\t]*.*[\s\t]*        {/* Ignore comments */ }

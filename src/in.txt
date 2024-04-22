@@ -1,3 +1,3 @@
 int x = add(a,b);
 A = x; # teste
-print("teste");
+print("teste")
