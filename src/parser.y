@@ -4,13 +4,12 @@
     #include <string.h>
     #include <stdbool.h>
     #include "parser.tab.h"
-    #include <errno.h>
     
     void yyerror(char* );
     int yylex();
     extern FILE *yyin;
     extern int number_of_line;
-
+    void assign_int( int d , int i);
 %}
 
 %union { 
@@ -252,6 +251,29 @@ ARGUMENTS:
                 | EXPRESSION    
                 ;
 %%
+
+void CodeGenOp(char* operator)
+{
+    if(codeGen){
+    char* second_operand = popVStack();
+    char* operation = popVStack();
+    char* first_operand = popVStack();
+    char dumstr[10];
+    itoa(tempNumber, dumstr, 10);
+    strcat(temp_var, dumstr);
+    tempNumber++;
+    pushVStack(temp_var);
+    FILE *llvfile = fopen("LLVM.txt", "a");
+    if(llvfile == NULL) {
+        printf("can't open LLVM.txt file!\n");
+        exit(1);
+    }
+    fprintf(llvfile, "%s = %s %s %s\n", temp_var, first_operand, operation, second_operand);
+    fclose (llvfile);
+    temp_var[strlen(temp_var)-1] = '\0';
+    
+    }
+};
 
 void yyerror(char *s) { 
  fprintf(stderr, "line %d: %s\n", number_of_line, s); 

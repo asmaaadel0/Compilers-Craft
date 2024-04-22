@@ -74,7 +74,6 @@
     #include <string.h>
     #include <stdbool.h>
     #include "parser.tab.h"
-    #include <errno.h>
     
     void yyerror(char* );
     int yylex();
@@ -82,7 +81,7 @@
     extern int number_of_line;
 
 
-#line 86 "parser.tab.c"
+#line 85 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -581,16 +580,16 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    66,    66,    67,    71,    76,    77,    78,    79,    81,
-      82,    84,    85,    86,    87,    88,    89,    90,    92,    93,
-      94,   100,   101,   105,   106,   107,   108,   113,   114,   115,
-     116,   117,   118,   120,   121,   123,   124,   126,   127,   129,
-     130,   131,   132,   134,   135,   137,   138,   140,   141,   142,
-     143,   144,   145,   146,   148,   149,   151,   152,   157,   158,
-     161,   162,   166,   167,   172,   175,   178,   179,   180,   185,
-     186,   187,   188,   191,   192,   195,   200,   202,   202,   205,
-     206,   212,   213,   217,   218,   223,   224,   229,   233,   237,
-     242,   243,   248,   251,   252
+       0,    65,    65,    66,    70,    75,    76,    77,    78,    80,
+      81,    83,    84,    85,    86,    87,    88,    89,    91,    92,
+      93,    99,   100,   104,   105,   106,   107,   112,   113,   114,
+     115,   116,   117,   119,   120,   122,   123,   125,   126,   128,
+     129,   130,   131,   133,   134,   136,   137,   139,   140,   141,
+     142,   143,   144,   145,   147,   148,   150,   151,   156,   157,
+     160,   161,   165,   166,   171,   174,   177,   178,   179,   184,
+     185,   186,   187,   190,   191,   194,   199,   201,   201,   204,
+     205,   211,   212,   216,   217,   222,   223,   228,   232,   236,
+     241,   242,   247,   250,   251
 };
 #endif
 
@@ -1369,121 +1368,121 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* PROGRAM: PROGRAM STATEMENT  */
-#line 66 "parser.y"
+#line 65 "parser.y"
                                             {printf("Parsed Line %d Succesfully\n\n", number_of_line);}
-#line 1375 "parser.tab.c"
+#line 1374 "parser.tab.c"
     break;
 
   case 5: /* STATEMENT: PRINT_STATEMENT  */
-#line 76 "parser.y"
+#line 75 "parser.y"
                                                             {printf("Parsed print statement\n");}
-#line 1381 "parser.tab.c"
+#line 1380 "parser.tab.c"
     break;
 
   case 7: /* STATEMENT: ASSIGNMENT_STATEMENT  */
-#line 78 "parser.y"
+#line 77 "parser.y"
                                                             {printf("Parsed Assignment statement\n");}
-#line 1387 "parser.tab.c"
+#line 1386 "parser.tab.c"
     break;
 
   case 9: /* STATEMENT: ENUM_DECLARATION_STATEMENT  */
-#line 81 "parser.y"
+#line 80 "parser.y"
                                                             {printf("Parsed Enum Declaration\n");}
-#line 1393 "parser.tab.c"
+#line 1392 "parser.tab.c"
     break;
 
   case 10: /* STATEMENT: ENUM_CALL_STATEMENT  */
-#line 82 "parser.y"
+#line 81 "parser.y"
                                                             {printf("Parsed Enum Call\n");}
-#line 1399 "parser.tab.c"
+#line 1398 "parser.tab.c"
     break;
 
   case 11: /* STATEMENT: IF_STATEMENT  */
-#line 84 "parser.y"
+#line 83 "parser.y"
                                                             {printf("Parsed if statement\n");}
-#line 1405 "parser.tab.c"
+#line 1404 "parser.tab.c"
     break;
 
   case 12: /* STATEMENT: WHILE_STATEMENT  */
-#line 85 "parser.y"
+#line 84 "parser.y"
                                                             {printf("Parsed While LOOP\n");}
-#line 1411 "parser.tab.c"
+#line 1410 "parser.tab.c"
     break;
 
   case 13: /* STATEMENT: FOR_STATEMENT  */
-#line 86 "parser.y"
+#line 85 "parser.y"
                                                             {printf("Parsed For LOOP\n");}
-#line 1417 "parser.tab.c"
+#line 1416 "parser.tab.c"
     break;
 
   case 14: /* STATEMENT: DO_WHILE_STATEMENT  */
-#line 87 "parser.y"
+#line 86 "parser.y"
                                                             {printf("Parsed Do While LOOP\n");}
-#line 1423 "parser.tab.c"
+#line 1422 "parser.tab.c"
     break;
 
   case 15: /* STATEMENT: SWITCH_STATEMENT  */
-#line 88 "parser.y"
+#line 87 "parser.y"
                                                             {printf("Parsed Switch Statement\n");}
-#line 1429 "parser.tab.c"
+#line 1428 "parser.tab.c"
     break;
 
   case 19: /* STATEMENT: BLOCK  */
-#line 93 "parser.y"
+#line 92 "parser.y"
                                                             {printf("Parsed Block\n");}
-#line 1435 "parser.tab.c"
+#line 1434 "parser.tab.c"
     break;
 
   case 20: /* STATEMENT: FUNC_DECLARATION_STATEMENT  */
-#line 94 "parser.y"
+#line 93 "parser.y"
                                                             {printf("Parsed Function Declaration\n");}
-#line 1441 "parser.tab.c"
+#line 1440 "parser.tab.c"
     break;
 
   case 23: /* TYPE: INT  */
-#line 105 "parser.y"
+#line 104 "parser.y"
                             { (yyval.str) = "int";   }
-#line 1447 "parser.tab.c"
+#line 1446 "parser.tab.c"
     break;
 
   case 24: /* TYPE: FLOAT  */
-#line 106 "parser.y"
+#line 105 "parser.y"
                             { (yyval.str) = "float"; }
-#line 1453 "parser.tab.c"
+#line 1452 "parser.tab.c"
     break;
 
   case 25: /* TYPE: BOOL  */
-#line 107 "parser.y"
+#line 106 "parser.y"
                             { (yyval.str) = "bool";  }
-#line 1459 "parser.tab.c"
+#line 1458 "parser.tab.c"
     break;
 
   case 26: /* TYPE: STRING  */
-#line 108 "parser.y"
+#line 107 "parser.y"
                             { (yyval.str) = "string";}
-#line 1465 "parser.tab.c"
+#line 1464 "parser.tab.c"
     break;
 
   case 58: /* DECLARATION_STATEMENT: TYPE IDENTIFIER DECLARATION_TAIL  */
-#line 157 "parser.y"
+#line 156 "parser.y"
                                                             { printf("Parsed Declaration\n"); }
-#line 1471 "parser.tab.c"
+#line 1470 "parser.tab.c"
     break;
 
   case 59: /* DECLARATION_STATEMENT: TYPE CONSTANT DECLARATION_TAIL  */
-#line 158 "parser.y"
+#line 157 "parser.y"
                                                             { printf("Parsed Const Declaration\n"); }
-#line 1477 "parser.tab.c"
+#line 1476 "parser.tab.c"
     break;
 
   case 92: /* FUNC_CALL: IDENTIFIER '(' ARGUMENTS ')'  */
-#line 248 "parser.y"
+#line 247 "parser.y"
                                               { printf("Parsed Function Call\n");}
-#line 1483 "parser.tab.c"
+#line 1482 "parser.tab.c"
     break;
 
 
-#line 1487 "parser.tab.c"
+#line 1486 "parser.tab.c"
 
       default: break;
     }
@@ -1676,7 +1675,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 254 "parser.y"
+#line 253 "parser.y"
 
 
 void yyerror(char *s) { 
