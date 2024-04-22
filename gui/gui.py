@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
 import subprocess
-import re
 import os
 def open_file():
     file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")])
