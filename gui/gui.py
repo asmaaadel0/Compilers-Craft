@@ -8,7 +8,7 @@ def open_file():
         with open(file_path, 'r') as file:
             code_editor.delete(1.0, tk.END)
             code_editor.insert(tk.END, file.read())
-
+            
 def compile_code():
     code = code_editor.get(1.0, tk.END)
     file_path = "./temp.txt"
@@ -19,7 +19,6 @@ def compile_code():
     compiler = "..\src\out.exe temp.txt"
     process = subprocess.Popen(compiler, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     out, err = process.communicate()
-    print(err)
     
     if err:
         # Display syntax errors in output panel
