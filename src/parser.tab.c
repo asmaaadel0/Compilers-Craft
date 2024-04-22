@@ -79,7 +79,7 @@
     int yylex();
     extern FILE *yyin;
     extern int number_of_line;
-
+    void assign_int( int d , int i);
 
 #line 85 "parser.tab.c"
 
@@ -1439,50 +1439,26 @@ yyreduce:
 #line 1440 "parser.tab.c"
     break;
 
-  case 23: /* TYPE: INT  */
-#line 104 "parser.y"
-                            { (yyval.str) = "int";   }
-#line 1446 "parser.tab.c"
-    break;
-
-  case 24: /* TYPE: FLOAT  */
-#line 105 "parser.y"
-                            { (yyval.str) = "float"; }
-#line 1452 "parser.tab.c"
-    break;
-
-  case 25: /* TYPE: BOOL  */
-#line 106 "parser.y"
-                            { (yyval.str) = "bool";  }
-#line 1458 "parser.tab.c"
-    break;
-
-  case 26: /* TYPE: STRING  */
-#line 107 "parser.y"
-                            { (yyval.str) = "string";}
-#line 1464 "parser.tab.c"
-    break;
-
   case 58: /* DECLARATION_STATEMENT: TYPE IDENTIFIER DECLARATION_TAIL  */
 #line 156 "parser.y"
                                                             { printf("Parsed Declaration\n"); }
-#line 1470 "parser.tab.c"
+#line 1446 "parser.tab.c"
     break;
 
   case 59: /* DECLARATION_STATEMENT: TYPE CONSTANT DECLARATION_TAIL  */
 #line 157 "parser.y"
                                                             { printf("Parsed Const Declaration\n"); }
-#line 1476 "parser.tab.c"
+#line 1452 "parser.tab.c"
     break;
 
   case 92: /* FUNC_CALL: IDENTIFIER '(' ARGUMENTS ')'  */
 #line 247 "parser.y"
                                               { printf("Parsed Function Call\n");}
-#line 1482 "parser.tab.c"
+#line 1458 "parser.tab.c"
     break;
 
 
-#line 1486 "parser.tab.c"
+#line 1462 "parser.tab.c"
 
       default: break;
     }
