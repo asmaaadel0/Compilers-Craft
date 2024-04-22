@@ -10,6 +10,7 @@
     int yylex();
     extern FILE *yyin;
     extern int number_of_line;
+
 %}
 
 %union { 
@@ -66,9 +67,9 @@ PROGRAM:
                 ;
 //________________________________________________ STATEMENT ________________________________________________
 STATEMENT:
-                PRINT_STATEMENT                            {printf("Parsed print statement\n");}
+                PRINT_STATEMENT                             {printf("Parsed print statement\n");}
                 | DECLARATION_STATEMENT
-                | ASSIGNMENT_STATEMENT                     {printf("Parsed Assignment statement\n");}
+                | ASSIGNMENT_STATEMENT                      {printf("Parsed Assignment statement\n");}
                 | EXPRESSION SEMICOLON
                 
                 | ENUM_DECLARATION_STATEMENT                {printf("Parsed Enum Declaration\n");}
@@ -84,13 +85,14 @@ STATEMENT:
                 | RETURN_STATEMENT SEMICOLON
                 | BLOCK                                     {printf("Parsed Block\n");}
                 | FUNC_DECLARATION_STATEMENT                {printf("Parsed Function Declaration\n");}
+                
                 ;
 
 //________________________________________________ PRINT STATEMENT ________________________________________________
 PRINT_STATEMENT:
                 PRINT '('EXPRESSION')' SEMICOLON
                 | PRINT '('EXPRESSION ',' EXPRESSION')' SEMICOLON
-                ;             
+                ;               
 //________________________________________________ TYPE ________________________________________________
 TYPE:
                 INT         { $$ = "int";   }
@@ -137,6 +139,7 @@ COMPARISON:
                 | EXPRESSION LT EQ EXPRESSION           
                 | EXPRESSION GT EXPRESSION                
                 | EXPRESSION GT EQ EXPRESSION  
+
                 ;
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
@@ -145,7 +148,7 @@ DECLARATION_STATEMENT:
                 | TYPE CONSTANT DECLARATION_TAIL            { printf("Parsed Const Declaration\n"); }
                 ;
 DECLARATION_TAIL:
-                EQ EXPRESSION SEMICOLON                 
+                EQ EXPRESSION SEMICOLON                                
                 | SEMICOLON 
                 ;
 
@@ -173,8 +176,8 @@ CASES:
 FUNC_DECLARATION_STATEMENT:
                 TYPE IDENTIFIER '(' ARGS ')'      BLOCK                                   
                 | VOID IDENTIFIER '(' ARGS ')'    BLOCK 
-                | TYPE IDENTIFIER '(' ')'         BLOCK                                   
-                | VOID IDENTIFIER '(' ')'         BLOCK 
+                | TYPE IDENTIFIER '(' ')'          BLOCK                                   
+                | VOID IDENTIFIER '(' ')'          BLOCK 
                 ;
 ARGS:
                 ARG_DECL ',' ARGS
@@ -187,17 +190,18 @@ ARG_DECL:
 //________________________________________________ ENUM DECLARATION STATEMENT ________________________________________________
 ENUM_DECLARATION_STATEMENT:
                 ENUM IDENTIFIER  '{' ENUM_HELPER '}'          
-                ;               
+                ;                
 ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
 ENUM_ARGS:
 
                 IDENTIFIER   ',' ENUM_ARGS  
                 | IDENTIFIER 
+
                 ;
             
 ENUM_DEFINED_ARGS:
 
-                IDENTIFIER EQ DIGIT ',' ENUM_DEFINED_ARGS 
+                IDENTIFIER EQ DIGIT    ',' ENUM_DEFINED_ARGS 
                 | IDENTIFIER EQ DIGIT  
                 ;
 
@@ -227,14 +231,13 @@ FOR_STATEMENT:
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
-                IDENTIFIER  EQ  EXPRESSION SEMICOLON 
-                | CONSTANT  EQ  EXPRESSION SEMICOLON
+                IDENTIFIER  EQ  EXPRESSION SEMICOLON   
+                | CONSTANT  EQ  EXPRESSION SEMICOLON   
                 ;
 
 //________________________________________________ BLOCK ________________________________________________
 BLOCK:
-                | '{' '}'     
-                '{' PROGRAM '}'
+                '{' PROGRAM '}'               
                 ;
 
 
@@ -244,7 +247,7 @@ FUNC_CALL:
                 IDENTIFIER '(' ARGUMENTS  ')' { printf("Parsed Function Call\n");}
                 ;       
 ARGUMENTS:      
-                EXPRESSION ',' ARGUMENTS
+                EXPRESSION ',' ARGUMENTS 
                 | EXPRESSION    
                 ;
 %%
@@ -258,7 +261,7 @@ int yywrap()
 }
 
 int main(int argc, char *argv[])
-{
+{ 
     yyin = fopen(argv[1], "r");
     yyparse();
 
