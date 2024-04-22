@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 24 "./parser.y"
+#line 24 "parser.y"
 
 #include<stdbool.h>
 
@@ -81,25 +81,28 @@ extern int yydebug;
     LOGIC_AND = 276,               /* LOGIC_AND  */
     LOGIC_OR = 277,                /* LOGIC_OR  */
     LOGIC_NOT = 278,               /* LOGIC_NOT  */
-    EQUALITY = 279,                /* EQUALITY  */
-    NEG_EQUALITY = 280,            /* NEG_EQUALITY  */
-    DEC = 281,                     /* DEC  */
-    INC = 282,                     /* INC  */
-    GT = 283,                      /* GT  */
-    LT = 284,                      /* LT  */
-    EQ = 285,                      /* EQ  */
-    SEMICOLON = 286,               /* SEMICOLON  */
-    MODULO = 287,                  /* MODULO  */
-    PLUS = 288,                    /* PLUS  */
-    SUB = 289,                     /* SUB  */
-    MUL = 290,                     /* MUL  */
-    DIV = 291,                     /* DIV  */
-    POW = 292,                     /* POW  */
-    CONSTANT = 293,                /* CONSTANT  */
-    IDENTIFIER = 294,              /* IDENTIFIER  */
-    STRING_LITERAL = 295,          /* STRING_LITERAL  */
-    DIGIT = 296,                   /* DIGIT  */
-    FLOAT_DIGIT = 297              /* FLOAT_DIGIT  */
+    NOT = 279,                     /* NOT  */
+    EQUALITY = 280,                /* EQUALITY  */
+    NEG_EQUALITY = 281,            /* NEG_EQUALITY  */
+    DEC = 282,                     /* DEC  */
+    INC = 283,                     /* INC  */
+    GT = 284,                      /* GT  */
+    LT = 285,                      /* LT  */
+    SHR = 286,                     /* SHR  */
+    SHL = 287,                     /* SHL  */
+    EQ = 288,                      /* EQ  */
+    SEMICOLON = 289,               /* SEMICOLON  */
+    MODULO = 290,                  /* MODULO  */
+    PLUS = 291,                    /* PLUS  */
+    SUB = 292,                     /* SUB  */
+    MUL = 293,                     /* MUL  */
+    DIV = 294,                     /* DIV  */
+    POW = 295,                     /* POW  */
+    CONSTANT = 296,                /* CONSTANT  */
+    IDENTIFIER = 297,              /* IDENTIFIER  */
+    STRING_LITERAL = 298,          /* STRING_LITERAL  */
+    DIGIT = 299,                   /* DIGIT  */
+    FLOAT_DIGIT = 300              /* FLOAT_DIGIT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -108,14 +111,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 16 "./parser.y"
+#line 16 "parser.y"
  
  int num;
  char* str; 
  float float_val;
  bool bool_val;
 
-#line 119 "parser.tab.h"
+#line 122 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

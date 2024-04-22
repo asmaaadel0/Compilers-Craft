@@ -34,16 +34,16 @@
 %token IF ELSE
 %token FOR WHILE DO 
 
-%token BOOL_LITERAL LOGIC_AND LOGIC_OR LOGIC_NOT
+%token BOOL_LITERAL LOGIC_AND LOGIC_OR LOGIC_NOT NOT
 %token EQUALITY NEG_EQUALITY DEC INC 
-%token GT LT EQ
+%token GT LT SHR SHL EQ
 %token SEMICOLON MODULO PLUS SUB MUL DIV POW
 
 %token CONSTANT IDENTIFIER STRING_LITERAL
 %token DIGIT FLOAT_DIGIT
 
 %left LOGIC_AND LOGIC_OR
-%right LOGIC_NOT
+%right LOGIC_NOT NOT
 
 %left EQUALITY NEG_EQUALITY
 %left PLUS SUB INC DEC MODULO
@@ -53,6 +53,7 @@
 %left MUL DIV 
 %right EQ GT LT
 
+%left SHR SHL
 
 
 %type <str> INT FLOAT BOOL STRING VOID CONSTANT IDENTIFIER TYPE STRING_LITERAL ENUM PLUS
@@ -110,7 +111,19 @@ EXPRESSION:
                 | STRING_LITERAL                
                 | CONSTANT  
 
-                | COMPARISON
+                | EXPRESSION LOGIC_AND EXPRESSION     
+                | EXPRESSION LOGIC_OR EXPRESSION  
+                      
+                | LOGIC_NOT EXPRESSION  
+                | NOT EXPRESSION
+
+                | EXPRESSION EQUALITY EXPRESSION       
+                | EXPRESSION NEG_EQUALITY EXPRESSION  
+
+                | EXPRESSION LT EXPRESSION              
+                | EXPRESSION LT EQ EXPRESSION           
+                | EXPRESSION GT EXPRESSION                
+                | EXPRESSION GT EQ EXPRESSION  
 
                 | EXPRESSION INC               
                 | EXPRESSION DEC     
@@ -123,24 +136,12 @@ EXPRESSION:
                 | EXPRESSION DIV EXPRESSION              
                 | EXPRESSION POW EXPRESSION
                             
+                | EXPRESSION SHR EXPRESSION  
+                | EXPRESSION SHL EXPRESSION  
+
                 | FUNC_CALL                                
                 | '(' EXPRESSION ')'
-                ;
-//________________________________________________ COMPARISON ________________________________________________
-COMPARISON:
-                EXPRESSION LOGIC_AND EXPRESSION     
-                | EXPRESSION LOGIC_OR EXPRESSION        
-                | LOGIC_NOT EXPRESSION  
-
-                | EXPRESSION EQUALITY EXPRESSION       
-                | EXPRESSION NEG_EQUALITY EXPRESSION  
-
-                | EXPRESSION LT EXPRESSION              
-                | EXPRESSION LT EQ EXPRESSION           
-                | EXPRESSION GT EXPRESSION                
-                | EXPRESSION GT EQ EXPRESSION  
-
-                ;
+                ;               
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
