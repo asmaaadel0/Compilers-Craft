@@ -9,7 +9,6 @@
     int yylex();
     extern FILE *yyin;
     extern int number_of_line;
-    void assign_int( int d , int i);
 %}
 
 %union { 
