@@ -4,11 +4,13 @@
     #include <string.h>
     #include <stdbool.h>
     #include "parser.tab.h"
+    #include "symbol_table.cpp"
     
     void yyerror(char* );
     int yylex();
     extern FILE *yyin;
     extern int number_of_line;
+    symbol *head = NULL;
 %}
 
 %union { 
@@ -66,7 +68,7 @@ PROGRAM:
                 ;
 //________________________________________________ BLOCK ________________________________________________
 BLOCK:
-                '{' PROGRAM '}'               
+                '{' {scope_start();} PROGRAM '}' {scope_end(head, number_of_line);}             
                 ;
 
 //________________________________________________ STATEMENT ________________________________________________
@@ -100,10 +102,10 @@ PRINT_STATEMENT:
                 ;               
 //________________________________________________ TYPE ________________________________________________
 TYPE:
-                INT       
-                | FLOAT   
-                | BOOL      
-                | STRING    
+                INT         { $$ = "int";   }
+                | FLOAT     { $$ = "float"; }
+                | BOOL      { $$ = "bool";  }
+                | STRING    { $$ = "string";}
                 ;
 
 //________________________________________________ EXPRESSION ________________________________________________
@@ -152,8 +154,8 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
-                TYPE IDENTIFIER DECLARATION_TAIL            { printf("Parsed Declaration\n"); }
-                | TYPE CONSTANT DECLARATION_TAIL            { printf("Parsed Const Declaration\n"); }
+                TYPE IDENTIFIER {insert(&head, $1, $2, "var", number_of_line, false);}  DECLARATION_TAIL { printf("Parsed Declaration\n");}
+                | TYPE CONSTANT {insert(&head, $1, $2, "const", number_of_line, false);} DECLARATION_TAIL            { printf("Parsed Const Declaration\n"); }
                 ;
 DECLARATION_TAIL:
                 EQ EXPRESSION SEMICOLON                                
@@ -182,38 +184,38 @@ CASES:
 FUNC_DECLARATION_STATEMENT:
                 TYPE IDENTIFIER '(' ARGS ')'      BLOCK                                   
                 | VOID IDENTIFIER '(' ARGS ')'    BLOCK 
-                | TYPE IDENTIFIER '(' ')'          BLOCK                                   
-                | VOID IDENTIFIER '(' ')'          BLOCK 
+                | TYPE IDENTIFIER '(' ')'         BLOCK                                   
+                | VOID IDENTIFIER '(' ')'         BLOCK 
                 ;
 ARGS:
                 ARG_DECL ',' ARGS
                 | ARG_DECL
                 ;
 ARG_DECL:
-                TYPE IDENTIFIER                             
+                TYPE IDENTIFIER {insert(&head, $1, $2,"var", number_of_line, true);}
                 ;
 
 //________________________________________________ ENUM DECLARATION STATEMENT ________________________________________________
 ENUM_DECLARATION_STATEMENT:
-                ENUM IDENTIFIER  '{' ENUM_HELPER '}'          
+                ENUM IDENTIFIER  '{' ENUM_HELPER '}' SEMICOLON {insert(&head, "enum" , $2, "var" , number_of_line, false);}        
                 ;                
 ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
 ENUM_ARGS:
 
-                IDENTIFIER   ',' ENUM_ARGS  
-                | IDENTIFIER 
+                IDENTIFIER {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);} ',' ENUM_ARGS  
+                | IDENTIFIER {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);} 
 
                 ;
             
 ENUM_DEFINED_ARGS:
 
-                IDENTIFIER EQ DIGIT    ',' ENUM_DEFINED_ARGS 
-                | IDENTIFIER EQ DIGIT  
+                IDENTIFIER EQ DIGIT {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);} ',' ENUM_DEFINED_ARGS 
+                | IDENTIFIER EQ DIGIT {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);}
                 ;
 
 ENUM_CALL_STATEMENT:
-                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON 
-                | IDENTIFIER IDENTIFIER SEMICOLON
+                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insert(&head, $1 , $2, "var_enum" , number_of_line, false);}
+                | IDENTIFIER IDENTIFIER SEMICOLON {insert(&head, $1 , $2, "var_enum" , number_of_line, false);}
                 ;
 
 //________________________________________________ IF STATEMENT ________________________________________________
@@ -263,6 +265,7 @@ int main(int argc, char *argv[])
 { 
     yyin = fopen(argv[1], "r");
     yyparse();
+    display(head);
 
     return 0;
 }
