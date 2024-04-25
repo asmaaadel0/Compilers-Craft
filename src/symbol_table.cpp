@@ -47,7 +47,7 @@ void scope_end(symbol *head, int number_of_line) {
     symbol *current = head;
     while (current != NULL) {
         if (strcmp(current->type, "func") == 0 && !current->outOfScope && strcmp(current->datatype, "void") != 0) {
-            printf("\n !!!!!!!!!!!! Error at line %d: Missing return statement in Function %s !!!!!!!!!!!\n", number_of_line, current->name);
+            printf("Error at line %d: Missing return statement in Function %s\n", number_of_line, current->name);
         }
         current = current->next;
     }
@@ -56,7 +56,7 @@ void scope_end(symbol *head, int number_of_line) {
     current = head;
     while (current != NULL) {
         if (strcmp(current->type, "func") == 0 && !current->outOfScope && strcmp(current->datatype, "void") == 0) {
-            printf("\n !!!!!!!!!!!! Error at line %d: %s Void Function can't have return statement !!!!!!!!!!!\n", number_of_line, current->name);
+            printf("Error at line %d: %s Void Function can't have return statement\n", number_of_line, current->name);
         }
         current = current->next;
     }
