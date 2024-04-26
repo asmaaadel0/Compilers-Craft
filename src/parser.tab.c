@@ -1792,6 +1792,7 @@ int main(int argc, char *argv[])
     yyin = fopen(argv[1], "r");
     yyparse();
     display(head);
+    display_to_file(head, "symbol_table.txt");
 
     return 0;
 }

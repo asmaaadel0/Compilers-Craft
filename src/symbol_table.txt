@@ -1,0 +1,5 @@
+ID	Name	Type	DataType	Line	Scope	isInit	Value
+3	s	var	string		4	0	1	"1"
+2	b	var	bool		3	0	1	false
+1	f	var	float		2	0	1	1.100000
+0	i	var	int		1	0	1	2

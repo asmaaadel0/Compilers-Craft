@@ -154,55 +154,6 @@ int lookup(symbol *headRef, const char *identifierName, bool is_assignment)
     return -1; // Return -1 to indicate symbol not found
 }
 
-void display(symbol *node)
-{
-    printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\n");
-    while (node != NULL)
-    {
-        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node->id, node->identifierName, node->type, node->datatype, node->declareLine, node->scope, node->isInit);
-        if (node->isInit == 1)
-        {
-            if (strcmp(node->datatype, "int") == 0 || strcmp(node->type, "var_enum") == 0)
-            {
-                printf("%d", node->intValue);
-            }
-            else if (strcmp(node->datatype, "float") == 0)
-            {
-                printf("%f", node->floatValue);
-            }
-            else if (strcmp(node->datatype, "bool") == 0)
-            {
-                printf("%s", node->boolValue ? "true" : "false");
-            }
-            else if (strcmp(node->datatype, "string") == 0)
-            {
-                printf("%s", node->strValue);
-            }
-        }
-        else
-        {
-            printf("-");
-        }
-
-        printf("\n");
-        node = node->next;
-    }
-}
-
-// Function to find the symbol by name in the linked list
-int find(symbol *head, const char *name)
-{
-    while (head != NULL)
-    {
-        if (strcmp(head->identifierName, name) == 0 && head->outOfScope == false)
-        {
-            return head->id;
-        }
-        head = head->next;
-    }
-    return -1; // Symbol not found
-}
-
 void assign_int(symbol *head, int value, const char *name, int number_of_line)
 {
     while (head != NULL)
@@ -337,25 +288,84 @@ void assign_string(symbol *head, char *value, const char *name, int number_of_li
     }
 }
 
-// Function to assign an integer value to a symbol
-// void assign_int(symbol *head, const char *name, void *value, const char *datatype)
-// {
-//     while (head != NULL)
-//     {
-//         if (strcmp(head->identifierName, name) == 0 && !head->outOfScope)
-//         {
-//             head->isInit = true;
-//             if (strcmp(datatype, "int") == 0)
-//                 head->intValue = *((int *)value);
-//             else if (strcmp(datatype, "float") == 0)
-//                 head->floatValue = *((float *)value);
-//             else if (strcmp(datatype, "bool") == 0)
-//                 head->boolValue = *((bool *)value);
-//             return;
-//         }
-//         head = head->next;
-//     }
-// }
+void display_to_file(symbol *node, const char *filename)
+{
+    FILE *fp = fopen(filename, "w");
+    if (fp == NULL)
+    {
+        printf("Error opening file.\n");
+        return;
+    }
+
+    fprintf(fp, "ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\n");
+    while (node != NULL)
+    {
+        fprintf(fp, "%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node->id, node->identifierName, node->type, node->datatype, node->declareLine, node->scope, node->isInit);
+        if (node->isInit == 1)
+        {
+            if (strcmp(node->datatype, "int") == 0 || strcmp(node->type, "var_enum") == 0)
+            {
+                fprintf(fp, "%d", node->intValue);
+            }
+            else if (strcmp(node->datatype, "float") == 0)
+            {
+                fprintf(fp, "%f", node->floatValue);
+            }
+            else if (strcmp(node->datatype, "bool") == 0)
+            {
+                fprintf(fp, "%s", node->boolValue ? "true" : "false");
+            }
+            else if (strcmp(node->datatype, "string") == 0)
+            {
+                fprintf(fp, "%s", node->strValue);
+            }
+        }
+        else
+        {
+            fprintf(fp, "-");
+        }
+
+        fprintf(fp, "\n");
+        node = node->next;
+    }
+
+    fclose(fp);
+}
+
+void display(symbol *node)
+{
+    printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\n");
+    while (node != NULL)
+    {
+        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node->id, node->identifierName, node->type, node->datatype, node->declareLine, node->scope, node->isInit);
+        if (node->isInit == 1)
+        {
+            if (strcmp(node->datatype, "int") == 0 || strcmp(node->type, "var_enum") == 0)
+            {
+                printf("%d", node->intValue);
+            }
+            else if (strcmp(node->datatype, "float") == 0)
+            {
+                printf("%f", node->floatValue);
+            }
+            else if (strcmp(node->datatype, "bool") == 0)
+            {
+                printf("%s", node->boolValue ? "true" : "false");
+            }
+            else if (strcmp(node->datatype, "string") == 0)
+            {
+                printf("%s", node->strValue);
+            }
+        }
+        else
+        {
+            printf("-");
+        }
+
+        printf("\n");
+        node = node->next;
+    }
+}
 
 // int main()
 // {
@@ -368,13 +378,6 @@ void assign_string(symbol *head, char *value, const char *name, int number_of_li
 //     printf("%d\n", lookup(head, "sama", false));
 //     printf("%d\n", is_exist(head, "asmaa"));
 //     display(head);
-
-//     int intValue = 10;
-//     assign_value(head, "lamiaa", &intValue, "int");
-//     float floatValue = 1.1;
-//     assign_value(head, "asmaa", &floatValue, "float");
-//     bool boolValue = false;
-//     assign_value(head, "test", &boolValue, "bool");
 
 //     display(head);
 //     return 0;
