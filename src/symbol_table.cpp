@@ -203,25 +203,159 @@ int find(symbol *head, const char *name)
     return -1; // Symbol not found
 }
 
-// Function to assign an integer value to a symbol
-void assign_value(symbol *head, const char *name, void *value, const char *datatype)
+void assign_int(symbol *head, int value, const char *name, int number_of_line)
 {
     while (head != NULL)
     {
-        if (strcmp(head->identifierName, name) == 0 && !head->outOfScope)
+        if (strcmp(head->identifierName, name) == 0)
         {
-            head->isInit = true;
-            if (strcmp(datatype, "int") == 0)
-                head->intValue = *((int *)value);
-            else if (strcmp(datatype, "float") == 0)
-                head->floatValue = *((float *)value);
-            else if (strcmp(datatype, "bool") == 0)
-                head->boolValue = *((bool *)value);
-            return;
+            if (strcmp(head->datatype, "string") == 0 && head->type == "func")
+            {
+                printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, head->identifierName, head->datatype);
+                return;
+            }
+            head->isInit = 1;
+            if (strcmp(head->datatype, "string") != 0 && !head->outOfScope)
+            {
+                if (strcmp(head->datatype, "float") == 0)
+                {
+                    head->floatValue = (float)value;
+                }
+                else if (strcmp(head->datatype, "bool") == 0)
+                {
+                    head->boolValue = (bool)value;
+                }
+                else if (strcmp(head->datatype, "int") == 0)
+                {
+                    head->intValue = value;
+                }
+            }
+            else
+            {
+                printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, head->identifierName, head->datatype);
+            }
         }
         head = head->next;
     }
 }
+
+void assign_float(symbol *head, float value, const char *name, int number_of_line)
+{
+    while (head != NULL)
+    {
+        if (strcmp(head->identifierName, name) == 0)
+        {
+            if (strcmp(head->datatype, "string") == 0 && head->type == "func")
+            {
+                printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned float\n", number_of_line, head->identifierName, head->datatype);
+                return;
+            }
+            head->isInit = 1;
+            if (strcmp(head->datatype, "string") != 0 && !head->outOfScope)
+            {
+                if (strcmp(head->datatype, "float") == 0)
+                {
+                    head->floatValue = value;
+                }
+                else if (strcmp(head->datatype, "bool") == 0)
+                {
+                    head->boolValue = (bool)value;
+                }
+                else if (strcmp(head->datatype, "int") == 0)
+                {
+                    head->intValue = (int)value;
+                }
+            }
+            else
+            {
+                printf("Type Mismatch Error at line %d: %s %s variable assigned float value\n", number_of_line, head->identifierName, head->datatype);
+            }
+        }
+        head = head->next;
+    }
+}
+
+void assign_bool(symbol *head, bool value, const char *name, int number_of_line)
+{
+    while (head != NULL)
+    {
+        if (strcmp(head->identifierName, name) == 0)
+        {
+            if (strcmp(head->datatype, "string") == 0 && head->type == "func")
+            {
+                printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned bool\n", number_of_line, head->identifierName, head->datatype);
+                return;
+            }
+            head->isInit = 1;
+            if (strcmp(head->datatype, "string") != 0 && !head->outOfScope)
+            {
+                if (strcmp(head->datatype, "float") == 0)
+                {
+                    head->floatValue = (float)value;
+                }
+                else if (strcmp(head->datatype, "bool") == 0)
+                {
+                    head->boolValue = value;
+                }
+                else if (strcmp(head->datatype, "int") == 0)
+                {
+                    head->intValue = (int)value;
+                }
+            }
+            else
+            {
+                printf("Type Mismatch Error at line %d: %s %s variable assigned bool value\n", number_of_line, head->identifierName, head->datatype);
+            }
+        }
+        head = head->next;
+    }
+}
+
+void assign_string(symbol *head, char *value, const char *name, int number_of_line)
+{
+    while (head != NULL)
+    {
+        if (strcmp(head->identifierName, name) == 0)
+        {
+            if (strcmp(head->datatype, "string") != 0 && head->type == "func")
+            {
+                printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned string\n", number_of_line, head->identifierName, head->datatype);
+                return;
+            }
+            head->isInit = 1;
+            if (strcmp(head->datatype, "string") == 0 && !head->outOfScope)
+            {
+                // strcpy(head->strValue, value);
+                head->strValue = value;
+            }
+            else
+            {
+                printf("Type Mismatch Error at line %d: %s %s variable assigned string value\n", number_of_line, head->identifierName, head->datatype);
+            }
+        }
+        head = head->next;
+    }
+}
+
+// Function to assign an integer value to a symbol
+// void assign_int(symbol *head, const char *name, void *value, const char *datatype)
+// {
+//     while (head != NULL)
+//     {
+//         if (strcmp(head->identifierName, name) == 0 && !head->outOfScope)
+//         {
+//             head->isInit = true;
+//             if (strcmp(datatype, "int") == 0)
+//                 head->intValue = *((int *)value);
+//             else if (strcmp(datatype, "float") == 0)
+//                 head->floatValue = *((float *)value);
+//             else if (strcmp(datatype, "bool") == 0)
+//                 head->boolValue = *((bool *)value);
+//             return;
+//         }
+//         head = head->next;
+//     }
+// }
 
 // int main()
 // {

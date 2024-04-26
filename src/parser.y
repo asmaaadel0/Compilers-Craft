@@ -11,6 +11,7 @@
     extern FILE *yyin;
     extern int number_of_line;
     symbol *head = NULL;
+    char IdentifierHolder[10];
 %}
 
 %union { 
@@ -111,10 +112,10 @@ TYPE:
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
                 IDENTIFIER                      
-                | DIGIT                      
-                | FLOAT_DIGIT                   
-                | BOOL_LITERAL          
-                | STRING_LITERAL                
+                | DIGIT         {assign_int(head, $1, IdentifierHolder, number_of_line);}       
+                | FLOAT_DIGIT   {assign_float(head, $1, IdentifierHolder, number_of_line);}                 
+                | BOOL_LITERAL  {assign_bool(head, $1, IdentifierHolder, number_of_line);}   
+                | STRING_LITERAL{assign_string(head, $1, IdentifierHolder, number_of_line);}                
                 | CONSTANT  
 
                 | EXPRESSION LOGIC_AND EXPRESSION     
@@ -154,8 +155,8 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
-                TYPE IDENTIFIER {insert(&head, $1, $2, "var", number_of_line, false);}  DECLARATION_TAIL { printf("Parsed Declaration\n");}
-                | TYPE CONSTANT {insert(&head, $1, $2, "const", number_of_line, false);} DECLARATION_TAIL            { printf("Parsed Const Declaration\n"); }
+                TYPE IDENTIFIER {insert(&head, $1, $2, "var", number_of_line, false);strcpy(IdentifierHolder, $2);}  DECLARATION_TAIL { printf("Parsed Declaration\n");}
+                | TYPE CONSTANT {insert(&head, $1, $2, "const", number_of_line, false);strcpy(IdentifierHolder, $2);} DECLARATION_TAIL            { printf("Parsed Const Declaration\n"); }
                 ;
 DECLARATION_TAIL:
                 EQ EXPRESSION SEMICOLON                                
@@ -192,30 +193,30 @@ ARGS:
                 | ARG_DECL
                 ;
 ARG_DECL:
-                TYPE IDENTIFIER {insert(&head, $1, $2,"var", number_of_line, true);}
+                TYPE IDENTIFIER {insert(&head, $1, $2,"var", number_of_line, true);strcpy(IdentifierHolder, $2);}
                 ;
 
 //________________________________________________ ENUM DECLARATION STATEMENT ________________________________________________
 ENUM_DECLARATION_STATEMENT:
-                ENUM IDENTIFIER  '{' ENUM_HELPER '}' SEMICOLON {insert(&head, "enum" , $2, "var" , number_of_line, false);}        
+                ENUM IDENTIFIER  '{' ENUM_HELPER '}' SEMICOLON {insert(&head, "enum" , $2, "var" , number_of_line, false);strcpy(IdentifierHolder, $2);}        
                 ;                
 ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
 ENUM_ARGS:
 
-                IDENTIFIER {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);} ',' ENUM_ARGS  
-                | IDENTIFIER {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);} 
+                IDENTIFIER {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} ',' ENUM_ARGS  
+                | IDENTIFIER {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} 
 
                 ;
             
 ENUM_DEFINED_ARGS:
 
-                IDENTIFIER EQ DIGIT {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);} ',' ENUM_DEFINED_ARGS 
-                | IDENTIFIER EQ DIGIT {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);}
+                IDENTIFIER EQ DIGIT {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} ',' ENUM_DEFINED_ARGS 
+                | IDENTIFIER EQ DIGIT {insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);}
                 ;
 
 ENUM_CALL_STATEMENT:
-                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insert(&head, $1 , $2, "var_enum" , number_of_line, false);}
-                | IDENTIFIER IDENTIFIER SEMICOLON {insert(&head, $1 , $2, "var_enum" , number_of_line, false);}
+                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insert(&head, $1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
+                | IDENTIFIER IDENTIFIER SEMICOLON {insert(&head, $1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
                 ;
 
 //________________________________________________ IF STATEMENT ________________________________________________

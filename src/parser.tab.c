@@ -81,8 +81,9 @@
     extern FILE *yyin;
     extern int number_of_line;
     symbol *head = NULL;
+    char IdentifierHolder[10];
 
-#line 86 "parser.tab.c"
+#line 87 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -586,16 +587,16 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    66,    66,    67,    71,    71,    76,    77,    78,    79,
-      81,    82,    84,    85,    86,    87,    88,    89,    90,    92,
-      93,    94,   100,   101,   105,   106,   107,   108,   113,   114,
-     115,   116,   117,   118,   120,   121,   123,   124,   126,   127,
-     129,   130,   131,   132,   134,   135,   137,   138,   140,   141,
-     142,   143,   144,   145,   146,   148,   149,   151,   152,   157,
-     157,   158,   158,   161,   162,   166,   167,   172,   175,   178,
-     179,   180,   185,   186,   187,   188,   191,   192,   195,   200,
-     202,   202,   205,   205,   206,   212,   212,   213,   217,   218,
-     223,   224,   229,   233,   237,   242,   243,   248,   251,   252
+       0,    67,    67,    68,    72,    72,    77,    78,    79,    80,
+      82,    83,    85,    86,    87,    88,    89,    90,    91,    93,
+      94,    95,   101,   102,   106,   107,   108,   109,   114,   115,
+     116,   117,   118,   119,   121,   122,   124,   125,   127,   128,
+     130,   131,   132,   133,   135,   136,   138,   139,   141,   142,
+     143,   144,   145,   146,   147,   149,   150,   152,   153,   158,
+     158,   159,   159,   162,   163,   167,   168,   173,   176,   179,
+     180,   181,   186,   187,   188,   189,   192,   193,   196,   201,
+     203,   203,   206,   206,   207,   213,   213,   214,   218,   219,
+     224,   225,   230,   234,   238,   243,   244,   249,   252,   253
 };
 #endif
 
@@ -1372,193 +1373,217 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* PROGRAM: PROGRAM STATEMENT  */
-#line 66 "./parser.y"
+#line 67 "./parser.y"
                                             {printf("Parsed Line %d Succesfully\n\n", number_of_line);}
-#line 1378 "parser.tab.c"
+#line 1379 "parser.tab.c"
     break;
 
   case 4: /* $@1: %empty  */
-#line 71 "./parser.y"
+#line 72 "./parser.y"
                     {scope_start();}
-#line 1384 "parser.tab.c"
+#line 1385 "parser.tab.c"
     break;
 
   case 5: /* BLOCK: '{' $@1 PROGRAM '}'  */
-#line 71 "./parser.y"
+#line 72 "./parser.y"
                                                  {scope_end(head, number_of_line);}
-#line 1390 "parser.tab.c"
+#line 1391 "parser.tab.c"
     break;
 
   case 6: /* STATEMENT: PRINT_STATEMENT  */
-#line 76 "./parser.y"
+#line 77 "./parser.y"
                                                             {printf("Parsed print statement\n");}
-#line 1396 "parser.tab.c"
+#line 1397 "parser.tab.c"
     break;
 
   case 8: /* STATEMENT: ASSIGNMENT_STATEMENT  */
-#line 78 "./parser.y"
+#line 79 "./parser.y"
                                                             {printf("Parsed Assignment statement\n");}
-#line 1402 "parser.tab.c"
+#line 1403 "parser.tab.c"
     break;
 
   case 10: /* STATEMENT: ENUM_DECLARATION_STATEMENT  */
-#line 81 "./parser.y"
+#line 82 "./parser.y"
                                                             {printf("Parsed Enum Declaration\n");}
-#line 1408 "parser.tab.c"
+#line 1409 "parser.tab.c"
     break;
 
   case 11: /* STATEMENT: ENUM_CALL_STATEMENT  */
-#line 82 "./parser.y"
+#line 83 "./parser.y"
                                                             {printf("Parsed Enum Call\n");}
-#line 1414 "parser.tab.c"
+#line 1415 "parser.tab.c"
     break;
 
   case 12: /* STATEMENT: IF_STATEMENT  */
-#line 84 "./parser.y"
+#line 85 "./parser.y"
                                                             {printf("Parsed if statement\n");}
-#line 1420 "parser.tab.c"
+#line 1421 "parser.tab.c"
     break;
 
   case 13: /* STATEMENT: WHILE_STATEMENT  */
-#line 85 "./parser.y"
+#line 86 "./parser.y"
                                                             {printf("Parsed While LOOP\n");}
-#line 1426 "parser.tab.c"
+#line 1427 "parser.tab.c"
     break;
 
   case 14: /* STATEMENT: FOR_STATEMENT  */
-#line 86 "./parser.y"
+#line 87 "./parser.y"
                                                             {printf("Parsed For LOOP\n");}
-#line 1432 "parser.tab.c"
+#line 1433 "parser.tab.c"
     break;
 
   case 15: /* STATEMENT: DO_WHILE_STATEMENT  */
-#line 87 "./parser.y"
+#line 88 "./parser.y"
                                                             {printf("Parsed Do While LOOP\n");}
-#line 1438 "parser.tab.c"
+#line 1439 "parser.tab.c"
     break;
 
   case 16: /* STATEMENT: SWITCH_STATEMENT  */
-#line 88 "./parser.y"
+#line 89 "./parser.y"
                                                             {printf("Parsed Switch Statement\n");}
-#line 1444 "parser.tab.c"
+#line 1445 "parser.tab.c"
     break;
 
   case 20: /* STATEMENT: BLOCK  */
-#line 93 "./parser.y"
+#line 94 "./parser.y"
                                                             {printf("Parsed Block\n");}
-#line 1450 "parser.tab.c"
+#line 1451 "parser.tab.c"
     break;
 
   case 21: /* STATEMENT: FUNC_DECLARATION_STATEMENT  */
-#line 94 "./parser.y"
+#line 95 "./parser.y"
                                                             {printf("Parsed Function Declaration\n");}
-#line 1456 "parser.tab.c"
+#line 1457 "parser.tab.c"
     break;
 
   case 24: /* TYPE: INT  */
-#line 105 "./parser.y"
+#line 106 "./parser.y"
                             { (yyval.str) = "int";   }
-#line 1462 "parser.tab.c"
+#line 1463 "parser.tab.c"
     break;
 
   case 25: /* TYPE: FLOAT  */
-#line 106 "./parser.y"
+#line 107 "./parser.y"
                             { (yyval.str) = "float"; }
-#line 1468 "parser.tab.c"
+#line 1469 "parser.tab.c"
     break;
 
   case 26: /* TYPE: BOOL  */
-#line 107 "./parser.y"
+#line 108 "./parser.y"
                             { (yyval.str) = "bool";  }
-#line 1474 "parser.tab.c"
+#line 1475 "parser.tab.c"
     break;
 
   case 27: /* TYPE: STRING  */
-#line 108 "./parser.y"
+#line 109 "./parser.y"
                             { (yyval.str) = "string";}
-#line 1480 "parser.tab.c"
+#line 1481 "parser.tab.c"
+    break;
+
+  case 29: /* EXPRESSION: DIGIT  */
+#line 115 "./parser.y"
+                                {assign_int(head, (yyvsp[0].num), IdentifierHolder, number_of_line);}
+#line 1487 "parser.tab.c"
+    break;
+
+  case 30: /* EXPRESSION: FLOAT_DIGIT  */
+#line 116 "./parser.y"
+                                {assign_float(head, (yyvsp[0].float_val), IdentifierHolder, number_of_line);}
+#line 1493 "parser.tab.c"
+    break;
+
+  case 31: /* EXPRESSION: BOOL_LITERAL  */
+#line 117 "./parser.y"
+                                {assign_bool(head, (yyvsp[0].bool_val), IdentifierHolder, number_of_line);}
+#line 1499 "parser.tab.c"
+    break;
+
+  case 32: /* EXPRESSION: STRING_LITERAL  */
+#line 118 "./parser.y"
+                                {assign_string(head, (yyvsp[0].str), IdentifierHolder, number_of_line);}
+#line 1505 "parser.tab.c"
     break;
 
   case 59: /* $@2: %empty  */
-#line 157 "./parser.y"
-                                {insert(&head, (yyvsp[-1].str), (yyvsp[0].str), "var", number_of_line, false);}
-#line 1486 "parser.tab.c"
+#line 158 "./parser.y"
+                                {insert(&head, (yyvsp[-1].str), (yyvsp[0].str), "var", number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
+#line 1511 "parser.tab.c"
     break;
 
   case 60: /* DECLARATION_STATEMENT: TYPE IDENTIFIER $@2 DECLARATION_TAIL  */
-#line 157 "./parser.y"
-                                                                                                         { printf("Parsed Declaration\n");}
-#line 1492 "parser.tab.c"
+#line 158 "./parser.y"
+                                                                                                                                      { printf("Parsed Declaration\n");}
+#line 1517 "parser.tab.c"
     break;
 
   case 61: /* $@3: %empty  */
-#line 158 "./parser.y"
-                                {insert(&head, (yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);}
-#line 1498 "parser.tab.c"
+#line 159 "./parser.y"
+                                {insert(&head, (yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
+#line 1523 "parser.tab.c"
     break;
 
   case 62: /* DECLARATION_STATEMENT: TYPE CONSTANT $@3 DECLARATION_TAIL  */
-#line 158 "./parser.y"
-                                                                                                                     { printf("Parsed Const Declaration\n"); }
-#line 1504 "parser.tab.c"
+#line 159 "./parser.y"
+                                                                                                                                                  { printf("Parsed Const Declaration\n"); }
+#line 1529 "parser.tab.c"
     break;
 
   case 78: /* ARG_DECL: TYPE IDENTIFIER  */
-#line 195 "./parser.y"
-                                {insert(&head, (yyvsp[-1].str), (yyvsp[0].str),"var", number_of_line, true);}
-#line 1510 "parser.tab.c"
+#line 196 "./parser.y"
+                                {insert(&head, (yyvsp[-1].str), (yyvsp[0].str),"var", number_of_line, true);strcpy(IdentifierHolder, (yyvsp[0].str));}
+#line 1535 "parser.tab.c"
     break;
 
   case 79: /* ENUM_DECLARATION_STATEMENT: ENUM IDENTIFIER '{' ENUM_HELPER '}' SEMICOLON  */
-#line 200 "./parser.y"
-                                                               {insert(&head, "enum" , (yyvsp[-4].str), "var" , number_of_line, false);}
-#line 1516 "parser.tab.c"
+#line 201 "./parser.y"
+                                                               {insert(&head, "enum" , (yyvsp[-4].str), "var" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-4].str));}
+#line 1541 "parser.tab.c"
     break;
 
   case 82: /* $@4: %empty  */
-#line 205 "./parser.y"
-                           {insert(&head, "int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);}
-#line 1522 "parser.tab.c"
+#line 206 "./parser.y"
+                           {insert(&head, "int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
+#line 1547 "parser.tab.c"
     break;
 
   case 84: /* ENUM_ARGS: IDENTIFIER  */
-#line 206 "./parser.y"
-                             {insert(&head, "int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);}
-#line 1528 "parser.tab.c"
+#line 207 "./parser.y"
+                             {insert(&head, "int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
+#line 1553 "parser.tab.c"
     break;
 
   case 85: /* $@5: %empty  */
-#line 212 "./parser.y"
-                                    {insert(&head, "int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);}
-#line 1534 "parser.tab.c"
+#line 213 "./parser.y"
+                                    {insert(&head, "int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-2].str));}
+#line 1559 "parser.tab.c"
     break;
 
   case 87: /* ENUM_DEFINED_ARGS: IDENTIFIER EQ DIGIT  */
-#line 213 "./parser.y"
-                                      {insert(&head, "int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);}
-#line 1540 "parser.tab.c"
+#line 214 "./parser.y"
+                                      {insert(&head, "int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-2].str));}
+#line 1565 "parser.tab.c"
     break;
 
   case 88: /* ENUM_CALL_STATEMENT: IDENTIFIER IDENTIFIER EQ IDENTIFIER SEMICOLON  */
-#line 217 "./parser.y"
-                                                               {insert(&head, (yyvsp[-4].str) , (yyvsp[-3].str), "var_enum" , number_of_line, false);}
-#line 1546 "parser.tab.c"
+#line 218 "./parser.y"
+                                                               {insert(&head, (yyvsp[-4].str) , (yyvsp[-3].str), "var_enum" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-3].str));}
+#line 1571 "parser.tab.c"
     break;
 
   case 89: /* ENUM_CALL_STATEMENT: IDENTIFIER IDENTIFIER SEMICOLON  */
-#line 218 "./parser.y"
-                                                  {insert(&head, (yyvsp[-2].str) , (yyvsp[-1].str), "var_enum" , number_of_line, false);}
-#line 1552 "parser.tab.c"
+#line 219 "./parser.y"
+                                                  {insert(&head, (yyvsp[-2].str) , (yyvsp[-1].str), "var_enum" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-1].str));}
+#line 1577 "parser.tab.c"
     break;
 
   case 97: /* FUNC_CALL: IDENTIFIER '(' ARGUMENTS ')'  */
-#line 248 "./parser.y"
+#line 249 "./parser.y"
                                               { printf("Parsed Function Call\n");}
-#line 1558 "parser.tab.c"
+#line 1583 "parser.tab.c"
     break;
 
 
-#line 1562 "parser.tab.c"
+#line 1587 "parser.tab.c"
 
       default: break;
     }
@@ -1751,7 +1776,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 254 "./parser.y"
+#line 255 "./parser.y"
 
 
 void yyerror(char *s) { 

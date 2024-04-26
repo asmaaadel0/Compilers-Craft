@@ -1,1 +1,4 @@
-string s = "a";
+int i = 2;
+float f = 1.1;
+bool b = false;
+string s = "1";
