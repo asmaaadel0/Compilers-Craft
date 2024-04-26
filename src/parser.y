@@ -111,9 +111,9 @@ TYPE:
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
                 IDENTIFIER                      
-                | DIGIT                         
+                | DIGIT                      
                 | FLOAT_DIGIT                   
-                | BOOL_LITERAL                  
+                | BOOL_LITERAL          
                 | STRING_LITERAL                
                 | CONSTANT  
 

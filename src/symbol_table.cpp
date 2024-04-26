@@ -35,44 +35,37 @@ int assignIndex = 0;
 int returnExist = 0;
 int funcIndex = 0;
 
-
-void scope_start(){
+void scope_start()
+{
     blockNumber++;
     scopeIndex++;
     scopeStack[scopeIndex] = blockNumber;
 }
 
-void scope_end(symbol *head, int number_of_line) {
-    // Check for missing return statement in non-void functions
+void scope_end(symbol *head, int number_of_line)
+{
     symbol *current = head;
-    while (current != NULL) {
-        if (strcmp(current->type, "func") == 0 && !current->outOfScope && strcmp(current->datatype, "void") != 0) {
+    while (current != NULL)
+    {
+        // Check for missing return statement in non-void functions
+        if (strcmp(current->type, "func") == 0 && !current->outOfScope && strcmp(current->datatype, "void") != 0)
+        {
             printf("Error at line %d: Missing return statement in Function %s\n", number_of_line, current->name);
         }
-        current = current->next;
-    }
-
-    // Check for return statement in void functions
-    current = head;
-    while (current != NULL) {
-        if (strcmp(current->type, "func") == 0 && !current->outOfScope && strcmp(current->datatype, "void") == 0) {
+        // Check for return statement in void functions
+        if (strcmp(current->type, "func") == 0 && !current->outOfScope && strcmp(current->datatype, "void") == 0)
+        {
             printf("Error at line %d: %s Void Function can't have return statement\n", number_of_line, current->name);
         }
-        current = current->next;
-    }
-
-    // Mark symbols in the current scope as out of scope
-    current = head;
-    while (current != NULL) {
-        if (current->scope == scopeStack[scopeIndex]) {
+        // Mark symbols in the current scope as out of scope
+        if (current->scope == scopeStack[scopeIndex])
+        {
             current->outOfScope = true;
         }
         current = current->next;
     }
-
     scopeIndex--;
 }
-
 
 int is_exist(symbol *head, const char *identifierName)
 {
@@ -163,11 +156,70 @@ int lookup(symbol *headRef, const char *identifierName, bool is_assignment)
 
 void display(symbol *node)
 {
-    printf("ID\tName\tType\tDatatype\tLine\tScope\tisInit\n");
+    printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\n");
     while (node != NULL)
     {
-        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t\n", node->id, node->identifierName, node->type, node->datatype, node->declareLine, node->scope, node->isInit);
+        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node->id, node->identifierName, node->type, node->datatype, node->declareLine, node->scope, node->isInit);
+        if (node->isInit == 1)
+        {
+            if (strcmp(node->datatype, "int") == 0 || strcmp(node->type, "var_enum") == 0)
+            {
+                printf("%d", node->intValue);
+            }
+            else if (strcmp(node->datatype, "float") == 0)
+            {
+                printf("%f", node->floatValue);
+            }
+            else if (strcmp(node->datatype, "bool") == 0)
+            {
+                printf("%s", node->boolValue ? "true" : "false");
+            }
+            else if (strcmp(node->datatype, "string") == 0)
+            {
+                printf("%s", node->strValue);
+            }
+        }
+        else
+        {
+            printf("-");
+        }
+
+        printf("\n");
         node = node->next;
+    }
+}
+
+// Function to find the symbol by name in the linked list
+int find(symbol *head, const char *name)
+{
+    while (head != NULL)
+    {
+        if (strcmp(head->identifierName, name) == 0 && head->outOfScope == false)
+        {
+            return head->id;
+        }
+        head = head->next;
+    }
+    return -1; // Symbol not found
+}
+
+// Function to assign an integer value to a symbol
+void assign_value(symbol *head, const char *name, void *value, const char *datatype)
+{
+    while (head != NULL)
+    {
+        if (strcmp(head->identifierName, name) == 0 && !head->outOfScope)
+        {
+            head->isInit = true;
+            if (strcmp(datatype, "int") == 0)
+                head->intValue = *((int *)value);
+            else if (strcmp(datatype, "float") == 0)
+                head->floatValue = *((float *)value);
+            else if (strcmp(datatype, "bool") == 0)
+                head->boolValue = *((bool *)value);
+            return;
+        }
+        head = head->next;
     }
 }
 
@@ -175,11 +227,20 @@ void display(symbol *node)
 // {
 //     symbol *head = NULL;
 //     scopeStack[0] = 0;
-//     insert(&head, "int", "asmaa", "var", 3, false);
-//     insert(&head, "int", "asmaa", "var", 4, false);
+//     insert(&head, "int", "lamiaa", "var", 3, false);
+//     insert(&head, "float", "asmaa", "var", 2, false);
+//     insert(&head, "bool", "test", "var", 2, false);
 
-//     // printf("%d\n", lookup(head, "sama", false));
-//     // printf("%d\n", is_exist(head, "asmaa"));
+//     printf("%d\n", lookup(head, "sama", false));
+//     printf("%d\n", is_exist(head, "asmaa"));
+//     display(head);
+
+//     int intValue = 10;
+//     assign_value(head, "lamiaa", &intValue, "int");
+//     float floatValue = 1.1;
+//     assign_value(head, "asmaa", &floatValue, "float");
+//     bool boolValue = false;
+//     assign_value(head, "test", &boolValue, "bool");
 
 //     display(head);
 //     return 0;
