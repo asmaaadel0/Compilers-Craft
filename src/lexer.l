@@ -10,7 +10,6 @@
 
 "int"                    { num_of_words++; num_of_char+=yyleng;  return INT;}
 "float"                  { num_of_words++; num_of_char+=yyleng;  return FLOAT;}
-"double"                 { num_of_words++; num_of_char+=yyleng;  return FLOAT;}
 "string"                 { num_of_words++; num_of_char+=yyleng;  return STRING;}
 "enum"                   { num_of_words++; num_of_char+=yyleng;  return ENUM;}
 "bool"                   { num_of_words++; num_of_char+=yyleng;  return BOOL;}

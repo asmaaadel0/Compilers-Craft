@@ -1374,7 +1374,7 @@ yyreduce:
     {
   case 2: /* PROGRAM: PROGRAM STATEMENT  */
 #line 67 "./parser.y"
-                                            {printf("Parsed Line %d Succesfully\n\n", number_of_line);}
+                                   {printf("Parsed Line %d Succesfully\n\n", number_of_line);}
 #line 1379 "parser.tab.c"
     break;
 
@@ -1506,73 +1506,73 @@ yyreduce:
 
   case 59: /* $@2: %empty  */
 #line 158 "./parser.y"
-                                {insert(&head, (yyvsp[-1].str), (yyvsp[0].str), "var", number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
+                                {insertResult = insert(&head, (yyvsp[-1].str), (yyvsp[0].str), "var", number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
 #line 1511 "parser.tab.c"
     break;
 
   case 60: /* DECLARATION_STATEMENT: TYPE IDENTIFIER $@2 DECLARATION_TAIL  */
 #line 158 "./parser.y"
-                                                                                                                                      { printf("Parsed Declaration\n");}
+                                                                                                                                                     { printf("Parsed Declaration\n");}
 #line 1517 "parser.tab.c"
     break;
 
   case 61: /* $@3: %empty  */
 #line 159 "./parser.y"
-                                {insert(&head, (yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
+                                {insertResult = insert(&head, (yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
 #line 1523 "parser.tab.c"
     break;
 
   case 62: /* DECLARATION_STATEMENT: TYPE CONSTANT $@3 DECLARATION_TAIL  */
 #line 159 "./parser.y"
-                                                                                                                                                  { printf("Parsed Const Declaration\n"); }
+                                                                                                                                                                 { printf("Parsed Const Declaration\n"); }
 #line 1529 "parser.tab.c"
     break;
 
   case 78: /* ARG_DECL: TYPE IDENTIFIER  */
 #line 196 "./parser.y"
-                                {insert(&head, (yyvsp[-1].str), (yyvsp[0].str),"var", number_of_line, true);strcpy(IdentifierHolder, (yyvsp[0].str));}
+                                {insertResult = insert(&head, (yyvsp[-1].str), (yyvsp[0].str),"var", number_of_line, true);strcpy(IdentifierHolder, (yyvsp[0].str));}
 #line 1535 "parser.tab.c"
     break;
 
   case 79: /* ENUM_DECLARATION_STATEMENT: ENUM IDENTIFIER '{' ENUM_HELPER '}' SEMICOLON  */
 #line 201 "./parser.y"
-                                                               {insert(&head, "enum" , (yyvsp[-4].str), "var" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-4].str));}
+                                                               {insertResult = insert(&head, "enum" , (yyvsp[-4].str), "var" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-4].str));}
 #line 1541 "parser.tab.c"
     break;
 
   case 82: /* $@4: %empty  */
 #line 206 "./parser.y"
-                           {insert(&head, "int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
+                           {insertResult = insert(&head, "int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
 #line 1547 "parser.tab.c"
     break;
 
   case 84: /* ENUM_ARGS: IDENTIFIER  */
 #line 207 "./parser.y"
-                             {insert(&head, "int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
+                             {insertResult = insert(&head, "int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
 #line 1553 "parser.tab.c"
     break;
 
   case 85: /* $@5: %empty  */
 #line 213 "./parser.y"
-                                    {insert(&head, "int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-2].str));}
+                                    {insertResult = insert(&head, "int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-2].str));}
 #line 1559 "parser.tab.c"
     break;
 
   case 87: /* ENUM_DEFINED_ARGS: IDENTIFIER EQ DIGIT  */
 #line 214 "./parser.y"
-                                      {insert(&head, "int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-2].str));}
+                                      {insertResult = insert(&head, "int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-2].str));}
 #line 1565 "parser.tab.c"
     break;
 
   case 88: /* ENUM_CALL_STATEMENT: IDENTIFIER IDENTIFIER EQ IDENTIFIER SEMICOLON  */
 #line 218 "./parser.y"
-                                                               {insert(&head, (yyvsp[-4].str) , (yyvsp[-3].str), "var_enum" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-3].str));}
+                                                               {insertResult = insert(&head, (yyvsp[-4].str) , (yyvsp[-3].str), "var_enum" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-3].str));}
 #line 1571 "parser.tab.c"
     break;
 
   case 89: /* ENUM_CALL_STATEMENT: IDENTIFIER IDENTIFIER SEMICOLON  */
 #line 219 "./parser.y"
-                                                  {insert(&head, (yyvsp[-2].str) , (yyvsp[-1].str), "var_enum" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-1].str));}
+                                                  {insertResult = insert(&head, (yyvsp[-2].str) , (yyvsp[-1].str), "var_enum" , number_of_line, false);strcpy(IdentifierHolder, (yyvsp[-1].str));}
 #line 1577 "parser.tab.c"
     break;
 
@@ -1793,6 +1793,7 @@ int main(int argc, char *argv[])
     yyparse();
     display(head);
     display_to_file(head, "symbol_table.txt");
+    display_unused_variables(head);
 
     return 0;
 }

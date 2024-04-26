@@ -35,6 +35,8 @@ int assignIndex = 0;
 int returnExist = 0;
 int funcIndex = 0;
 
+int insertResult = 0;
+
 void scope_start()
 {
     blockNumber++;
@@ -160,6 +162,10 @@ void assign_int(symbol *head, int value, const char *name, int number_of_line)
     {
         if (strcmp(head->identifierName, name) == 0)
         {
+            if (insertResult == -1)
+            {
+                return;
+            }
             if (strcmp(head->datatype, "string") == 0 && head->type == "func")
             {
                 printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, head->identifierName, head->datatype);
@@ -196,6 +202,10 @@ void assign_float(symbol *head, float value, const char *name, int number_of_lin
     {
         if (strcmp(head->identifierName, name) == 0)
         {
+            if (insertResult == -1)
+            {
+                return;
+            }
             if (strcmp(head->datatype, "string") == 0 && head->type == "func")
             {
                 printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned float\n", number_of_line, head->identifierName, head->datatype);
@@ -232,6 +242,10 @@ void assign_bool(symbol *head, bool value, const char *name, int number_of_line)
     {
         if (strcmp(head->identifierName, name) == 0)
         {
+            if (insertResult == -1)
+            {
+                return;
+            }
             if (strcmp(head->datatype, "string") == 0 && head->type == "func")
             {
                 printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned bool\n", number_of_line, head->identifierName, head->datatype);
@@ -268,6 +282,10 @@ void assign_string(symbol *head, char *value, const char *name, int number_of_li
     {
         if (strcmp(head->identifierName, name) == 0)
         {
+            if (insertResult == -1)
+            {
+                return;
+            }
             if (strcmp(head->datatype, "string") != 0 && head->type == "func")
             {
                 printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned string\n", number_of_line, head->identifierName, head->datatype);
@@ -366,6 +384,59 @@ void display(symbol *node)
         node = node->next;
     }
 }
+
+void display_unused_variables(symbol *head)
+{
+    while (head != NULL)
+    {
+        if (head->isUsed == 0 && strcmp(head->type, "enum_arg") != 0)
+        {
+            if (strcmp(head->type, "func") == 0)
+            {
+                printf("Function %s Declared at line %d but never called\n", head->identifierName, head->declareLine);
+            }
+            else if (head->isArg == 1)
+            {
+                printf("Unused Argument %s Declared in Function at line %d\n", head->identifierName, head->declareLine);
+            }
+            else
+            {
+                printf("Unused Identifier %s Declared at line %d\n", head->identifierName, head->declareLine);
+            }
+        }
+        head = head->next;
+    }
+}
+
+// int compare(const void *a, const void *b)
+// {
+//     return (*(symbol **)a)->declareLine - (*(symbol **)b)->declareLine;
+// }
+// void display_unused_variables(symbol *head)
+// {
+//     symbol *unused[1000]; // Assuming maximum 1000 unused identifiers
+//     int count = 0;
+
+//     // Collect unused identifiers into an array
+//     while (head != NULL)
+//     {
+//         if (head->isUsed == 0 && strcmp(head->type, "enum_arg") != 0)
+//         {
+//             unused[count++] = head;
+//         }
+//         head = head->next;
+//     }
+
+//     // Sort the array based on declaration line numbers
+//     qsort(unused, count, sizeof(symbol *), compare);
+
+//     // Print the sorted list of unused identifiers
+//     printf("Unused Identifiers:\n");
+//     for (int i = 0; i < count; i++)
+//     {
+//         printf("%d. %s Declared at line %d\n", i + 1, unused[i]->identifierName, unused[i]->declareLine);
+//     }
+// }
 
 // int main()
 // {
