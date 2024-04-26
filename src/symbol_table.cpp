@@ -130,7 +130,7 @@ int insert(symbol **headRef, const char *datatype, const char *identifier, const
     return 0;
 }
 
-int lookup(symbol *headRef, const char *identifierName, bool is_assignment)
+int lookup(symbol *headRef, const char *identifierName, bool is_assignment, int number_of_line)
 {
     symbol *current = headRef;
     while (current != NULL)
@@ -141,7 +141,7 @@ int lookup(symbol *headRef, const char *identifierName, bool is_assignment)
             {
                 if (!is_assignment)
                 {
-                    printf("Error: %s used before initialized\n", identifierName);
+                    printf("Error at line %d: %s used before initialized\n", number_of_line, identifierName);
                 }
             }
             if (!is_assignment)
@@ -152,8 +152,8 @@ int lookup(symbol *headRef, const char *identifierName, bool is_assignment)
         }
         current = current->next;
     }
-    printf("Error: %s undeclared identifier\n", identifierName);
-    return -1; // Return -1 to indicate symbol not found
+    printf("Error at line %d: %s undeclared identifier\n", number_of_line, identifierName);
+    return -1;
 }
 
 void assign_int(symbol *head, int value, const char *name, int number_of_line)
@@ -408,36 +408,44 @@ void display_unused_variables(symbol *head)
     }
 }
 
-// int compare(const void *a, const void *b)
-// {
-//     return (*(symbol **)a)->declareLine - (*(symbol **)b)->declareLine;
-// }
-// void display_unused_variables(symbol *head)
-// {
-//     symbol *unused[1000]; // Assuming maximum 1000 unused identifiers
-//     int count = 0;
-
-//     // Collect unused identifiers into an array
-//     while (head != NULL)
-//     {
-//         if (head->isUsed == 0 && strcmp(head->type, "enum_arg") != 0)
-//         {
-//             unused[count++] = head;
-//         }
-//         head = head->next;
+// void check_type( int i) {
+//     // this functio check type matching between 2 identifiers before assign the value
+//     if ( is_param == 1) //to check argument type 
+//     { 
+//         if ( arg_count <symbolTable[called_func_index].argCount )
+//         {assign_index = symbolTable[called_func_index].argList[arg_count];}
+//         else {assign_index=-1;}
 //     }
-
-//     // Sort the array based on declaration line numbers
-//     qsort(unused, count, sizeof(symbol *), compare);
-
-//     // Print the sorted list of unused identifiers
-//     printf("Unused Identifiers:\n");
-//     for (int i = 0; i < count; i++)
-//     {
-//         printf("%d. %s Declared at line %d\n", i + 1, unused[i]->identifierName, unused[i]->declareLine);
+//      if ( i == -1 || assign_index == -1) 
+//     { return;}
+//     if (symbolTable[i].dataType != symbolTable[assign_index].dataType && (symbolTable[assign_index].dataType == "string" ||  symbolTable[i].dataType == "string"))
+//     {   /// at calling a function
+//         if (strcmp(symbolTable[i].type,"func")== 0){ printf("\n !!!!!!!!!!!! Type Mismatch Error at line %d: %s is %s variable  but %s return %s value  !!!!!!!!!!!\n", line_number,symbolTable[assign_index].name,symbolTable[assign_index].dataType, symbolTable[i].name,symbolTable[i].dataType ); sErr(line_number);}
+//         else if (strcmp(symbolTable[assign_index].type,"func")== 0){ printf("\n !!!!!!!!!!!! Type Mismatch Error at line %d: %s is %s variable  but %s return %s value  !!!!!!!!!!!\n", line_number,symbolTable[i].name,symbolTable[i].dataType, symbolTable[assign_index].name,symbolTable[assign_index].dataType ); sErr(line_number);}
+//         else if (is_param == 1)
+//         {printf("\n !!!!!!!!!!!! Type Mismatch Error at line %d: Incorrect argument type %s is %s variable but %s %s !!!!!!!!!!!\n", line_number,symbolTable[assign_index].name,symbolTable[assign_index].dataType, symbolTable[i].name,symbolTable[i].dataType ); sErr(line_number);}
+//         else {printf("\n !!!!!!!!!!!! Type Mismatch Error at line %d: %s is %s variable  but %s %s !!!!!!!!!!!\n", line_number,symbolTable[assign_index].name,symbolTable[assign_index].dataType, symbolTable[i].name,symbolTable[i].dataType );sErr(line_number);}
 //     }
+//     else if (strcmp(symbolTable[assign_index].type,"func") != 0)
+//     {
+//         symbolTable[assign_index].isInit=1;
+//         // assign value to the variable
+//         if ( strcmp(symbolTable[i].dataType,"int") ==0 || strcmp(symbolTable[i].type,"var_enum") ==0  ) {
+//             assign_int(symbolTable[i].intValue, assign_index);
+//             }
+//         else if (symbolTable[i].dataType == "float"){
+//             assign_float(symbolTable[i].floatValue, assign_index);
+//             }
+//         else if ( strcmp(symbolTable[i].dataType, "string")==0){
+//             assign_str(symbolTable[i].strValue, assign_index);
+//             }
+//         else if (symbolTable[i].dataType == "bool"){
+//             assign_bool(symbolTable[i].boolValue, assign_index);
+//             }
+//         st_log();
+//     }
+//     if(is_param == 0){ assign_index = -1;}
 // }
-
 // int main()
 // {
 //     symbol *head = NULL;

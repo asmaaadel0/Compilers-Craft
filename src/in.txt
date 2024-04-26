@@ -1,6 +1,2 @@
-int I = 2;
-I = 3;
-int i = 3;
-float f = 1.1;
-bool b = false;
-string s = "1";
+int i ;
+print(i);

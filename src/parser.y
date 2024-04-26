@@ -111,12 +111,12 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER                      
+                IDENTIFIER      {int i = lookup(head, $1, 0, number_of_line);}                
                 | DIGIT         {assign_int(head, $1, IdentifierHolder, number_of_line);}       
                 | FLOAT_DIGIT   {assign_float(head, $1, IdentifierHolder, number_of_line);}                 
                 | BOOL_LITERAL  {assign_bool(head, $1, IdentifierHolder, number_of_line);}   
                 | STRING_LITERAL{assign_string(head, $1, IdentifierHolder, number_of_line);}                
-                | CONSTANT  
+                | CONSTANT      {int i = lookup(head, $1, 0, number_of_line);}
 
                 | EXPRESSION LOGIC_AND EXPRESSION     
                 | EXPRESSION LOGIC_OR EXPRESSION  
@@ -240,7 +240,7 @@ FOR_STATEMENT:
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
-                IDENTIFIER  EQ  EXPRESSION SEMICOLON   
+                IDENTIFIER {int i = lookup(head, $1, 1, number_of_line);} EQ  EXPRESSION SEMICOLON   
                 | CONSTANT  EQ  EXPRESSION SEMICOLON   
                 ;
 
