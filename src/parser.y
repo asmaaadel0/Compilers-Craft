@@ -10,7 +10,6 @@
     int yylex();
     extern FILE *yyin;
     extern int number_of_line;
-    char IdentifierHolder[10];
 %}
 
 %union { 
@@ -110,7 +109,7 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);}                
+                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);printf("i: %d\n", i);}                
                 | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);}
                 | DIGIT         {assign_int(insertResult, $1, number_of_line);}       
                 | FLOAT_DIGIT   {assign_float(insertResult, $1, number_of_line);}                 
@@ -154,8 +153,8 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
-                TYPE IDENTIFIER {insertResult = insert($1, $2, "var", number_of_line, false);strcpy(IdentifierHolder, $2);}  DECLARATION_TAIL { insertResult = -1;printf("Parsed Declaration\n");}
-                | TYPE CONSTANT {insertResult = insert($1, $2, "const", number_of_line, false);strcpy(IdentifierHolder, $2);}DECLARATION_TAIL { insertResult = -1;printf("Parsed Const Declaration\n"); }
+                TYPE IDENTIFIER {insertResult = insert($1, $2, "var", number_of_line, false);}  DECLARATION_TAIL { insertResult = -1;printf("Parsed Declaration\n");}
+                | TYPE CONSTANT {insertResult = insert($1, $2, "const", number_of_line, false);}DECLARATION_TAIL { insertResult = -1;printf("Parsed Const Declaration\n"); }
                 ;
 DECLARATION_TAIL:
                 EQ EXPRESSION SEMICOLON                                
@@ -192,29 +191,29 @@ ARGS:
                 | ARG_DECL
                 ;
 ARG_DECL:
-                TYPE IDENTIFIER {insertResult = insert($1, $2,"var", number_of_line, true);strcpy(IdentifierHolder, $2);}
+                TYPE IDENTIFIER {insertResult = insert($1, $2,"var", number_of_line, true);}
                 ;
 
 //________________________________________________ ENUM DECLARATION STATEMENT ________________________________________________
 ENUM_DECLARATION_STATEMENT:
-                ENUM IDENTIFIER  '{' {isEnum = 1;} ENUM_HELPER '}' SEMICOLON {insertResult = insert("enum" , $2, "var" , number_of_line, false);isEnum=0;strcpy(IdentifierHolder, $2);}        
+                ENUM IDENTIFIER  '{' {isEnum = 1;} ENUM_HELPER '}' SEMICOLON {insertResult = insert("enum" , $2, "var" , number_of_line, false);isEnum=0;}        
                 ;                
 ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
 ENUM_ARGS:
-                IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, enumArgCount-1, number_of_line);strcpy(IdentifierHolder, $1);} ',' ENUM_ARGS  
-                | IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, enumArgCount-1, number_of_line);strcpy(IdentifierHolder, $1);} 
+                IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, enumArgCount-1, number_of_line);} ',' ENUM_ARGS  
+                | IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, enumArgCount-1, number_of_line);} 
 
                 ;
             
 ENUM_DEFINED_ARGS:
 
-                IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);strcpy(IdentifierHolder, $1);} ',' ENUM_DEFINED_ARGS 
-                | IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);strcpy(IdentifierHolder, $1);}
+                IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);} ',' ENUM_DEFINED_ARGS 
+                | IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);}
                 ;
 
 ENUM_CALL_STATEMENT:
-                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);assign_enum(insertResult, $1, $4, number_of_line);strcpy(IdentifierHolder, $2);}
-                | IDENTIFIER IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
+                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);assign_enum(insertResult, $1, $4, number_of_line);}
+                | IDENTIFIER IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);}
                 ;
 
 //________________________________________________ IF STATEMENT ________________________________________________
@@ -238,7 +237,7 @@ FOR_STATEMENT:
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
-                IDENTIFIER EQ {int i = lookup($1, 1, number_of_line);} EXPRESSION SEMICOLON   
+                IDENTIFIER EQ {insertResult = lookup($1, 1, number_of_line);} EXPRESSION SEMICOLON   
                 | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);insertResult = -1;} EXPRESSION SEMICOLON   
                 ;
 
@@ -264,9 +263,9 @@ int main(int argc, char *argv[])
 { 
     yyin = fopen(argv[1], "r");
     yyparse();
-    display();
+    // display();
     display_to_file("symbol_table.txt");
-    display_unused_variables();
+    // display_unused_variables();
 
     return 0;
 }

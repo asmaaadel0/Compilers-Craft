@@ -195,6 +195,12 @@ void assign_arg_indexes()
 void assign_int(int index, int value, int number_of_line)
 {
     assign_arg_indexes();
+    printf("in assign int: symbolTable[index].datatype: %s, %d, %d\n", symbolTable[index].identifierName, index, value);
+    if (isParameter)
+    {
+        index = insertResult;
+    }
+    printf("value: %d\n", value);
     if (index == -1)
     {
         return;
@@ -224,11 +230,20 @@ void assign_int(int index, int value, int number_of_line)
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
     }
+    if (isParameter)
+    {
+        insertResult = -1;
+    }
 }
 
 void assign_float(int index, float value, int number_of_line)
 {
     assign_arg_indexes();
+
+    if (isParameter)
+    {
+        index = insertResult;
+    }
     if (index == -1)
     {
         return;
@@ -258,11 +273,19 @@ void assign_float(int index, float value, int number_of_line)
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
     }
+    if (isParameter)
+    {
+        insertResult = -1;
+    }
 }
 
 void assign_bool(int index, bool value, int number_of_line)
 {
     assign_arg_indexes();
+    if (isParameter)
+    {
+        index = insertResult;
+    }
     if (index == -1)
     {
         return;
@@ -292,11 +315,19 @@ void assign_bool(int index, bool value, int number_of_line)
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
     }
+    if (isParameter)
+    {
+        insertResult = -1;
+    }
 }
 
 void assign_string(int index, char *value, int number_of_line)
 {
     assign_arg_indexes();
+    if (isParameter)
+    {
+        index = insertResult;
+    }
     if (index == -1)
     {
         return;
@@ -315,6 +346,10 @@ void assign_string(int index, char *value, int number_of_line)
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned string value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
     }
+    if (isParameter)
+    {
+        insertResult = -1;
+    }
 }
 
 void assign_enum(int index, char *value, char *key, int number_of_line)
@@ -331,7 +366,6 @@ void assign_enum(int index, char *value, char *key, int number_of_line)
             {
                 for (int j = 0; j < 100; j++)
                 {
-                    printf("strcmp(symbolTable[k].enumValue.keys[j]: %s, %s\n\n\n", symbolTable[k].enumValue.keys[j], key);
                     if (strcmp(symbolTable[k].enumValue.keys[j], key) == 0)
                     {
                         symbolTable[index].intValue = symbolTable[k].enumValue.values[j];
@@ -427,6 +461,7 @@ void check_type(int i, int number_of_line)
         symbolTable[insertResult].isInit = 1;
         if (strcmp(symbolTable[i].datatype, "int") == 0 || strcmp(symbolTable[i].type, "var_enum") == 0)
         {
+            printf("symbolTable[i].intValue: %d , %s\n", symbolTable[i].intValue, symbolTable[i].identifierName);
             assign_int(insertResult, symbolTable[i].intValue, number_of_line);
         }
         else if (symbolTable[i].datatype == "float")
