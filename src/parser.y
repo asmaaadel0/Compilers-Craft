@@ -200,15 +200,15 @@ ENUM_DECLARATION_STATEMENT:
                 ;                
 ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
 ENUM_ARGS:
-                IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, enumArgCount-1, number_of_line);} ',' ENUM_ARGS  
-                | IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, enumArgCount-1, number_of_line);} 
+                IDENTIFIER  {enumValues[enumArgCount] = enumArgCount;enumKeys[enumArgCount] = $1;enumArgCount++;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, enumArgCount-1, number_of_line);} ',' ENUM_ARGS  
+                | IDENTIFIER{enumValues[enumArgCount] = enumArgCount;enumKeys[enumArgCount] = $1;enumArgCount++;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, enumArgCount-1, number_of_line);} 
 
                 ;
             
 ENUM_DEFINED_ARGS:
 
-                IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);} ',' ENUM_DEFINED_ARGS 
-                | IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);}
+                IDENTIFIER EQ DIGIT   {enumValues[enumArgCount] = $3;enumKeys[enumArgCount] = $1;enumArgCount++;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);} ',' ENUM_DEFINED_ARGS 
+                | IDENTIFIER EQ DIGIT {enumValues[enumArgCount] = $3;enumKeys[enumArgCount] = $1;enumArgCount++;;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);}
                 ;
 
 ENUM_CALL_STATEMENT:

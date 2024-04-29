@@ -461,7 +461,6 @@ void check_type(int i, int number_of_line)
         symbolTable[insertResult].isInit = 1;
         if (strcmp(symbolTable[i].datatype, "int") == 0 || strcmp(symbolTable[i].type, "var_enum") == 0)
         {
-            printf("symbolTable[i].intValue: %d , %s\n", symbolTable[i].intValue, symbolTable[i].identifierName);
             assign_int(insertResult, symbolTable[i].intValue, number_of_line);
         }
         else if (symbolTable[i].datatype == "float")

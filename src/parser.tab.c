@@ -1627,25 +1627,25 @@ yyreduce:
 
   case 88: /* $@10: %empty  */
 #line 203 "./parser.y"
-                           {enumKeys[enumArgCount] = (yyvsp[0].str);insertResult = insert("int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, enumArgCount-1, number_of_line);}
+                            {enumValues[enumArgCount] = enumArgCount;enumKeys[enumArgCount] = (yyvsp[0].str);enumArgCount++;insertResult = insert("int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);assign_int(insertResult, enumArgCount-1, number_of_line);}
 #line 1632 "parser.tab.c"
     break;
 
   case 90: /* ENUM_ARGS: IDENTIFIER  */
 #line 204 "./parser.y"
-                             {enumKeys[enumArgCount] = (yyvsp[0].str);insertResult = insert("int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, enumArgCount-1, number_of_line);}
+                            {enumValues[enumArgCount] = enumArgCount;enumKeys[enumArgCount] = (yyvsp[0].str);enumArgCount++;insertResult = insert("int" , (yyvsp[0].str), "enum_arg" , number_of_line, false);assign_int(insertResult, enumArgCount-1, number_of_line);}
 #line 1638 "parser.tab.c"
     break;
 
   case 91: /* $@11: %empty  */
 #line 210 "./parser.y"
-                                    {enumKeys[enumArgCount] = (yyvsp[-2].str);insertResult = insert("int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, (yyvsp[0].num), number_of_line);}
+                                      {enumValues[enumArgCount] = (yyvsp[0].num);enumKeys[enumArgCount] = (yyvsp[-2].str);enumArgCount++;insertResult = insert("int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, (yyvsp[0].num), number_of_line);}
 #line 1644 "parser.tab.c"
     break;
 
   case 93: /* ENUM_DEFINED_ARGS: IDENTIFIER EQ DIGIT  */
 #line 211 "./parser.y"
-                                      {enumKeys[enumArgCount] = (yyvsp[-2].str);insertResult = insert("int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, (yyvsp[0].num), number_of_line);}
+                                      {enumValues[enumArgCount] = (yyvsp[0].num);enumKeys[enumArgCount] = (yyvsp[-2].str);enumArgCount++;;insertResult = insert("int" , (yyvsp[-2].str), "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, (yyvsp[0].num), number_of_line);}
 #line 1650 "parser.tab.c"
     break;
 

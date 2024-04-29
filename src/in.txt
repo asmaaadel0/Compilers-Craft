@@ -1,31 +1,22 @@
-enum Color{
-    red=10,
-    green=5,
-    blue=12
-};
-
+int add ( int x, int y)
 {
-    Color c1;
-    Color c2=red;
-    int x = c2;
-    enum days {sat,sun, mon, tues};
-    days Vacation =tues;
-    int y ;
-    switch Vacation:
-    {
-        case sat:
-        {
-            y=sat;
-        }
-         case sat:
-        {
-            y=sun;
-        }
-        default:
-        {
-            y=mon;
-        }
-    }
+    int z;
+    z= x+y ;
+    return z;
 }
 
-days holiday;
+string hello()
+{
+    string text ="hello";
+    return text;
+}
+
+void useless()
+{
+    int bla=-1;
+}
+
+int a=3;
+int b=7;
+int c = add (a,b);
+hello();
