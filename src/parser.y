@@ -4,11 +4,14 @@
     #include <string.h>
     #include <stdbool.h>
     #include "parser.tab.h"
+    #include "symbol_table.cpp"
     
     void yyerror(char* );
     int yylex();
     extern FILE *yyin;
     extern int number_of_line;
+    symbol *head = NULL;
+    char IdentifierHolder[10];
 %}
 
 %union { 
@@ -61,35 +64,35 @@
 
 %%
 PROGRAM:                                                    
-                PROGRAM STATEMENT           {printf("Parsed Line %d Succesfully\n\n", number_of_line);}        
+                PROGRAM STATEMENT  {printf("Parsed Line %d Succesfully\n\n", number_of_line);}        
                 |
                 ;
 //________________________________________________ BLOCK ________________________________________________
 BLOCK:
-                '{' PROGRAM '}'               
+                '{' {scope_start();} PROGRAM '}' {scope_end(head, number_of_line);}             
                 ;
 
 //________________________________________________ STATEMENT ________________________________________________
 STATEMENT:
-                PRINT_STATEMENT                             {printf("Parsed print statement\n");}
+                PRINT_STATEMENT               {printf("Parsed print statement\n");}
                 | DECLARATION_STATEMENT
-                | ASSIGNMENT_STATEMENT                      {printf("Parsed Assignment statement\n");}
+                | ASSIGNMENT_STATEMENT         {printf("Parsed Assignment statement\n");}
                 | EXPRESSION SEMICOLON
                 
-                | ENUM_DECLARATION_STATEMENT                {printf("Parsed Enum Declaration\n");}
-                | ENUM_CALL_STATEMENT                       {printf("Parsed Enum Call\n");}
+                | ENUM_DECLARATION_STATEMENT   {printf("Parsed Enum Declaration\n");}
+                | ENUM_CALL_STATEMENT          {printf("Parsed Enum Call\n");}
                 
-                | IF_STATEMENT                              {printf("Parsed if statement\n");}
-                | WHILE_STATEMENT                           {printf("Parsed While LOOP\n");}
-                | FOR_STATEMENT                             {printf("Parsed For LOOP\n");}
-                | DO_WHILE_STATEMENT                        {printf("Parsed Do While LOOP\n");}
-                | SWITCH_STATEMENT                          {printf("Parsed Switch Statement\n");}
+                | IF_STATEMENT                 {printf("Parsed if statement\n");}
+                | WHILE_STATEMENT              {printf("Parsed While LOOP\n");}
+                | FOR_STATEMENT                {printf("Parsed For LOOP\n");}
+                | DO_WHILE_STATEMENT           {printf("Parsed Do While LOOP\n");}
+                | SWITCH_STATEMENT             {printf("Parsed Switch Statement\n");}
                 | BREAK SEMICOLON
                 | CONTINUE SEMICOLON
                 
                 | RETURN_STATEMENT SEMICOLON
-                | BLOCK                                     {printf("Parsed Block\n");}
-                | FUNC_DECLARATION_STATEMENT                {printf("Parsed Function Declaration\n");}
+                | BLOCK                        {printf("Parsed Block\n");}
+                | FUNC_DECLARATION_STATEMENT   {printf("Parsed Function Declaration\n");}
                 
                 ;
 
@@ -100,20 +103,20 @@ PRINT_STATEMENT:
                 ;               
 //________________________________________________ TYPE ________________________________________________
 TYPE:
-                INT       
-                | FLOAT   
-                | BOOL      
-                | STRING    
+                INT         { $$ = "int";   }
+                | FLOAT     { $$ = "float"; }
+                | BOOL      { $$ = "bool";  }
+                | STRING    { $$ = "string";}
                 ;
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER                      
-                | DIGIT                         
-                | FLOAT_DIGIT                   
-                | BOOL_LITERAL                  
-                | STRING_LITERAL                
-                | CONSTANT  
+                IDENTIFIER      {int i = lookup(head, $1, 0, number_of_line);}                
+                | CONSTANT      {int i = lookup(head, $1, 0, number_of_line);}
+                | DIGIT         {assign_int(head, $1, IdentifierHolder, number_of_line);}       
+                | FLOAT_DIGIT   {assign_float(head, $1, IdentifierHolder, number_of_line);}                 
+                | BOOL_LITERAL  {assign_bool(head, $1, IdentifierHolder, number_of_line);}   
+                | STRING_LITERAL{assign_string(head, $1, IdentifierHolder, number_of_line);}                
 
                 | EXPRESSION LOGIC_AND EXPRESSION     
                 | EXPRESSION LOGIC_OR EXPRESSION  
@@ -152,8 +155,8 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
-                TYPE IDENTIFIER DECLARATION_TAIL            { printf("Parsed Declaration\n"); }
-                | TYPE CONSTANT DECLARATION_TAIL            { printf("Parsed Const Declaration\n"); }
+                TYPE IDENTIFIER {insertResult = insert(&head, $1, $2, "var", number_of_line, false);strcpy(IdentifierHolder, $2);}  DECLARATION_TAIL { printf("Parsed Declaration\n");}
+                | TYPE CONSTANT {insertResult = insert(&head, $1, $2, "const", number_of_line, false);strcpy(IdentifierHolder, $2);}DECLARATION_TAIL { printf("Parsed Const Declaration\n"); }
                 ;
 DECLARATION_TAIL:
                 EQ EXPRESSION SEMICOLON                                
@@ -182,38 +185,38 @@ CASES:
 FUNC_DECLARATION_STATEMENT:
                 TYPE IDENTIFIER '(' ARGS ')'      BLOCK                                   
                 | VOID IDENTIFIER '(' ARGS ')'    BLOCK 
-                | TYPE IDENTIFIER '(' ')'          BLOCK                                   
-                | VOID IDENTIFIER '(' ')'          BLOCK 
+                | TYPE IDENTIFIER '(' ')'         BLOCK                                   
+                | VOID IDENTIFIER '(' ')'         BLOCK 
                 ;
 ARGS:
                 ARG_DECL ',' ARGS
                 | ARG_DECL
                 ;
 ARG_DECL:
-                TYPE IDENTIFIER                             
+                TYPE IDENTIFIER {insertResult = insert(&head, $1, $2,"var", number_of_line, true);strcpy(IdentifierHolder, $2);}
                 ;
 
 //________________________________________________ ENUM DECLARATION STATEMENT ________________________________________________
 ENUM_DECLARATION_STATEMENT:
-                ENUM IDENTIFIER  '{' ENUM_HELPER '}'          
+                ENUM IDENTIFIER  '{' ENUM_HELPER '}' SEMICOLON {insertResult = insert(&head, "enum" , $2, "var" , number_of_line, false);strcpy(IdentifierHolder, $2);}        
                 ;                
 ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
 ENUM_ARGS:
 
-                IDENTIFIER   ',' ENUM_ARGS  
-                | IDENTIFIER 
+                IDENTIFIER {insertResult = insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} ',' ENUM_ARGS  
+                | IDENTIFIER {insertResult = insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} 
 
                 ;
             
 ENUM_DEFINED_ARGS:
 
-                IDENTIFIER EQ DIGIT    ',' ENUM_DEFINED_ARGS 
-                | IDENTIFIER EQ DIGIT  
+                IDENTIFIER EQ DIGIT {insertResult = insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} ',' ENUM_DEFINED_ARGS 
+                | IDENTIFIER EQ DIGIT {insertResult = insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);}
                 ;
 
 ENUM_CALL_STATEMENT:
-                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON 
-                | IDENTIFIER IDENTIFIER SEMICOLON
+                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insertResult = insert(&head, $1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
+                | IDENTIFIER IDENTIFIER SEMICOLON {insertResult = insert(&head, $1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
                 ;
 
 //________________________________________________ IF STATEMENT ________________________________________________
@@ -237,8 +240,8 @@ FOR_STATEMENT:
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
-                IDENTIFIER  EQ  EXPRESSION SEMICOLON   
-                | CONSTANT  EQ  EXPRESSION SEMICOLON   
+                IDENTIFIER EQ {int i = lookup(head, $1, 1, number_of_line);} EXPRESSION SEMICOLON   
+                | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);} EXPRESSION SEMICOLON   
                 ;
 
 //________________________________________________ FUNCTION CALL ________________________________________________
@@ -263,6 +266,9 @@ int main(int argc, char *argv[])
 { 
     yyin = fopen(argv[1], "r");
     yyparse();
+    display(head);
+    display_to_file(head, "symbol_table.txt");
+    display_unused_variables(head);
 
     return 0;
 }
