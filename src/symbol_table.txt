@@ -1,8 +1,16 @@
 ID	Name	Type	DataType	Line	Scope	isInit	Value
-0	x0	var	int		1	0	0	-
-1	x1	var	int		3	1	1	8
-2	x2	var	int		8	2	0	-
-3	y	var	int		9	2	1	5
-4	y	var	int		17	2	1	9
-5	y	var	int		19	3	1	8
-6	x3	var	int		29	1	1	9
+0	red	enum_arg	int		2	0	1	10
+1	green	enum_arg	int		3	0	1	5
+2	blue	enum_arg	int		5	0	1	12
+3	Color	var	enum		5	0	1	
+4	c1	var_enum	Color		8	1	0	-
+5	c2	var_enum	Color		9	1	0	-
+6	x	var	int		10	1	1	12599272
+7	sat	enum_arg	int		11	1	1	-1
+8	sun	enum_arg	int		11	1	1	-1
+9	mon	enum_arg	int		11	1	1	-1
+10	tues	enum_arg	int		11	1	1	-1
+11	days	var	enum		11	1	1	
+12	Vacation	var_enum	days		12	1	0	-
+13	y	var	int		13	1	0	-
+14	holiday	var_enum	days		31	0	0	-

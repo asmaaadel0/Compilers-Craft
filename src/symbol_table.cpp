@@ -8,6 +8,12 @@
 #define BUFFER_SIZE 1024
 #define TOKEN_SIZE 32
 
+typedef struct enumNode
+{
+    char *keys[100];
+    int values[100];
+} enumNode;
+
 typedef struct symbol
 {
 
@@ -24,6 +30,11 @@ typedef struct symbol
     char *identifierName;
     char *type;     // variable, const, func, enum_arg, var_enum
     char *datatype; // int, float, bool, string
+    int argList[100];
+    int argEnum[100];
+    int argCount;
+
+    struct enumNode enumValue;
 } symbol;
 
 symbol symbolTable[500];
@@ -34,11 +45,18 @@ int scopeIndex = 0;
 int inLoop = 0;
 int blockNumber = 0;
 int symbolTableIndex = 0;
-int assignIndex = -1;
+
 int returnExist = 0;
 int funcIndex = 0;
+int argCount = 0;
+int calledFuncIndex = 0;
+int isParameter = 0;
 
 int insertResult = 0;
+
+int enumArgCount = 0;
+char *enumKeys[100];
+int enumValues[100];
 
 void scope_start()
 {
@@ -57,7 +75,7 @@ void scope_end(int number_of_line)
     {
         printf("Error at line %d: %s Void Function can't have return statement\n", number_of_line, symbolTable[funcIndex].name);
     }
-    assignIndex = -1;
+    insertResult = -1;
     funcIndex = -1;
     returnExist = 0;
     for (int i = 0; i < symbolTableIndex; i++)
@@ -118,7 +136,42 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
     {
         newnode.scope = scopeStack[scopeIndex];
     }
+    if (strcmp(type, "func") == 0)
+    {
+        int j = 0;
+        for (int i = 0; i < symbolTableIndex; i++)
+        {
+            if (symbolTable[i].isArg && symbolTable[i].scope == (blockNumber + 1))
+            {
+                newnode.argList[j] = symbolTable[i].id;
+                j++;
+            }
+        }
+        newnode.argCount = j;
+    }
     symbolTable[symbolTableIndex] = newnode;
+    if (strcmp(datatype, "enum") == 0)
+    {
+        symbolTable[symbolTableIndex].isInit = 1;
+        struct enumNode newnodeEnum;
+        for (int i = 0; i < 100; i++)
+        {
+            newnodeEnum.keys[i] = "";
+            newnodeEnum.values[i] = 0;
+        }
+        for (int i = 0; i < enumArgCount; i++)
+        {
+            newnodeEnum.keys[i] = enumKeys[i];
+            newnodeEnum.values[i] = enumValues[i];
+        }
+        symbolTable[symbolTableIndex].enumValue = newnodeEnum;
+        enumArgCount = 0;
+        for (int i = 0; i < 100; i++)
+        {
+            enumKeys[i] = "";
+            enumValues[i] = 0;
+        }
+    }
     symbolTableIndex++;
     return newnode.id;
 }
@@ -147,8 +200,24 @@ int lookup(const char *identifierName, bool is_assignment, int number_of_line)
     return -1;
 }
 
+void assign_arg_indexes()
+{
+    if (isParameter == 1)
+    {
+        if (argCount <= symbolTable[calledFuncIndex].argCount)
+        {
+            insertResult = symbolTable[calledFuncIndex].argList[argCount];
+        }
+        else
+        {
+            insertResult = -1;
+        }
+    }
+}
+
 void assign_int(int index, int value, int number_of_line)
 {
+    assign_arg_indexes();
     if (index == -1)
     {
         return;
@@ -183,6 +252,7 @@ void assign_int(int index, int value, int number_of_line)
 
 void assign_float(int index, float value, int number_of_line)
 {
+    assign_arg_indexes();
     if (index == -1)
     {
         return;
@@ -216,6 +286,7 @@ void assign_float(int index, float value, int number_of_line)
 
 void assign_bool(int index, bool value, int number_of_line)
 {
+    assign_arg_indexes();
     if (index == -1)
     {
         return;
@@ -249,6 +320,7 @@ void assign_bool(int index, bool value, int number_of_line)
 
 void assign_string(int index, char *value, int number_of_line)
 {
+    assign_arg_indexes();
     if (index == -1)
     {
         return;
@@ -266,6 +338,68 @@ void assign_string(int index, char *value, int number_of_line)
     else
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned string value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+    }
+}
+
+void check_type(int i, int number_of_line)
+{
+    if (isParameter == 1)
+    {
+        if (argCount < symbolTable[calledFuncIndex].argCount)
+        {
+            insertResult = symbolTable[calledFuncIndex].argList[argCount];
+        }
+        else
+        {
+            insertResult = -1;
+        }
+    }
+    if (i == -1 || insertResult == -1)
+    {
+        return;
+    }
+    if (symbolTable[i].datatype != symbolTable[insertResult].datatype && (symbolTable[insertResult].datatype == "string" || symbolTable[i].datatype == "string"))
+    {
+        if (strcmp(symbolTable[i].type, "func") == 0)
+        {
+            printf("Type Mismatch Error at line %d: %s is %s variable  but %s return %s value\n", number_of_line, symbolTable[insertResult].name, symbolTable[insertResult].datatype, symbolTable[i].name, symbolTable[i].datatype);
+        }
+        else if (strcmp(symbolTable[insertResult].type, "func") == 0)
+        {
+            printf("Type Mismatch Error at line %d: %s is %s variable  but %s return %s value\n", number_of_line, symbolTable[i].name, symbolTable[i].datatype, symbolTable[insertResult].name, symbolTable[insertResult].datatype);
+        }
+        else if (isParameter == 1)
+        {
+            printf("Type Mismatch Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].name, symbolTable[insertResult].datatype, symbolTable[i].name, symbolTable[i].datatype);
+        }
+        else
+        {
+            printf("Type Mismatch Error at line %d: %s is %s variable  but %s %s\n", number_of_line, symbolTable[insertResult].name, symbolTable[insertResult].datatype, symbolTable[i].name, symbolTable[i].datatype);
+        }
+    }
+    else if (strcmp(symbolTable[insertResult].type, "func") != 0)
+    {
+        symbolTable[insertResult].isInit = 1;
+        if (strcmp(symbolTable[i].datatype, "int") == 0 || strcmp(symbolTable[i].type, "var_enum") == 0)
+        {
+            assign_int(insertResult, symbolTable[i].intValue, number_of_line);
+        }
+        else if (symbolTable[i].datatype == "float")
+        {
+            assign_float(insertResult, symbolTable[i].floatValue, number_of_line);
+        }
+        else if (strcmp(symbolTable[i].datatype, "string") == 0)
+        {
+            assign_string(insertResult, symbolTable[i].strValue, number_of_line);
+        }
+        else if (symbolTable[i].datatype == "bool")
+        {
+            assign_bool(insertResult, symbolTable[i].boolValue, number_of_line);
+        }
+    }
+    if (isParameter == 0)
+    {
+        insertResult = -1;
     }
 }
 

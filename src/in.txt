@@ -1,37 +1,31 @@
-int x0;
-{
-    int x1;
-    {
+enum Color{
+    red=10,
+    green=5,
+    blue=12
+};
 
-    x0=7;
-    x1=8;
-    int x2;
-    int y=5;
-    }
-    x2=4;
-    x1=10;
+{
+    Color c1;
+    Color c2=red;
+    int x = c2;
+    enum days {sat,sun, mon, tues};
+    days Vacation =tues;
+    int y ;
+    switch Vacation:
     {
-        x1=5;
-        x0=9;
-        x2=7;
-        int y=9;
+        case sat:
         {
-            int y =8;
+            y=sat;
         }
+         case sat:
+        {
+            y=sun;
+        }
+        default:
+        {
+            y=mon;
+        }
+    }
+}
 
-    }
-}
-x1=8;
-x2=4;
-{
-    x2=4;
-    x1=5;
-    int x3;
-    x3=8;
-    {
-        x3=-9;
-        x0=9;
-    }
-}
-x0=4;
-x3=0;
+days holiday;

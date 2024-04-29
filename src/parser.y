@@ -110,8 +110,8 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER      {int i = lookup($1, 0, number_of_line);}                
-                | CONSTANT      {int i = lookup($1, 0, number_of_line);}
+                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);}                
+                | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);}
                 | DIGIT         {assign_int(insertResult, $1, number_of_line);}       
                 | FLOAT_DIGIT   {assign_float(insertResult, $1, number_of_line);}                 
                 | BOOL_LITERAL  {assign_bool(insertResult, $1, number_of_line);}   
@@ -154,8 +154,8 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
-                TYPE IDENTIFIER {insertResult = insert($1, $2, "var", number_of_line, false);strcpy(IdentifierHolder, $2);}  DECLARATION_TAIL { printf("Parsed Declaration\n");}
-                | TYPE CONSTANT {insertResult = insert($1, $2, "const", number_of_line, false);strcpy(IdentifierHolder, $2);}DECLARATION_TAIL { printf("Parsed Const Declaration\n"); }
+                TYPE IDENTIFIER {insertResult = insert($1, $2, "var", number_of_line, false);strcpy(IdentifierHolder, $2);}  DECLARATION_TAIL { insertResult = -1;printf("Parsed Declaration\n");}
+                | TYPE CONSTANT {insertResult = insert($1, $2, "const", number_of_line, false);strcpy(IdentifierHolder, $2);}DECLARATION_TAIL { insertResult = -1;printf("Parsed Const Declaration\n"); }
                 ;
 DECLARATION_TAIL:
                 EQ EXPRESSION SEMICOLON                                
@@ -164,7 +164,7 @@ DECLARATION_TAIL:
 
 RETURN_STATEMENT:
                 RETURN                  
-                | RETURN EXPRESSION   
+                | RETURN {insertResult = funcIndex;} EXPRESSION {returnExist = 1;}  
                 ;
 
 //________________________________________________ SWITCH STATEMENT ________________________________________________
@@ -182,10 +182,10 @@ CASES:
 
 //________________________________________________ FUNCTION DECLARATION STATEMENT ________________________________________________
 FUNC_DECLARATION_STATEMENT:
-                TYPE IDENTIFIER '(' ARGS ')'      BLOCK                                   
-                | VOID IDENTIFIER '(' ARGS ')'    BLOCK 
-                | TYPE IDENTIFIER '(' ')'         BLOCK                                   
-                | VOID IDENTIFIER '(' ')'         BLOCK 
+                TYPE IDENTIFIER '(' ARGS ')' {funcIndex = insert($1, $2,"func", number_of_line, 0);} BLOCK                                   
+                | VOID IDENTIFIER '(' ARGS ')'{funcIndex = insert("void", $2,"func", number_of_line, 0);}BLOCK 
+                | TYPE IDENTIFIER '(' ')' {funcIndex = insert($1, $2,"func", number_of_line, 0);} BLOCK                                   
+                | VOID IDENTIFIER '(' ')' {funcIndex = insert("void", $2,"func", number_of_line, 0);}BLOCK 
                 ;
 ARGS:
                 ARG_DECL ',' ARGS
@@ -201,16 +201,15 @@ ENUM_DECLARATION_STATEMENT:
                 ;                
 ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
 ENUM_ARGS:
-
-                IDENTIFIER {insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} ',' ENUM_ARGS  
-                | IDENTIFIER {insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} 
+                IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, enumArgCount-1, number_of_line);strcpy(IdentifierHolder, $1);} ',' ENUM_ARGS  
+                | IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, enumArgCount-1, number_of_line);strcpy(IdentifierHolder, $1);} 
 
                 ;
             
 ENUM_DEFINED_ARGS:
 
-                IDENTIFIER EQ DIGIT {insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} ',' ENUM_DEFINED_ARGS 
-                | IDENTIFIER EQ DIGIT {insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);}
+                IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, $3, number_of_line);strcpy(IdentifierHolder, $1);} ',' ENUM_DEFINED_ARGS 
+                | IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, $3, number_of_line);strcpy(IdentifierHolder, $1);}
                 ;
 
 ENUM_CALL_STATEMENT:
@@ -234,7 +233,7 @@ DO_WHILE_STATEMENT:
                 ;
 //________________________________________________ FOR STATEMENT ________________________________________________
 FOR_STATEMENT:
-                FOR '(' STATEMENT STATEMENT STATEMENT ')' BLOCK 
+                FOR '(' {inLoop = 1;} STATEMENT STATEMENT STATEMENT ')' {inLoop = 0;} BLOCK 
                 ;
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
@@ -245,7 +244,7 @@ ASSIGNMENT_STATEMENT:
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-                IDENTIFIER '(' ARGUMENTS  ')' { printf("Parsed Function Call\n");}
+                IDENTIFIER {calledFuncIndex = lookup($1,0, number_of_line);check_type(calledFuncIndex, number_of_line);} '(' ARGUMENTS  ')' { printf("Parsed Function Call\n");}
                 ;       
 ARGUMENTS:      
                 EXPRESSION ',' ARGUMENTS 
