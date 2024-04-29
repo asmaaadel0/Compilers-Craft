@@ -195,12 +195,10 @@ void assign_arg_indexes()
 void assign_int(int index, int value, int number_of_line)
 {
     assign_arg_indexes();
-    printf("in assign int: symbolTable[index].datatype: %s, %d, %d\n", symbolTable[index].identifierName, index, value);
     if (isParameter)
     {
         index = insertResult;
     }
-    printf("value: %d\n", value);
     if (index == -1)
     {
         return;

@@ -109,7 +109,7 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);printf("i: %d\n", i);}                
+                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);}                
                 | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);}
                 | DIGIT         {assign_int(insertResult, $1, number_of_line);}       
                 | FLOAT_DIGIT   {assign_float(insertResult, $1, number_of_line);}                 
@@ -247,7 +247,8 @@ FUNC_CALL:
                 ;       
 ARGUMENTS:      
                 EXPRESSION ',' ARGUMENTS 
-                | EXPRESSION    
+                | EXPRESSION  
+                |  
                 ;
 %%
 

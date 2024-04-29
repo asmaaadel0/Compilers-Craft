@@ -540,7 +540,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  44
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  110
+#define YYNRULES  111
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  213
 
@@ -607,7 +607,7 @@ static const yytype_uint8 yyrline[] =
      187,   190,   191,   194,   199,   199,   201,   201,   203,   203,
      204,   210,   210,   211,   215,   216,   221,   222,   227,   231,
      235,   235,   235,   240,   240,   241,   241,   246,   246,   249,
-     250
+     250,   251
 };
 #endif
 
@@ -702,14 +702,14 @@ static const yytype_int8 yydefact[] =
        3,     0,    61,    59,     0,     0,     0,     0,    45,    44,
        0,     0,     0,     0,     9,     0,     0,     0,     0,     0,
        0,    19,    84,     0,     0,    67,     0,    96,     0,    98,
-       0,     0,     0,     0,    95,     0,     0,    58,     0,     0,
+       0,     0,     0,     0,    95,   111,     0,    58,     0,     0,
        0,    34,    35,    38,    39,     0,    42,     0,    40,    55,
       56,    48,    49,    51,    52,    53,    54,     0,     0,     0,
       79,     0,     0,    82,    72,     0,     0,     0,     0,     0,
        0,   110,     0,     5,     0,    64,    62,    77,     0,    60,
       43,    41,    88,     0,    86,    87,    22,     0,     0,    83,
       75,     0,     0,     0,    71,     0,    97,     0,     0,   106,
-     104,    94,     0,   108,     0,     0,    73,     0,     0,     0,
+     104,    94,   111,   108,     0,     0,    73,     0,     0,     0,
        0,    80,     0,    81,     0,     0,    68,     0,     0,   109,
       63,    78,     0,    91,     0,    85,    23,    76,     0,    69,
      101,    99,    74,     0,    88,    89,    72,     0,     0,    70,
@@ -923,7 +923,7 @@ static const yytype_int8 yyr1[] =
       70,    75,    75,    76,    78,    77,    79,    79,    81,    80,
       80,    83,    82,    82,    84,    84,    85,    85,    86,    87,
       89,    90,    88,    92,    91,    93,    91,    95,    94,    96,
-      96
+      96,    96
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
@@ -940,7 +940,7 @@ static const yytype_int8 yyr2[] =
        6,     3,     1,     2,     0,     7,     1,     1,     0,     4,
        1,     0,     6,     3,     5,     3,     3,     5,     3,     7,
        0,     0,     9,     0,     5,     0,     5,     0,     5,     3,
-       1
+       1,     0
 };
 
 
@@ -1513,7 +1513,7 @@ yyreduce:
 
   case 28: /* EXPRESSION: IDENTIFIER  */
 #line 112 "./parser.y"
-                                {int i = lookup((yyvsp[0].str), 0, number_of_line);check_type(i, number_of_line);printf("i: %d\n", i);}
+                                {int i = lookup((yyvsp[0].str), 0, number_of_line);check_type(i, number_of_line);}
 #line 1518 "parser.tab.c"
     break;
 
@@ -1891,7 +1891,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 252 "./parser.y"
+#line 253 "./parser.y"
 
 
 void yyerror(char *s) { 
