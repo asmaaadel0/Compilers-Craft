@@ -1,2 +1,2 @@
-int i ;
-print(i);
+int I = 5;
+I = 6;

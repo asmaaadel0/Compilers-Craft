@@ -1,2 +1,2 @@
 ID	Name	Type	DataType	Line	Scope	isInit	Value
-0	i	var	int		1	0	0	-
+0	I	const	int		1	0	1	5

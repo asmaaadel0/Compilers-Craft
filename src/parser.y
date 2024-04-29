@@ -74,25 +74,25 @@ BLOCK:
 
 //________________________________________________ STATEMENT ________________________________________________
 STATEMENT:
-                PRINT_STATEMENT                             {printf("Parsed print statement\n");}
+                PRINT_STATEMENT               {printf("Parsed print statement\n");}
                 | DECLARATION_STATEMENT
-                | ASSIGNMENT_STATEMENT                      {printf("Parsed Assignment statement\n");}
+                | ASSIGNMENT_STATEMENT         {printf("Parsed Assignment statement\n");}
                 | EXPRESSION SEMICOLON
                 
-                | ENUM_DECLARATION_STATEMENT                {printf("Parsed Enum Declaration\n");}
-                | ENUM_CALL_STATEMENT                       {printf("Parsed Enum Call\n");}
+                | ENUM_DECLARATION_STATEMENT   {printf("Parsed Enum Declaration\n");}
+                | ENUM_CALL_STATEMENT          {printf("Parsed Enum Call\n");}
                 
-                | IF_STATEMENT                              {printf("Parsed if statement\n");}
-                | WHILE_STATEMENT                           {printf("Parsed While LOOP\n");}
-                | FOR_STATEMENT                             {printf("Parsed For LOOP\n");}
-                | DO_WHILE_STATEMENT                        {printf("Parsed Do While LOOP\n");}
-                | SWITCH_STATEMENT                          {printf("Parsed Switch Statement\n");}
+                | IF_STATEMENT                 {printf("Parsed if statement\n");}
+                | WHILE_STATEMENT              {printf("Parsed While LOOP\n");}
+                | FOR_STATEMENT                {printf("Parsed For LOOP\n");}
+                | DO_WHILE_STATEMENT           {printf("Parsed Do While LOOP\n");}
+                | SWITCH_STATEMENT             {printf("Parsed Switch Statement\n");}
                 | BREAK SEMICOLON
                 | CONTINUE SEMICOLON
                 
                 | RETURN_STATEMENT SEMICOLON
-                | BLOCK                                     {printf("Parsed Block\n");}
-                | FUNC_DECLARATION_STATEMENT                {printf("Parsed Function Declaration\n");}
+                | BLOCK                        {printf("Parsed Block\n");}
+                | FUNC_DECLARATION_STATEMENT   {printf("Parsed Function Declaration\n");}
                 
                 ;
 
@@ -112,11 +112,11 @@ TYPE:
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
                 IDENTIFIER      {int i = lookup(head, $1, 0, number_of_line);}                
+                | CONSTANT      {int i = lookup(head, $1, 0, number_of_line);}
                 | DIGIT         {assign_int(head, $1, IdentifierHolder, number_of_line);}       
                 | FLOAT_DIGIT   {assign_float(head, $1, IdentifierHolder, number_of_line);}                 
                 | BOOL_LITERAL  {assign_bool(head, $1, IdentifierHolder, number_of_line);}   
                 | STRING_LITERAL{assign_string(head, $1, IdentifierHolder, number_of_line);}                
-                | CONSTANT      {int i = lookup(head, $1, 0, number_of_line);}
 
                 | EXPRESSION LOGIC_AND EXPRESSION     
                 | EXPRESSION LOGIC_OR EXPRESSION  
@@ -156,7 +156,7 @@ EXPRESSION:
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
                 TYPE IDENTIFIER {insertResult = insert(&head, $1, $2, "var", number_of_line, false);strcpy(IdentifierHolder, $2);}  DECLARATION_TAIL { printf("Parsed Declaration\n");}
-                | TYPE CONSTANT {insertResult = insert(&head, $1, $2, "const", number_of_line, false);strcpy(IdentifierHolder, $2);} DECLARATION_TAIL            { printf("Parsed Const Declaration\n"); }
+                | TYPE CONSTANT {insertResult = insert(&head, $1, $2, "const", number_of_line, false);strcpy(IdentifierHolder, $2);}DECLARATION_TAIL { printf("Parsed Const Declaration\n"); }
                 ;
 DECLARATION_TAIL:
                 EQ EXPRESSION SEMICOLON                                
@@ -240,8 +240,8 @@ FOR_STATEMENT:
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
-                IDENTIFIER {int i = lookup(head, $1, 1, number_of_line);} EQ  EXPRESSION SEMICOLON   
-                | CONSTANT  EQ  EXPRESSION SEMICOLON   
+                IDENTIFIER EQ {int i = lookup(head, $1, 1, number_of_line);} EXPRESSION SEMICOLON   
+                | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);} EXPRESSION SEMICOLON   
                 ;
 
 //________________________________________________ FUNCTION CALL ________________________________________________

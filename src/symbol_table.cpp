@@ -162,7 +162,7 @@ void assign_int(symbol *head, int value, const char *name, int number_of_line)
     {
         if (strcmp(head->identifierName, name) == 0)
         {
-            if (insertResult == -1)
+            if (insertResult == -1 || (head->isInit && strcmp(head->type, "const") == 0))
             {
                 return;
             }
@@ -202,7 +202,7 @@ void assign_float(symbol *head, float value, const char *name, int number_of_lin
     {
         if (strcmp(head->identifierName, name) == 0)
         {
-            if (insertResult == -1)
+            if (insertResult == -1 || (head->isInit && strcmp(head->type, "const") == 0))
             {
                 return;
             }
@@ -242,7 +242,7 @@ void assign_bool(symbol *head, bool value, const char *name, int number_of_line)
     {
         if (strcmp(head->identifierName, name) == 0)
         {
-            if (insertResult == -1)
+            if (insertResult == -1 || (head->isInit && strcmp(head->type, "const") == 0))
             {
                 return;
             }
@@ -282,7 +282,7 @@ void assign_string(symbol *head, char *value, const char *name, int number_of_li
     {
         if (strcmp(head->identifierName, name) == 0)
         {
-            if (insertResult == -1)
+            if (insertResult == -1 || (head->isInit && strcmp(head->type, "const") == 0))
             {
                 return;
             }
@@ -410,13 +410,13 @@ void display_unused_variables(symbol *head)
 
 // void check_type( int i) {
 //     // this functio check type matching between 2 identifiers before assign the value
-//     if ( is_param == 1) //to check argument type 
-//     { 
+//     if ( is_param == 1) //to check argument type
+//     {
 //         if ( arg_count <symbolTable[called_func_index].argCount )
 //         {assign_index = symbolTable[called_func_index].argList[arg_count];}
 //         else {assign_index=-1;}
 //     }
-//      if ( i == -1 || assign_index == -1) 
+//      if ( i == -1 || assign_index == -1)
 //     { return;}
 //     if (symbolTable[i].dataType != symbolTable[assign_index].dataType && (symbolTable[assign_index].dataType == "string" ||  symbolTable[i].dataType == "string"))
 //     {   /// at calling a function
