@@ -456,34 +456,48 @@ void display_to_file(const char *filename)
         printf("Error opening file.\n");
         return;
     }
-    fprintf(fp, "ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\n");
-    for (int i = 0; i < symbolTableIndex; ++i)
+    fprintf(fp, "ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\t\tArgs\n");
+    for (int i = 0; i < symbolTableIndex; i++)
     {
-        symbol current = symbolTable[i];
-        fprintf(fp, "%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", current.id, current.identifierName, current.type, current.datatype, current.declareLine, current.scope, current.isInit);
-        if (current.isInit == 1)
+        struct symbol node = symbolTable[i];
+        fprintf(fp, "%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node.id, node.identifierName, node.type, node.datatype, node.declareLine, node.scope, node.isInit);
+        //---- store value of entry
+        if (node.isInit == 1)
         {
-            if (strcmp(current.datatype, "int") == 0 || strcmp(current.type, "var_enum") == 0)
+            if (strcmp(node.datatype, "int") == 0 || strcmp(node.type, "var_enum") == 0)
             {
-                fprintf(fp, "%d", current.intValue);
+                fprintf(fp, "%d\t\t", node.intValue);
             }
-            else if (strcmp(current.datatype, "float") == 0)
+            else if (strcmp(node.datatype, "float") == 0)
             {
-                fprintf(fp, "%f", current.floatValue);
+                fprintf(fp, "%f\t\t", node.floatValue);
             }
-            else if (strcmp(current.datatype, "bool") == 0)
+            else if (strcmp(node.datatype, "bool") == 0)
             {
-                fprintf(fp, "%s", current.boolValue ? "true" : "false");
+                fprintf(fp, "%s\t\t", node.boolValue ? "true" : "false");
             }
-            else if (strcmp(current.datatype, "string") == 0)
+            else if (strcmp(node.datatype, "string") == 0)
             {
-                fprintf(fp, "%s", current.strValue);
+                fprintf(fp, "%s\t\t", node.strValue);
+            }
+        }
+        else
+        {
+            fprintf(fp, "-\t\t");
+        }
+        //---- print arguments of functions
+        if (strcmp(node.type, "func") == 0)
+        {
+            for (int j = 0; j < node.argCount; j++)
+            {
+                fprintf(fp, "%d,", node.argList[j]);
             }
         }
         else
         {
             fprintf(fp, "-");
         }
+
         fprintf(fp, "\n");
     }
     fclose(fp);
@@ -491,34 +505,49 @@ void display_to_file(const char *filename)
 
 void display()
 {
-    printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\toutOfScope\tValue\n");
-    for (int i = 0; i < symbolTableIndex; ++i)
+    printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\t\tArgs\n");
+    //----- write symbol table entries
+    for (int i = 0; i < symbolTableIndex; i++)
     {
-        symbol current = symbolTable[i];
-        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t%d\t\t", current.id, current.identifierName, current.type, current.datatype, current.declareLine, current.scope, current.isInit, current.outOfScope);
-        if (current.isInit == 1)
+        struct symbol node = symbolTable[i];
+        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node.id, node.identifierName, node.type, node.datatype, node.declareLine, node.scope, node.isInit);
+        //---- store value of entry
+        if (node.isInit == 1)
         {
-            if (strcmp(current.datatype, "int") == 0 || strcmp(current.type, "var_enum") == 0)
+            if (strcmp(node.datatype, "int") == 0 || strcmp(node.type, "var_enum") == 0)
             {
-                printf("%d", current.intValue);
+                printf("%d\t\t", node.intValue);
             }
-            else if (strcmp(current.datatype, "float") == 0)
+            else if (strcmp(node.datatype, "float") == 0)
             {
-                printf("%f", current.floatValue);
+                printf("%f\t\t", node.floatValue);
             }
-            else if (strcmp(current.datatype, "bool") == 0)
+            else if (strcmp(node.datatype, "bool") == 0)
             {
-                printf("%s", current.boolValue ? "true" : "false");
+                printf("%s\t\t", node.boolValue ? "true" : "false");
             }
-            else if (strcmp(current.datatype, "string") == 0)
+            else if (strcmp(node.datatype, "string") == 0)
             {
-                printf("%s", current.strValue);
+                printf("%s\t\t", node.strValue);
+            }
+        }
+        else
+        {
+            printf("-\t\t");
+        }
+        //---- print arguments of functions
+        if (strcmp(node.type, "func") == 0)
+        {
+            for (int j = 0; j < node.argCount; j++)
+            {
+                printf("%d,", node.argList[j]);
             }
         }
         else
         {
             printf("-");
         }
+
         printf("\n");
     }
 }
