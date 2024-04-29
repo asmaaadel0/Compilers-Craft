@@ -1538,13 +1538,13 @@ yyreduce:
 
   case 61: /* $@3: %empty  */
 #line 158 "./parser.y"
-                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);display();strcpy(IdentifierHolder, (yyvsp[0].str));}
+                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);strcpy(IdentifierHolder, (yyvsp[0].str));}
 #line 1543 "parser.tab.c"
     break;
 
   case 62: /* DECLARATION_STATEMENT: TYPE CONSTANT $@3 DECLARATION_TAIL  */
 #line 158 "./parser.y"
-                                                                                                                                                        { printf("Parsed Const Declaration\n"); }
+                                                                                                                                              { printf("Parsed Const Declaration\n"); }
 #line 1549 "parser.tab.c"
     break;
 

@@ -68,16 +68,16 @@ void scope_end(int number_of_line)
         }
     }
     scopeIndex--;
+    // blockNumber--;
 }
 
-int is_exist(const char *identifierName)
+int is_exist(char *identifierName)
 {
     for (int i = 0; i < symbolTableIndex; ++i)
     {
-        symbol current = symbolTable[i];
-        if (strcmp(current.identifierName, identifierName) == 0 && current.scope == blockNumber && !current.outOfScope)
+        if (strcmp(symbolTable[i].identifierName, identifierName) == 0 && symbolTable[i].scope == blockNumber && !symbolTable[i].outOfScope)
         {
-            return current.declareLine;
+            return symbolTable[i].declareLine;
         }
     }
     return -1;
@@ -312,11 +312,11 @@ void display_to_file(const char *filename)
 
 void display()
 {
-    printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\n");
+    printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\toutOfScope\tValue\n");
     for (int i = 0; i < symbolTableIndex; ++i)
     {
         symbol current = symbolTable[i];
-        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", current.id, current.identifierName, current.type, current.datatype, current.declareLine, current.scope, current.isInit);
+        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t%d\t\t", current.id, current.identifierName, current.type, current.datatype, current.declareLine, current.scope, current.isInit, current.outOfScope);
         if (current.isInit == 1)
         {
             if (strcmp(current.datatype, "int") == 0 || strcmp(current.type, "var_enum") == 0)
