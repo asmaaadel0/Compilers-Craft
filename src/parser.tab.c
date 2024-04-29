@@ -1503,7 +1503,7 @@ yyreduce:
 
   case 30: /* EXPRESSION: DIGIT  */
 #line 116 "./parser.y"
-                                {assign_int(head, (yyvsp[0].num), IdentifierHolder, number_of_line);printf("assign\n");}
+                                {assign_int(head, (yyvsp[0].num), IdentifierHolder, number_of_line);}
 #line 1508 "parser.tab.c"
     break;
 
