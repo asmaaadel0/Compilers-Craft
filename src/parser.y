@@ -197,23 +197,23 @@ ARG_DECL:
 
 //________________________________________________ ENUM DECLARATION STATEMENT ________________________________________________
 ENUM_DECLARATION_STATEMENT:
-                ENUM IDENTIFIER  '{' ENUM_HELPER '}' SEMICOLON {insertResult = insert("enum" , $2, "var" , number_of_line, false);strcpy(IdentifierHolder, $2);}        
+                ENUM IDENTIFIER  '{' {isEnum = 1;} ENUM_HELPER '}' SEMICOLON {insertResult = insert("enum" , $2, "var" , number_of_line, false);isEnum=0;strcpy(IdentifierHolder, $2);}        
                 ;                
 ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
 ENUM_ARGS:
-                IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, enumArgCount-1, number_of_line);strcpy(IdentifierHolder, $1);} ',' ENUM_ARGS  
-                | IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, enumArgCount-1, number_of_line);strcpy(IdentifierHolder, $1);} 
+                IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, enumArgCount-1, number_of_line);strcpy(IdentifierHolder, $1);} ',' ENUM_ARGS  
+                | IDENTIFIER {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, enumArgCount-1, number_of_line);strcpy(IdentifierHolder, $1);} 
 
                 ;
             
 ENUM_DEFINED_ARGS:
 
-                IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, $3, number_of_line);strcpy(IdentifierHolder, $1);} ',' ENUM_DEFINED_ARGS 
-                | IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, $3, number_of_line);strcpy(IdentifierHolder, $1);}
+                IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);strcpy(IdentifierHolder, $1);} ',' ENUM_DEFINED_ARGS 
+                | IDENTIFIER EQ DIGIT {enumKeys[enumArgCount] = $1;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);strcpy(IdentifierHolder, $1);}
                 ;
 
 ENUM_CALL_STATEMENT:
-                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
+                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);assign_enum(insertResult, $1, $4, number_of_line);strcpy(IdentifierHolder, $2);}
                 | IDENTIFIER IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
                 ;
 

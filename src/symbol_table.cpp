@@ -57,6 +57,7 @@ int insertResult = 0;
 int enumArgCount = 0;
 char *enumKeys[100];
 int enumValues[100];
+int isEnum = 0;
 
 void scope_start()
 {
@@ -69,11 +70,11 @@ void scope_end(int number_of_line)
 {
     if (funcIndex != -1 && strcmp(symbolTable[funcIndex].type, "func") == 0 && returnExist == 0 && strcmp(symbolTable[funcIndex].datatype, "void") != 0)
     {
-        printf("Error at line %d: Missing return statement in Function %s\n", number_of_line, symbolTable[funcIndex].name);
+        printf("Error at line %d: Missing return statement in Function %s\n", number_of_line, symbolTable[funcIndex].identifierName);
     }
     if (funcIndex != -1 && strcmp(symbolTable[funcIndex].type, "func") == 0 && returnExist == 1 && strcmp(symbolTable[funcIndex].datatype, "void") == 0)
     {
-        printf("Error at line %d: %s Void Function can't have return statement\n", number_of_line, symbolTable[funcIndex].name);
+        printf("Error at line %d: %s Void Function can't have return statement\n", number_of_line, symbolTable[funcIndex].identifierName);
     }
     insertResult = -1;
     funcIndex = -1;
@@ -176,30 +177,6 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
     return newnode.id;
 }
 
-int lookup(const char *identifierName, bool is_assignment, int number_of_line)
-{
-    for (int i = 0; i < symbolTableIndex; ++i)
-    {
-        if (strcmp(symbolTable[i].identifierName, identifierName) == 0 && !symbolTable[i].outOfScope)
-        {
-            if (!symbolTable[i].isInit && strcmp(symbolTable[i].type, "var") == 0 && !symbolTable[i].isArg)
-            {
-                if (!is_assignment)
-                {
-                    printf("Error at line %d: %s used before initialized\n", number_of_line, identifierName);
-                }
-            }
-            if (!is_assignment)
-            {
-                symbolTable[i].isUsed = true;
-            }
-            return symbolTable[i].id;
-        }
-    }
-    printf("Error at line %d: %s undeclared identifier\n", number_of_line, identifierName);
-    return -1;
-}
-
 void assign_arg_indexes()
 {
     if (isParameter == 1)
@@ -247,7 +224,6 @@ void assign_int(int index, int value, int number_of_line)
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
     }
-    printf("%s\n", symbolTable[index].identifierName);
 }
 
 void assign_float(int index, float value, int number_of_line)
@@ -341,6 +317,75 @@ void assign_string(int index, char *value, int number_of_line)
     }
 }
 
+void assign_enum(int index, char *value, char *key, int number_of_line)
+{
+    if (index == -1)
+    {
+        return;
+    }
+    if (symbolTable[index].type == "var_enum")
+    {
+        for (int k = 0; k < symbolTableIndex; k++)
+        {
+            if (strcmp(symbolTable[k].identifierName, value) == 0)
+            {
+                for (int j = 0; j < 100; j++)
+                {
+                    printf("strcmp(symbolTable[k].enumValue.keys[j]: %s, %s\n\n\n", symbolTable[k].enumValue.keys[j], key);
+                    if (strcmp(symbolTable[k].enumValue.keys[j], key) == 0)
+                    {
+                        symbolTable[index].intValue = symbolTable[k].enumValue.values[j];
+                        symbolTable[index].isInit = 1;
+                        insertResult = -1;
+                        return;
+                    }
+                }
+                printf("Error at line %d: %s not exist as key for %s enum \n", number_of_line, key, value);
+                insertResult = -1;
+                return;
+            }
+        }
+    }
+    else
+    {
+        printf("Type Mismatch Error at line %d: %s %s variable assigned enum value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+    }
+    insertResult = -1;
+}
+
+int lookup(char *identifierName, bool is_assignment, int number_of_line)
+{
+    if (isEnum == 1)
+    {
+        return -1;
+    }
+    if (symbolTable[insertResult].type == "var_enum")
+    {
+        assign_enum(insertResult, symbolTable[insertResult].datatype, identifierName, number_of_line);
+        return -1;
+    }
+    for (int i = 0; i < symbolTableIndex; ++i)
+    {
+        if (strcmp(symbolTable[i].identifierName, identifierName) == 0 && !symbolTable[i].outOfScope)
+        {
+            if (!symbolTable[i].isInit && strcmp(symbolTable[i].type, "var") == 0 && !symbolTable[i].isArg)
+            {
+                if (!is_assignment)
+                {
+                    printf("Error at line %d: %s used before initialized\n", number_of_line, identifierName);
+                }
+            }
+            if (!is_assignment)
+            {
+                symbolTable[i].isUsed = true;
+            }
+            return symbolTable[i].id;
+        }
+    }
+    printf("Error at line %d: %s undeclared identifier\n", number_of_line, identifierName);
+    return -1;
+}
+
 void check_type(int i, int number_of_line)
 {
     if (isParameter == 1)
@@ -362,19 +407,19 @@ void check_type(int i, int number_of_line)
     {
         if (strcmp(symbolTable[i].type, "func") == 0)
         {
-            printf("Type Mismatch Error at line %d: %s is %s variable  but %s return %s value\n", number_of_line, symbolTable[insertResult].name, symbolTable[insertResult].datatype, symbolTable[i].name, symbolTable[i].datatype);
+            printf("Type Mismatch Error at line %d: %s is %s variable  but %s return %s value\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
         }
         else if (strcmp(symbolTable[insertResult].type, "func") == 0)
         {
-            printf("Type Mismatch Error at line %d: %s is %s variable  but %s return %s value\n", number_of_line, symbolTable[i].name, symbolTable[i].datatype, symbolTable[insertResult].name, symbolTable[insertResult].datatype);
+            printf("Type Mismatch Error at line %d: %s is %s variable  but %s return %s value\n", number_of_line, symbolTable[i].identifierName, symbolTable[i].datatype, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype);
         }
         else if (isParameter == 1)
         {
-            printf("Type Mismatch Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].name, symbolTable[insertResult].datatype, symbolTable[i].name, symbolTable[i].datatype);
+            printf("Type Mismatch Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
         }
         else
         {
-            printf("Type Mismatch Error at line %d: %s is %s variable  but %s %s\n", number_of_line, symbolTable[insertResult].name, symbolTable[insertResult].datatype, symbolTable[i].name, symbolTable[i].datatype);
+            printf("Type Mismatch Error at line %d: %s is %s variable  but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
         }
     }
     else if (strcmp(symbolTable[insertResult].type, "func") != 0)
