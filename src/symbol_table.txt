@@ -1,2 +1,5 @@
 ID	Name	Type	DataType	Line	Scope	isInit	Value
 0	I	const	int		1	0	1	5
+1	x	var	float		3	0	1	9.100000
+2	s	var	string		4	0	1	"asmaa"
+3	b	var	bool		5	0	1	false

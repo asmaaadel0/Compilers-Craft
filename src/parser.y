@@ -10,7 +10,6 @@
     int yylex();
     extern FILE *yyin;
     extern int number_of_line;
-    symbol *head = NULL;
     char IdentifierHolder[10];
 %}
 
@@ -69,7 +68,7 @@ PROGRAM:
                 ;
 //________________________________________________ BLOCK ________________________________________________
 BLOCK:
-                '{' {scope_start();} PROGRAM '}' {scope_end(head, number_of_line);}             
+                '{' {scope_start();} PROGRAM '}' {scope_end(number_of_line);}             
                 ;
 
 //________________________________________________ STATEMENT ________________________________________________
@@ -111,12 +110,12 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER      {int i = lookup(head, $1, 0, number_of_line);}                
-                | CONSTANT      {int i = lookup(head, $1, 0, number_of_line);}
-                | DIGIT         {assign_int(head, $1, IdentifierHolder, number_of_line);}       
-                | FLOAT_DIGIT   {assign_float(head, $1, IdentifierHolder, number_of_line);}                 
-                | BOOL_LITERAL  {assign_bool(head, $1, IdentifierHolder, number_of_line);}   
-                | STRING_LITERAL{assign_string(head, $1, IdentifierHolder, number_of_line);}                
+                IDENTIFIER      {int i = lookup($1, 0, number_of_line);}                
+                | CONSTANT      {int i = lookup($1, 0, number_of_line);}
+                | DIGIT         {assign_int(insertResult, $1, number_of_line);}       
+                | FLOAT_DIGIT   {assign_float(insertResult, $1, number_of_line);}                 
+                | BOOL_LITERAL  {assign_bool(insertResult, $1, number_of_line);}   
+                | STRING_LITERAL{assign_string(insertResult, $1, number_of_line);}                
 
                 | EXPRESSION LOGIC_AND EXPRESSION     
                 | EXPRESSION LOGIC_OR EXPRESSION  
@@ -155,8 +154,8 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
-                TYPE IDENTIFIER {insertResult = insert(&head, $1, $2, "var", number_of_line, false);strcpy(IdentifierHolder, $2);}  DECLARATION_TAIL { printf("Parsed Declaration\n");}
-                | TYPE CONSTANT {insertResult = insert(&head, $1, $2, "const", number_of_line, false);strcpy(IdentifierHolder, $2);}DECLARATION_TAIL { printf("Parsed Const Declaration\n"); }
+                TYPE IDENTIFIER {insertResult = insert($1, $2, "var", number_of_line, false);strcpy(IdentifierHolder, $2);}  DECLARATION_TAIL { printf("Parsed Declaration\n");}
+                | TYPE CONSTANT {insertResult = insert($1, $2, "const", number_of_line, false);display();strcpy(IdentifierHolder, $2);}DECLARATION_TAIL { printf("Parsed Const Declaration\n"); }
                 ;
 DECLARATION_TAIL:
                 EQ EXPRESSION SEMICOLON                                
@@ -193,30 +192,30 @@ ARGS:
                 | ARG_DECL
                 ;
 ARG_DECL:
-                TYPE IDENTIFIER {insertResult = insert(&head, $1, $2,"var", number_of_line, true);strcpy(IdentifierHolder, $2);}
+                TYPE IDENTIFIER {insertResult = insert($1, $2,"var", number_of_line, true);strcpy(IdentifierHolder, $2);}
                 ;
 
 //________________________________________________ ENUM DECLARATION STATEMENT ________________________________________________
 ENUM_DECLARATION_STATEMENT:
-                ENUM IDENTIFIER  '{' ENUM_HELPER '}' SEMICOLON {insertResult = insert(&head, "enum" , $2, "var" , number_of_line, false);strcpy(IdentifierHolder, $2);}        
+                ENUM IDENTIFIER  '{' ENUM_HELPER '}' SEMICOLON {insertResult = insert("enum" , $2, "var" , number_of_line, false);strcpy(IdentifierHolder, $2);}        
                 ;                
 ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
 ENUM_ARGS:
 
-                IDENTIFIER {insertResult = insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} ',' ENUM_ARGS  
-                | IDENTIFIER {insertResult = insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} 
+                IDENTIFIER {insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} ',' ENUM_ARGS  
+                | IDENTIFIER {insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} 
 
                 ;
             
 ENUM_DEFINED_ARGS:
 
-                IDENTIFIER EQ DIGIT {insertResult = insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} ',' ENUM_DEFINED_ARGS 
-                | IDENTIFIER EQ DIGIT {insertResult = insert(&head, "int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);}
+                IDENTIFIER EQ DIGIT {insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);} ',' ENUM_DEFINED_ARGS 
+                | IDENTIFIER EQ DIGIT {insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);strcpy(IdentifierHolder, $1);}
                 ;
 
 ENUM_CALL_STATEMENT:
-                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insertResult = insert(&head, $1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
-                | IDENTIFIER IDENTIFIER SEMICOLON {insertResult = insert(&head, $1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
+                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
+                | IDENTIFIER IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);strcpy(IdentifierHolder, $2);}
                 ;
 
 //________________________________________________ IF STATEMENT ________________________________________________
@@ -240,8 +239,8 @@ FOR_STATEMENT:
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
-                IDENTIFIER EQ {int i = lookup(head, $1, 1, number_of_line);} EXPRESSION SEMICOLON   
-                | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);} EXPRESSION SEMICOLON   
+                IDENTIFIER EQ {int i = lookup($1, 1, number_of_line);} EXPRESSION SEMICOLON   
+                | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);insertResult = -1;} EXPRESSION SEMICOLON   
                 ;
 
 //________________________________________________ FUNCTION CALL ________________________________________________
@@ -266,9 +265,9 @@ int main(int argc, char *argv[])
 { 
     yyin = fopen(argv[1], "r");
     yyparse();
-    display(head);
-    display_to_file(head, "symbol_table.txt");
-    display_unused_variables(head);
+    display();
+    display_to_file("symbol_table.txt");
+    display_unused_variables();
 
     return 0;
 }

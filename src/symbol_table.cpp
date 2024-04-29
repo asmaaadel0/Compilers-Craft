@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define BUFFER_SIZE 1024
 #define TOKEN_SIZE 32
@@ -10,8 +11,9 @@
 typedef struct symbol
 {
 
-    int id, intValue, scope;
+    int id, scope;
     char *name, value;
+    int intValue;
     float floatValue;
     bool boolValue;
     char *strValue;
@@ -22,16 +24,17 @@ typedef struct symbol
     char *identifierName;
     char *type;     // variable, const, func, enum_arg, var_enum
     char *datatype; // int, float, bool, string
-
-    struct symbol *next;
 } symbol;
+
+symbol symbolTable[500];
+int symbolTableSize = 0;
 
 int scopeStack[500];
 int scopeIndex = 0;
 int inLoop = 0;
 int blockNumber = 0;
 int symbolTableIndex = 0;
-int assignIndex = 0;
+int assignIndex = -1;
 int returnExist = 0;
 int funcIndex = 0;
 
@@ -44,100 +47,89 @@ void scope_start()
     scopeStack[scopeIndex] = blockNumber;
 }
 
-void scope_end(symbol *head, int number_of_line)
+void scope_end(int number_of_line)
 {
-    symbol *current = head;
-    while (current != NULL)
+    if (funcIndex != -1 && strcmp(symbolTable[funcIndex].type, "func") == 0 && returnExist == 0 && strcmp(symbolTable[funcIndex].datatype, "void") != 0)
     {
-        // Check for missing return statement in non-void functions
-        if (strcmp(current->type, "func") == 0 && !current->outOfScope && strcmp(current->datatype, "void") != 0)
+        printf("Error at line %d: Missing return statement in Function %s\n", number_of_line, symbolTable[funcIndex].name);
+    }
+    if (funcIndex != -1 && strcmp(symbolTable[funcIndex].type, "func") == 0 && returnExist == 1 && strcmp(symbolTable[funcIndex].datatype, "void") == 0)
+    {
+        printf("Error at line %d: %s Void Function can't have return statement\n", number_of_line, symbolTable[funcIndex].name);
+    }
+    assignIndex = -1;
+    funcIndex = -1;
+    returnExist = 0;
+    for (int i = 0; i < symbolTableIndex; i++)
+    {
+        if (symbolTable[i].scope == scopeStack[scopeIndex])
         {
-            printf("Error at line %d: Missing return statement in Function %s\n", number_of_line, current->name);
+            symbolTable[i].outOfScope = 1;
         }
-        // Check for return statement in void functions
-        if (strcmp(current->type, "func") == 0 && !current->outOfScope && strcmp(current->datatype, "void") == 0)
-        {
-            printf("Error at line %d: %s Void Function can't have return statement\n", number_of_line, current->name);
-        }
-        // Mark symbols in the current scope as out of scope
-        if (current->scope == scopeStack[scopeIndex])
-        {
-            current->outOfScope = true;
-        }
-        current = current->next;
     }
     scopeIndex--;
 }
 
-int is_exist(symbol *head, const char *identifierName)
+int is_exist(const char *identifierName)
 {
-    int index = 0;
-    while (head != NULL)
+    for (int i = 0; i < symbolTableIndex; ++i)
     {
-        if (strcmp(head->identifierName, identifierName) == 0 && head->scope == blockNumber && !head->outOfScope)
+        symbol current = symbolTable[i];
+        if (strcmp(current.identifierName, identifierName) == 0 && current.scope == blockNumber && !current.outOfScope)
         {
-            return head->declareLine;
+            return current.declareLine;
         }
-        head = head->next;
-        index++;
     }
-    return -1; // Symbol not found
+    return -1;
 }
 
-int insert(symbol **headRef, const char *datatype, const char *identifier, const char *type, int number_of_line, bool isArg)
+int insert(char *datatype, char *identifier, char *type, int number_of_line, bool isArg)
 {
-    symbol *newnode = (symbol *)malloc(sizeof(symbol));
-    static symbol *prevnode;
-    int L = is_exist(*headRef, identifier);
+    int L = is_exist(identifier);
     if (L != -1)
     {
         printf("Error at line %d: %s is already declared in this scope at line %d\n", number_of_line, identifier, L);
         return -1;
     }
+    struct symbol newnode;
 
-    newnode->identifierName = (char *)malloc((strlen(identifier) + 1) * sizeof(char));
-    strcpy(newnode->identifierName, identifier);
-    newnode->datatype = (char *)malloc((strlen(datatype) + 1) * sizeof(char));
-    strcpy(newnode->datatype, datatype);
-    newnode->type = (char *)malloc((strlen(type) + 1) * sizeof(char));
-    strcpy(newnode->type, type);
-
-    newnode->declareLine = number_of_line;
-    newnode->id = symbolTableIndex;
-    newnode->isArg = isArg;
-    newnode->outOfScope = false;
-    newnode->isInit = false;
-    newnode->isUsed = false;
-
-    if (*headRef == NULL)
+    if (newnode.identifierName == NULL || newnode.datatype == NULL || newnode.type == NULL)
     {
-        prevnode = newnode;
+        printf("Error: Memory allocation failed\n");
+        return -1;
     }
 
-    if (newnode->isArg == 1 || inLoop == 1)
+    newnode.identifierName = identifier;
+    newnode.datatype = datatype;
+    newnode.type = type;
+
+    newnode.declareLine = number_of_line;
+    newnode.id = symbolTableIndex;
+    newnode.isArg = isArg;
+    newnode.outOfScope = false;
+    newnode.isInit = false;
+    newnode.isUsed = false;
+
+    if (newnode.isArg == 1 || inLoop == 1)
     {
-        newnode->scope = blockNumber + 1;
+        newnode.scope = blockNumber + 1;
     }
     else
     {
-        newnode->scope = scopeStack[scopeIndex];
+        newnode.scope = scopeStack[scopeIndex];
     }
-
-    prevnode = newnode;
-    newnode->next = (*headRef);
-    (*headRef) = newnode;
+    symbolTable[symbolTableIndex] = newnode;
     symbolTableIndex++;
-    return 0;
+    return newnode.id;
 }
 
-int lookup(symbol *headRef, const char *identifierName, bool is_assignment, int number_of_line)
+int lookup(const char *identifierName, bool is_assignment, int number_of_line)
 {
-    symbol *current = headRef;
-    while (current != NULL)
+    for (int i = 0; i < symbolTableIndex; ++i)
     {
-        if (strcmp(current->identifierName, identifierName) == 0 && !current->outOfScope)
+        if (strcmp(symbolTable[i].identifierName, identifierName) == 0 && !symbolTable[i].outOfScope)
         {
-            if (!current->isInit && strcmp(current->type, "var") == 0 && !current->isArg)
+            if (!symbolTable[i].isInit && strcmp(symbolTable[i].type, "var") == 0 && !symbolTable[i].isArg)
             {
                 if (!is_assignment)
                 {
@@ -146,167 +138,138 @@ int lookup(symbol *headRef, const char *identifierName, bool is_assignment, int 
             }
             if (!is_assignment)
             {
-                current->isUsed = true;
+                symbolTable[i].isUsed = true;
             }
-            return current->id;
+            return symbolTable[i].id;
         }
-        current = current->next;
     }
     printf("Error at line %d: %s undeclared identifier\n", number_of_line, identifierName);
     return -1;
 }
 
-void assign_int(symbol *head, int value, const char *name, int number_of_line)
+void assign_int(int index, int value, int number_of_line)
 {
-    while (head != NULL)
+    if (index == -1)
     {
-        if (strcmp(head->identifierName, name) == 0)
+        return;
+    }
+    if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
+    {
+        printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        return;
+    }
+    symbolTable[index].isInit = 1;
+    if (strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope)
+    {
+        if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
-            if (insertResult == -1 || (head->isInit && strcmp(head->type, "const") == 0))
-            {
-                return;
-            }
-            if (strcmp(head->datatype, "string") == 0 && head->type == "func")
-            {
-                printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, head->identifierName, head->datatype);
-                return;
-            }
-            head->isInit = 1;
-            if (strcmp(head->datatype, "string") != 0 && !head->outOfScope)
-            {
-                if (strcmp(head->datatype, "float") == 0)
-                {
-                    head->floatValue = (float)value;
-                }
-                else if (strcmp(head->datatype, "bool") == 0)
-                {
-                    head->boolValue = (bool)value;
-                }
-                else if (strcmp(head->datatype, "int") == 0)
-                {
-                    head->intValue = value;
-                }
-            }
-            else
-            {
-                printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, head->identifierName, head->datatype);
-            }
+            symbolTable[index].floatValue = (float)value;
         }
-        head = head->next;
+        else if (strcmp(symbolTable[index].datatype, "bool") == 0)
+        {
+            symbolTable[index].boolValue = (bool)value;
+        }
+        else if (strcmp(symbolTable[index].datatype, "int") == 0)
+        {
+            symbolTable[index].intValue = value;
+        }
+    }
+    else
+    {
+        printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+    }
+    printf("%s\n", symbolTable[index].identifierName);
+}
+
+void assign_float(int index, float value, int number_of_line)
+{
+    if (index == -1)
+    {
+        return;
+    }
+    if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
+    {
+        printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        return;
+    }
+    symbolTable[index].isInit = 1;
+    if (strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope)
+    {
+        if (strcmp(symbolTable[index].datatype, "float") == 0)
+        {
+            symbolTable[index].floatValue = value;
+        }
+        else if (strcmp(symbolTable[index].datatype, "bool") == 0)
+        {
+            symbolTable[index].boolValue = (bool)value;
+        }
+        else if (strcmp(symbolTable[index].datatype, "int") == 0)
+        {
+            symbolTable[index].intValue = (int)value;
+        }
+    }
+    else
+    {
+        printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
     }
 }
 
-void assign_float(symbol *head, float value, const char *name, int number_of_line)
+void assign_bool(int index, bool value, int number_of_line)
 {
-    while (head != NULL)
+    if (index == -1)
     {
-        if (strcmp(head->identifierName, name) == 0)
+        return;
+    }
+    if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
+    {
+        printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        return;
+    }
+    symbolTable[index].isInit = 1;
+    if (strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope)
+    {
+        if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
-            if (insertResult == -1 || (head->isInit && strcmp(head->type, "const") == 0))
-            {
-                return;
-            }
-            if (strcmp(head->datatype, "string") == 0 && head->type == "func")
-            {
-                printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned float\n", number_of_line, head->identifierName, head->datatype);
-                return;
-            }
-            head->isInit = 1;
-            if (strcmp(head->datatype, "string") != 0 && !head->outOfScope)
-            {
-                if (strcmp(head->datatype, "float") == 0)
-                {
-                    head->floatValue = value;
-                }
-                else if (strcmp(head->datatype, "bool") == 0)
-                {
-                    head->boolValue = (bool)value;
-                }
-                else if (strcmp(head->datatype, "int") == 0)
-                {
-                    head->intValue = (int)value;
-                }
-            }
-            else
-            {
-                printf("Type Mismatch Error at line %d: %s %s variable assigned float value\n", number_of_line, head->identifierName, head->datatype);
-            }
+            symbolTable[index].floatValue = (float)value;
         }
-        head = head->next;
+        else if (strcmp(symbolTable[index].datatype, "bool") == 0)
+        {
+            symbolTable[index].boolValue = value;
+        }
+        else if (strcmp(symbolTable[index].datatype, "int") == 0)
+        {
+            symbolTable[index].intValue = (int)value;
+        }
+    }
+    else
+    {
+        printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
     }
 }
 
-void assign_bool(symbol *head, bool value, const char *name, int number_of_line)
+void assign_string(int index, char *value, int number_of_line)
 {
-    while (head != NULL)
+    if (index == -1)
     {
-        if (strcmp(head->identifierName, name) == 0)
-        {
-            if (insertResult == -1 || (head->isInit && strcmp(head->type, "const") == 0))
-            {
-                return;
-            }
-            if (strcmp(head->datatype, "string") == 0 && head->type == "func")
-            {
-                printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned bool\n", number_of_line, head->identifierName, head->datatype);
-                return;
-            }
-            head->isInit = 1;
-            if (strcmp(head->datatype, "string") != 0 && !head->outOfScope)
-            {
-                if (strcmp(head->datatype, "float") == 0)
-                {
-                    head->floatValue = (float)value;
-                }
-                else if (strcmp(head->datatype, "bool") == 0)
-                {
-                    head->boolValue = value;
-                }
-                else if (strcmp(head->datatype, "int") == 0)
-                {
-                    head->intValue = (int)value;
-                }
-            }
-            else
-            {
-                printf("Type Mismatch Error at line %d: %s %s variable assigned bool value\n", number_of_line, head->identifierName, head->datatype);
-            }
-        }
-        head = head->next;
+        return;
+    }
+    if (strcmp(symbolTable[index].datatype, "string") != 0 && symbolTable[index].type == "func")
+    {
+        printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned string\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        return;
+    }
+    symbolTable[index].isInit = 1;
+    if (strcmp(symbolTable[index].datatype, "string") == 0 && !symbolTable[index].outOfScope)
+    {
+        symbolTable[index].strValue = value;
+    }
+    else
+    {
+        printf("Type Mismatch Error at line %d: %s %s variable assigned string value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
     }
 }
 
-void assign_string(symbol *head, char *value, const char *name, int number_of_line)
-{
-    while (head != NULL)
-    {
-        if (strcmp(head->identifierName, name) == 0)
-        {
-            if (insertResult == -1 || (head->isInit && strcmp(head->type, "const") == 0))
-            {
-                return;
-            }
-            if (strcmp(head->datatype, "string") != 0 && head->type == "func")
-            {
-                printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned string\n", number_of_line, head->identifierName, head->datatype);
-                return;
-            }
-            head->isInit = 1;
-            if (strcmp(head->datatype, "string") == 0 && !head->outOfScope)
-            {
-                // strcpy(head->strValue, value);
-                head->strValue = value;
-            }
-            else
-            {
-                printf("Type Mismatch Error at line %d: %s %s variable assigned string value\n", number_of_line, head->identifierName, head->datatype);
-            }
-        }
-        head = head->next;
-    }
-}
-
-void display_to_file(symbol *node, const char *filename)
+void display_to_file(const char *filename)
 {
     FILE *fp = fopen(filename, "w");
     if (fp == NULL)
@@ -314,150 +277,123 @@ void display_to_file(symbol *node, const char *filename)
         printf("Error opening file.\n");
         return;
     }
-
     fprintf(fp, "ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\n");
-    while (node != NULL)
+    for (int i = 0; i < symbolTableIndex; ++i)
     {
-        fprintf(fp, "%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node->id, node->identifierName, node->type, node->datatype, node->declareLine, node->scope, node->isInit);
-        if (node->isInit == 1)
+        symbol current = symbolTable[i];
+        fprintf(fp, "%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", current.id, current.identifierName, current.type, current.datatype, current.declareLine, current.scope, current.isInit);
+        if (current.isInit == 1)
         {
-            if (strcmp(node->datatype, "int") == 0 || strcmp(node->type, "var_enum") == 0)
+            if (strcmp(current.datatype, "int") == 0 || strcmp(current.type, "var_enum") == 0)
             {
-                fprintf(fp, "%d", node->intValue);
+                fprintf(fp, "%d", current.intValue);
             }
-            else if (strcmp(node->datatype, "float") == 0)
+            else if (strcmp(current.datatype, "float") == 0)
             {
-                fprintf(fp, "%f", node->floatValue);
+                fprintf(fp, "%f", current.floatValue);
             }
-            else if (strcmp(node->datatype, "bool") == 0)
+            else if (strcmp(current.datatype, "bool") == 0)
             {
-                fprintf(fp, "%s", node->boolValue ? "true" : "false");
+                fprintf(fp, "%s", current.boolValue ? "true" : "false");
             }
-            else if (strcmp(node->datatype, "string") == 0)
+            else if (strcmp(current.datatype, "string") == 0)
             {
-                fprintf(fp, "%s", node->strValue);
+                fprintf(fp, "%s", current.strValue);
             }
         }
         else
         {
             fprintf(fp, "-");
         }
-
         fprintf(fp, "\n");
-        node = node->next;
     }
-
     fclose(fp);
 }
 
-void display(symbol *node)
+void display()
 {
     printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\n");
-    while (node != NULL)
+    for (int i = 0; i < symbolTableIndex; ++i)
     {
-        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node->id, node->identifierName, node->type, node->datatype, node->declareLine, node->scope, node->isInit);
-        if (node->isInit == 1)
+        symbol current = symbolTable[i];
+        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", current.id, current.identifierName, current.type, current.datatype, current.declareLine, current.scope, current.isInit);
+        if (current.isInit == 1)
         {
-            if (strcmp(node->datatype, "int") == 0 || strcmp(node->type, "var_enum") == 0)
+            if (strcmp(current.datatype, "int") == 0 || strcmp(current.type, "var_enum") == 0)
             {
-                printf("%d", node->intValue);
+                printf("%d", current.intValue);
             }
-            else if (strcmp(node->datatype, "float") == 0)
+            else if (strcmp(current.datatype, "float") == 0)
             {
-                printf("%f", node->floatValue);
+                printf("%f", current.floatValue);
             }
-            else if (strcmp(node->datatype, "bool") == 0)
+            else if (strcmp(current.datatype, "bool") == 0)
             {
-                printf("%s", node->boolValue ? "true" : "false");
+                printf("%s", current.boolValue ? "true" : "false");
             }
-            else if (strcmp(node->datatype, "string") == 0)
+            else if (strcmp(current.datatype, "string") == 0)
             {
-                printf("%s", node->strValue);
+                printf("%s", current.strValue);
             }
         }
         else
         {
             printf("-");
         }
-
         printf("\n");
-        node = node->next;
     }
 }
 
-void display_unused_variables(symbol *head)
+void display_unused_variables()
 {
-    while (head != NULL)
+    for (int i = 0; i < symbolTableIndex; ++i)
     {
-        if (head->isUsed == 0 && strcmp(head->type, "enum_arg") != 0)
+        symbol current = symbolTable[i];
+        if (current.isUsed == false && strcmp(current.type, "enum_arg") != 0)
         {
-            if (strcmp(head->type, "func") == 0)
+            if (strcmp(current.type, "func") == 0)
             {
-                printf("Function %s Declared at line %d but never called\n", head->identifierName, head->declareLine);
+                printf("Function %s Declared at line %d but never called\n", current.identifierName, current.declareLine);
             }
-            else if (head->isArg == 1)
+            else if (current.isArg == 1)
             {
-                printf("Unused Argument %s Declared in Function at line %d\n", head->identifierName, head->declareLine);
+                printf("Unused Argument %s Declared in Function at line %d\n", current.identifierName, current.declareLine);
             }
             else
             {
-                printf("Unused Identifier %s Declared at line %d\n", head->identifierName, head->declareLine);
+                printf("Unused Identifier %s Declared at line %d\n", current.identifierName, current.declareLine);
             }
         }
-        head = head->next;
     }
 }
 
-// void check_type( int i) {
-//     // this functio check type matching between 2 identifiers before assign the value
-//     if ( is_param == 1) //to check argument type
-//     {
-//         if ( arg_count <symbolTable[called_func_index].argCount )
-//         {assign_index = symbolTable[called_func_index].argList[arg_count];}
-//         else {assign_index=-1;}
-//     }
-//      if ( i == -1 || assign_index == -1)
-//     { return;}
-//     if (symbolTable[i].dataType != symbolTable[assign_index].dataType && (symbolTable[assign_index].dataType == "string" ||  symbolTable[i].dataType == "string"))
-//     {   /// at calling a function
-//         if (strcmp(symbolTable[i].type,"func")== 0){ printf("\n !!!!!!!!!!!! Type Mismatch Error at line %d: %s is %s variable  but %s return %s value  !!!!!!!!!!!\n", line_number,symbolTable[assign_index].name,symbolTable[assign_index].dataType, symbolTable[i].name,symbolTable[i].dataType ); sErr(line_number);}
-//         else if (strcmp(symbolTable[assign_index].type,"func")== 0){ printf("\n !!!!!!!!!!!! Type Mismatch Error at line %d: %s is %s variable  but %s return %s value  !!!!!!!!!!!\n", line_number,symbolTable[i].name,symbolTable[i].dataType, symbolTable[assign_index].name,symbolTable[assign_index].dataType ); sErr(line_number);}
-//         else if (is_param == 1)
-//         {printf("\n !!!!!!!!!!!! Type Mismatch Error at line %d: Incorrect argument type %s is %s variable but %s %s !!!!!!!!!!!\n", line_number,symbolTable[assign_index].name,symbolTable[assign_index].dataType, symbolTable[i].name,symbolTable[i].dataType ); sErr(line_number);}
-//         else {printf("\n !!!!!!!!!!!! Type Mismatch Error at line %d: %s is %s variable  but %s %s !!!!!!!!!!!\n", line_number,symbolTable[assign_index].name,symbolTable[assign_index].dataType, symbolTable[i].name,symbolTable[i].dataType );sErr(line_number);}
-//     }
-//     else if (strcmp(symbolTable[assign_index].type,"func") != 0)
-//     {
-//         symbolTable[assign_index].isInit=1;
-//         // assign value to the variable
-//         if ( strcmp(symbolTable[i].dataType,"int") ==0 || strcmp(symbolTable[i].type,"var_enum") ==0  ) {
-//             assign_int(symbolTable[i].intValue, assign_index);
-//             }
-//         else if (symbolTable[i].dataType == "float"){
-//             assign_float(symbolTable[i].floatValue, assign_index);
-//             }
-//         else if ( strcmp(symbolTable[i].dataType, "string")==0){
-//             assign_str(symbolTable[i].strValue, assign_index);
-//             }
-//         else if (symbolTable[i].dataType == "bool"){
-//             assign_bool(symbolTable[i].boolValue, assign_index);
-//             }
-//         st_log();
-//     }
-//     if(is_param == 0){ assign_index = -1;}
-// }
 // int main()
 // {
-//     symbol *head = NULL;
+//     initialize_symbol_table(100);
+
+//     // Example usage
 //     scopeStack[0] = 0;
-//     insert(&head, "int", "lamiaa", "var", 3, false);
-//     insert(&head, "float", "asmaa", "var", 2, false);
-//     insert(&head, "bool", "test", "var", 2, false);
+//     insert("int", "lamiaa", "var", 3, false);
+//     insert("float", "asmaa", "var", 2, false);
+//     insert("bool", "test", "var", 2, false);
 
-//     printf("%d\n", lookup(head, "sama", false));
-//     printf("%d\n", is_exist(head, "asmaa"));
-//     display(head);
+//     assign_int(0, 5, 3);
+//     assign_float(1, 5.5, 3);
+//     assign_bool(2, true, 3);
 
-//     display(head);
+//     // Display the symbol table
+//     display();
+//     display_to_file("symbol_table.txt");
+//     display_unused_variables();
+
+//     // Free dynamically allocated memory
+//     for (int i = 0; i < symbolTableIndex; ++i)
+//     {
+//         free(symbolTable[i].identifierName);
+//         free(symbolTable[i].datatype);
+//         free(symbolTable[i].type);
+//     }
+//     free(symbolTable);
+
 //     return 0;
 // }

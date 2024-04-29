@@ -1,2 +1,5 @@
 int I = 5;
 I = 6;
+float x = 9.1;
+string s = "asmaa";
+bool b = false;
