@@ -34,7 +34,6 @@ symbol symbolTable[500];
 int symbolTableSize = 0;
 
 int scopeStack[500];
-// int scopeIndex = 0;
 int inLoop = 0;
 int blockNumber = 0;
 int symbolTableIndex = 0;
@@ -50,7 +49,6 @@ int insertResult = 0;
 void scope_start()
 {
     blockNumber++;
-    // scopeIndex++;
     scopeStack[blockNumber] = blockNumber;
 }
 
@@ -76,7 +74,6 @@ void scope_end(int number_of_line)
             symbolTable[i].outOfScope = 1;
         }
     }
-    // scopeIndex--;
     blockNumber--;
 }
 
