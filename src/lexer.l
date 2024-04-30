@@ -11,6 +11,7 @@
 "int"                    { num_of_words++; num_of_char+=yyleng;  return INT;}
 "float"                  { num_of_words++; num_of_char+=yyleng;  return FLOAT;}
 "string"                 { num_of_words++; num_of_char+=yyleng;  return STRING;}
+"char"                   { num_of_words++; num_of_char+=yyleng;  return CHAR;}
 "bool"                   { num_of_words++; num_of_char+=yyleng;  return BOOL;}
 
 "print"                  { num_of_words++; num_of_char+=yyleng;  return PRINT;}
@@ -60,10 +61,11 @@
 "/"                      { num_of_words++; num_of_char+=yyleng;                             return DIV;}
 "^"                      { num_of_words++; num_of_char+=yyleng;                             return POW;}
 
-[){}(:,]                 { num_of_words++; num_of_char+=yyleng;                                return *yytext;}
-[A-Z]+                   { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext);   return CONSTANT;}
-[a-zA-Z_][a-zA-Z0-9_]*   { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext);   return IDENTIFIER;}
-\"[a-zA-Z0-9_]+\"        { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext);   return STRING_LITERAL;}
+[){}(:,]                 { num_of_words++; num_of_char+=yyleng;                              return *yytext;}
+[A-Z]+                   { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext); return CONSTANT;}
+[a-zA-Z_][a-zA-Z0-9_]*   { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext); return IDENTIFIER;}
+\"[a-zA-Z0-9_]\"         { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext); return CHAR_LITERAL;}
+\"[a-zA-Z0-9_]+\"        { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext); return STRING_LITERAL;}
 
 [0-9]+                   { num_of_words++; num_of_char+=yyleng; yylval.num = atoi(yytext);     return DIGIT;}
 [0-9]+\.[0-9]+           { num_of_words++; num_of_char+=yyleng; yylval.float_val= atof(yytext);return FLOAT_DIGIT;}

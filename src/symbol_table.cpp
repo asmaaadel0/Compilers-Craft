@@ -17,6 +17,7 @@ typedef struct symbol
     float floatValue;
     bool boolValue;
     char *strValue;
+    char *charValue;
 
     int declareLine;
     bool isConst, isArg, isUsed, isInit, outOfScope;
@@ -309,6 +310,38 @@ void assign_string(int index, char *value, int number_of_line)
     }
 }
 
+void assign_char(int index, char *value, int number_of_line)
+{
+    assign_arg_indexes();
+    if (isParameter)
+    {
+        index = insertResult;
+    }
+    if (index == -1)
+    {
+        return;
+    }
+    if (strcmp(symbolTable[index].datatype, "char") != 0 && symbolTable[index].type == "func")
+    {
+        printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned char\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        return;
+    }
+    symbolTable[index].isInit = 1;
+    if (strcmp(symbolTable[index].datatype, "char") == 0 && !symbolTable[index].outOfScope)
+    {
+        symbolTable[index].charValue = value;
+    }
+    else
+    {
+        printf("Type Mismatch Error at line %d: %s %s variable assigned char value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+    }
+    if (isParameter)
+    {
+        insertResult = -1;
+    }
+}
+
+
 int lookup(char *identifierName, bool is_assignment, int number_of_line)
 {
     for (int i = 0; i < symbolTableIndex; ++i)
@@ -427,6 +460,10 @@ void display_to_file(const char *filename)
             {
                 fprintf(fp, "%s\t\t", node.strValue);
             }
+            else if (strcmp(node.datatype, "char") == 0)
+            {
+                fprintf(fp, "%s\t\t", node.charValue);
+            }
         }
         else
         {
@@ -476,6 +513,10 @@ void display()
             else if (strcmp(node.datatype, "string") == 0)
             {
                 printf("%s\t\t", node.strValue);
+            }
+            else if (strcmp(node.datatype, "char") == 0)
+            {
+                printf("%s\t\t", node.charValue);
             }
         }
         else

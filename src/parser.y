@@ -24,7 +24,7 @@
 #include<stdbool.h>
 }
 
-%token INT FLOAT STRING BOOL 
+%token INT FLOAT STRING BOOL CHAR
 
 %token PRINT VOID RETURN
 %token SWITCH BREAK CONTINUE
@@ -38,7 +38,7 @@
 %token GT LT SHR SHL EQ
 %token SEMICOLON MODULO PLUS SUB MUL DIV POW
 
-%token CONSTANT IDENTIFIER STRING_LITERAL
+%token CONSTANT IDENTIFIER STRING_LITERAL CHAR_LITERAL
 %token DIGIT FLOAT_DIGIT
 
 %left LOGIC_AND LOGIC_OR
@@ -55,7 +55,7 @@
 %left SHR SHL
 
 
-%type <str> INT FLOAT BOOL STRING VOID CONSTANT IDENTIFIER TYPE STRING_LITERAL PLUS
+%type <str> INT FLOAT BOOL STRING CHAR VOID CONSTANT IDENTIFIER TYPE STRING_LITERAL PLUS CHAR_LITERAL
 %type <float_val> FLOAT_DIGIT
 %type <num> DIGIT
 %type <bool_val> BOOL_LITERAL
@@ -102,6 +102,7 @@ TYPE:
                 | FLOAT     { $$ = "float"; }
                 | BOOL      { $$ = "bool";  }
                 | STRING    { $$ = "string";}
+                | CHAR      { $$ = "char";}
                 ;
 
 //________________________________________________ EXPRESSION ________________________________________________
@@ -112,6 +113,7 @@ EXPRESSION:
                 | FLOAT_DIGIT   {assign_float(insertResult, $1, number_of_line);}                 
                 | BOOL_LITERAL  {assign_bool(insertResult, $1, number_of_line);}   
                 | STRING_LITERAL{assign_string(insertResult, $1, number_of_line);}                
+                | CHAR_LITERAL  {assign_char(insertResult, $1, number_of_line);}                
 
                 | EXPRESSION LOGIC_AND EXPRESSION     
                 | EXPRESSION LOGIC_OR EXPRESSION  
@@ -218,7 +220,7 @@ ASSIGNMENT_STATEMENT:
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-                IDENTIFIER {calledFuncIndex = lookup($1,0, number_of_line);check_type(calledFuncIndex, number_of_line);} '(' ARGUMENTS  ')' { printf("Parsed Function Call\n");}
+                IDENTIFIER {calledFuncIndex = lookup($1, 0, number_of_line);check_type(calledFuncIndex, number_of_line);} '(' ARGUMENTS  ')' { printf("Parsed Function Call\n");}
                 ;       
 ARGUMENTS:      
                 EXPRESSION ',' ARGUMENTS 
