@@ -358,7 +358,8 @@ int lookup(char *identifierName, bool is_assignment, int number_of_line)
             {
                 if (!is_assignment)
                 {
-                    printf("Error at line %d: %s used before initialized\n", number_of_line, identifierName);
+                    printf("Error at line %d: %s used before initialization\n", number_of_line, identifierName);
+                    exit(1);
                 }
             }
             if (!is_assignment)
@@ -369,7 +370,7 @@ int lookup(char *identifierName, bool is_assignment, int number_of_line)
         }
     }
     printf("Error at line %d: %s undeclared identifier\n", number_of_line, identifierName);
-    return -1;
+    exit(1);
 }
 
 void check_type(int i, int number_of_line)
