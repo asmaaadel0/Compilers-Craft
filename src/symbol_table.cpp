@@ -8,12 +8,6 @@
 #define BUFFER_SIZE 1024
 #define TOKEN_SIZE 32
 
-typedef struct enumNode
-{
-    char *keys[100];
-    int values[100];
-} enumNode;
-
 typedef struct symbol
 {
 
@@ -28,13 +22,11 @@ typedef struct symbol
     bool isConst, isArg, isUsed, isInit, outOfScope;
 
     char *identifierName;
-    char *type;     // variable, const, func, enum_arg, var_enum
+    char *type;     // variable, const, func
     char *datatype; // int, float, bool, string
     int argList[100];
-    int argEnum[100];
     int argCount;
 
-    struct enumNode enumValue;
 } symbol;
 
 symbol symbolTable[500];
@@ -53,11 +45,6 @@ int calledFuncIndex = 0;
 int isParameter = 0;
 
 int insertResult = 0;
-
-int enumArgCount = 0;
-char *enumKeys[100];
-int enumValues[100];
-int isEnum = 0;
 
 void scope_start()
 {
@@ -112,12 +99,6 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
     }
     struct symbol newnode;
 
-    if (newnode.identifierName == NULL || newnode.datatype == NULL || newnode.type == NULL)
-    {
-        printf("Error: Memory allocation failed\n");
-        return -1;
-    }
-
     newnode.identifierName = identifier;
     newnode.datatype = datatype;
     newnode.type = type;
@@ -151,28 +132,6 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
         newnode.argCount = j;
     }
     symbolTable[symbolTableIndex] = newnode;
-    if (strcmp(datatype, "enum") == 0)
-    {
-        symbolTable[symbolTableIndex].isInit = 1;
-        struct enumNode newnodeEnum;
-        for (int i = 0; i < 100; i++)
-        {
-            newnodeEnum.keys[i] = "";
-            newnodeEnum.values[i] = 0;
-        }
-        for (int i = 0; i < enumArgCount; i++)
-        {
-            newnodeEnum.keys[i] = enumKeys[i];
-            newnodeEnum.values[i] = enumValues[i];
-        }
-        symbolTable[symbolTableIndex].enumValue = newnodeEnum;
-        enumArgCount = 0;
-        for (int i = 0; i < 100; i++)
-        {
-            enumKeys[i] = "";
-            enumValues[i] = 0;
-        }
-    }
     symbolTableIndex++;
     return newnode.id;
 }
@@ -350,52 +309,8 @@ void assign_string(int index, char *value, int number_of_line)
     }
 }
 
-void assign_enum(int index, char *value, char *key, int number_of_line)
-{
-    if (index == -1)
-    {
-        return;
-    }
-    if (symbolTable[index].type == "var_enum")
-    {
-        for (int k = 0; k < symbolTableIndex; k++)
-        {
-            if (strcmp(symbolTable[k].identifierName, value) == 0)
-            {
-                for (int j = 0; j < 100; j++)
-                {
-                    if (strcmp(symbolTable[k].enumValue.keys[j], key) == 0)
-                    {
-                        symbolTable[index].intValue = symbolTable[k].enumValue.values[j];
-                        symbolTable[index].isInit = 1;
-                        insertResult = -1;
-                        return;
-                    }
-                }
-                printf("Error at line %d: %s not exist as key for %s enum \n", number_of_line, key, value);
-                insertResult = -1;
-                return;
-            }
-        }
-    }
-    else
-    {
-        printf("Type Mismatch Error at line %d: %s %s variable assigned enum value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-    }
-    insertResult = -1;
-}
-
 int lookup(char *identifierName, bool is_assignment, int number_of_line)
 {
-    if (isEnum == 1)
-    {
-        return -1;
-    }
-    if (symbolTable[insertResult].type == "var_enum")
-    {
-        assign_enum(insertResult, symbolTable[insertResult].datatype, identifierName, number_of_line);
-        return -1;
-    }
     for (int i = 0; i < symbolTableIndex; ++i)
     {
         if (strcmp(symbolTable[i].identifierName, identifierName) == 0 && !symbolTable[i].outOfScope)
@@ -457,7 +372,7 @@ void check_type(int i, int number_of_line)
     else if (strcmp(symbolTable[insertResult].type, "func") != 0)
     {
         symbolTable[insertResult].isInit = 1;
-        if (strcmp(symbolTable[i].datatype, "int") == 0 || strcmp(symbolTable[i].type, "var_enum") == 0)
+        if (strcmp(symbolTable[i].datatype, "int") == 0)
         {
             assign_int(insertResult, symbolTable[i].intValue, number_of_line);
         }
@@ -496,7 +411,7 @@ void display_to_file(const char *filename)
         //---- store value of entry
         if (node.isInit == 1)
         {
-            if (strcmp(node.datatype, "int") == 0 || strcmp(node.type, "var_enum") == 0)
+            if (strcmp(node.datatype, "int") == 0)
             {
                 fprintf(fp, "%d\t\t", node.intValue);
             }
@@ -546,7 +461,7 @@ void display()
         //---- store value of entry
         if (node.isInit == 1)
         {
-            if (strcmp(node.datatype, "int") == 0 || strcmp(node.type, "var_enum") == 0)
+            if (strcmp(node.datatype, "int") == 0)
             {
                 printf("%d\t\t", node.intValue);
             }
@@ -589,7 +504,7 @@ void display_unused_variables()
     for (int i = 0; i < symbolTableIndex; ++i)
     {
         symbol current = symbolTable[i];
-        if (current.isUsed == false && strcmp(current.type, "enum_arg") != 0)
+        if (current.isUsed == false)
         {
             if (strcmp(current.type, "func") == 0)
             {

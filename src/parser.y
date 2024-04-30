@@ -24,7 +24,7 @@
 #include<stdbool.h>
 }
 
-%token INT FLOAT STRING ENUM BOOL 
+%token INT FLOAT STRING BOOL 
 
 %token PRINT VOID RETURN
 %token SWITCH BREAK CONTINUE
@@ -55,7 +55,7 @@
 %left SHR SHL
 
 
-%type <str> INT FLOAT BOOL STRING VOID CONSTANT IDENTIFIER TYPE STRING_LITERAL ENUM PLUS
+%type <str> INT FLOAT BOOL STRING VOID CONSTANT IDENTIFIER TYPE STRING_LITERAL PLUS
 %type <float_val> FLOAT_DIGIT
 %type <num> DIGIT
 %type <bool_val> BOOL_LITERAL
@@ -76,9 +76,6 @@ STATEMENT:
                 | DECLARATION_STATEMENT
                 | ASSIGNMENT_STATEMENT         {printf("Parsed Assignment statement\n");}
                 | EXPRESSION SEMICOLON
-                
-                | ENUM_DECLARATION_STATEMENT   {printf("Parsed Enum Declaration\n");}
-                | ENUM_CALL_STATEMENT          {printf("Parsed Enum Call\n");}
                 
                 | IF_STATEMENT                 {printf("Parsed if statement\n");}
                 | WHILE_STATEMENT              {printf("Parsed While LOOP\n");}
@@ -192,28 +189,6 @@ ARGS:
                 ;
 ARG_DECL:
                 TYPE IDENTIFIER {insertResult = insert($1, $2,"var", number_of_line, true);}
-                ;
-
-//________________________________________________ ENUM DECLARATION STATEMENT ________________________________________________
-ENUM_DECLARATION_STATEMENT:
-                ENUM IDENTIFIER  '{' {isEnum = 1;} ENUM_HELPER '}' SEMICOLON {insertResult = insert("enum" , $2, "var" , number_of_line, false);isEnum=0;}        
-                ;                
-ENUM_HELPER     : ENUM_ARGS | ENUM_DEFINED_ARGS;
-ENUM_ARGS:
-                IDENTIFIER  {enumValues[enumArgCount] = enumArgCount;enumKeys[enumArgCount] = $1;enumArgCount++;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, enumArgCount-1, number_of_line);} ',' ENUM_ARGS  
-                | IDENTIFIER{enumValues[enumArgCount] = enumArgCount;enumKeys[enumArgCount] = $1;enumArgCount++;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);assign_int(insertResult, enumArgCount-1, number_of_line);} 
-
-                ;
-            
-ENUM_DEFINED_ARGS:
-
-                IDENTIFIER EQ DIGIT   {enumValues[enumArgCount] = $3;enumKeys[enumArgCount] = $1;enumArgCount++;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);} ',' ENUM_DEFINED_ARGS 
-                | IDENTIFIER EQ DIGIT {enumValues[enumArgCount] = $3;enumKeys[enumArgCount] = $1;enumArgCount++;;insertResult = insert("int" , $1, "enum_arg" , number_of_line, false);enumArgCount++;assign_int(insertResult, $3, number_of_line);}
-                ;
-
-ENUM_CALL_STATEMENT:
-                IDENTIFIER  IDENTIFIER EQ IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);assign_enum(insertResult, $1, $4, number_of_line);}
-                | IDENTIFIER IDENTIFIER SEMICOLON {insertResult = insert($1 , $2, "var_enum" , number_of_line, false);}
                 ;
 
 //________________________________________________ IF STATEMENT ________________________________________________
