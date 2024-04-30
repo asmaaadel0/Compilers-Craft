@@ -272,7 +272,7 @@ void assign_bool(int index, bool value, int number_of_line)
     }
     else
     {
-        printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Type Mismatch Error at line %d: %s %s variable assigned bool value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
     if (isParameter)

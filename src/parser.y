@@ -161,7 +161,7 @@ RETURN_STATEMENT:
 
 //________________________________________________ SWITCH STATEMENT ________________________________________________
 SWITCH_STATEMENT:
-                SWITCH IDENTIFIER ':' '{' CASES  '}' 
+                SWITCH '(' IDENTIFIER  {int i = lookup($3, 0, number_of_line);check_type(i, number_of_line);} ')' '{' CASES  '}' 
                 ;
 DEFAULTCASE:
                 DEFAULT ':' BLOCK

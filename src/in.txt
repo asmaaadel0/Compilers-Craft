@@ -1,37 +1,18 @@
-int x0;
-{
-    int x1;
-    {
+int x =5;
+int y=6.5;
+int z= true;
+int w = false;
 
-    x0=7;
-    x1=8;
-    int x2;
-    int y=5;
-    }
-    //x2=4;
-    x1=10;
-    {
-        x1=5;
-        x0=9;
-        //x2=7;
-        int y=9;
-        {
-            int y =8;
-        }
+float a=7.7;
+float b= 6;
+float c= true;
+float d= false;
 
-    }
-}
-// x1=8;
-//x2=4;
-{
-    //x2=4;
-    //x1=5;
-    int x3;
-    x3=8;
-    {
-        x3=-9;
-        x0=9;
-    }
-}
-x0=4;
-//x3=0;
+bool q= true;
+bool r =false;
+bool s =6;
+bool t =6.5;
+bool m = 0;
+bool n =0.0;
+
+string s1 ="hello";
