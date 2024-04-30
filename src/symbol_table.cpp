@@ -59,10 +59,12 @@ void scope_end(int number_of_line)
     if (funcIndex != -1 && strcmp(symbolTable[funcIndex].type, "func") == 0 && returnExist == 0 && strcmp(symbolTable[funcIndex].datatype, "void") != 0)
     {
         printf("Error at line %d: Missing return statement in Function %s\n", number_of_line, symbolTable[funcIndex].identifierName);
+        exit(1);
     }
     if (funcIndex != -1 && strcmp(symbolTable[funcIndex].type, "func") == 0 && returnExist == 1 && strcmp(symbolTable[funcIndex].datatype, "void") == 0)
     {
         printf("Error at line %d: %s Void Function can't have return statement\n", number_of_line, symbolTable[funcIndex].identifierName);
+        exit(1);
     }
     insertResult = -1;
     funcIndex = -1;
@@ -96,7 +98,7 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
     if (L != -1)
     {
         printf("Error at line %d: %s is already declared in this scope at line %d\n", number_of_line, identifier, L);
-        return -1;
+        exit(1);
     }
     struct symbol newnode;
 
@@ -166,7 +168,7 @@ void assign_int(int index, int value, int number_of_line)
     if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
     {
         printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        return;
+        exit(1);
     }
     symbolTable[index].isInit = 1;
     if (strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope)
@@ -187,6 +189,7 @@ void assign_int(int index, int value, int number_of_line)
     else
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        exit(1);
     }
     if (isParameter)
     {
@@ -209,7 +212,7 @@ void assign_float(int index, float value, int number_of_line)
     if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
     {
         printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        return;
+        exit(1);
     }
     symbolTable[index].isInit = 1;
     if (strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope)
@@ -230,6 +233,7 @@ void assign_float(int index, float value, int number_of_line)
     else
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        exit(1);
     }
     if (isParameter)
     {
@@ -251,7 +255,7 @@ void assign_bool(int index, bool value, int number_of_line)
     if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
     {
         printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        return;
+        exit(1);
     }
     symbolTable[index].isInit = 1;
     if (strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope)
@@ -272,6 +276,7 @@ void assign_bool(int index, bool value, int number_of_line)
     else
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        exit(1);
     }
     if (isParameter)
     {
@@ -293,7 +298,7 @@ void assign_string(int index, char *value, int number_of_line)
     if (strcmp(symbolTable[index].datatype, "string") != 0 && symbolTable[index].type == "func")
     {
         printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned string\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        return;
+        exit(1);
     }
     symbolTable[index].isInit = 1;
     if (strcmp(symbolTable[index].datatype, "string") == 0 && !symbolTable[index].outOfScope)
@@ -303,6 +308,7 @@ void assign_string(int index, char *value, int number_of_line)
     else
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned string value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        exit(1);
     }
     if (isParameter)
     {
@@ -324,7 +330,7 @@ void assign_char(int index, char *value, int number_of_line)
     if (strcmp(symbolTable[index].datatype, "char") != 0 && symbolTable[index].type == "func")
     {
         printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned char\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        return;
+        exit(1);
     }
     symbolTable[index].isInit = 1;
     if (strcmp(symbolTable[index].datatype, "char") == 0 && !symbolTable[index].outOfScope)
@@ -334,13 +340,13 @@ void assign_char(int index, char *value, int number_of_line)
     else
     {
         printf("Type Mismatch Error at line %d: %s %s variable assigned char value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        exit(1);
     }
     if (isParameter)
     {
         insertResult = -1;
     }
 }
-
 
 int lookup(char *identifierName, bool is_assignment, int number_of_line)
 {
@@ -434,14 +440,13 @@ void display_to_file(const char *filename)
     if (fp == NULL)
     {
         printf("Error opening file.\n");
-        return;
+        exit(1);
     }
     fprintf(fp, "ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\t\tArgs\n");
     for (int i = 0; i < symbolTableIndex; i++)
     {
         struct symbol node = symbolTable[i];
         fprintf(fp, "%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node.id, node.identifierName, node.type, node.datatype, node.declareLine, node.scope, node.isInit);
-        //---- store value of entry
         if (node.isInit == 1)
         {
             if (strcmp(node.datatype, "int") == 0)
@@ -469,7 +474,6 @@ void display_to_file(const char *filename)
         {
             fprintf(fp, "-\t\t");
         }
-        //---- print arguments of functions
         if (strcmp(node.type, "func") == 0)
         {
             for (int j = 0; j < node.argCount; j++)
@@ -490,12 +494,10 @@ void display_to_file(const char *filename)
 void display()
 {
     printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\t\tArgs\n");
-    //----- write symbol table entries
     for (int i = 0; i < symbolTableIndex; i++)
     {
         struct symbol node = symbolTable[i];
         printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node.id, node.identifierName, node.type, node.datatype, node.declareLine, node.scope, node.isInit);
-        //---- store value of entry
         if (node.isInit == 1)
         {
             if (strcmp(node.datatype, "int") == 0)
@@ -523,7 +525,6 @@ void display()
         {
             printf("-\t\t");
         }
-        //---- print arguments of functions
         if (strcmp(node.type, "func") == 0)
         {
             for (int j = 0; j < node.argCount; j++)
@@ -561,6 +562,11 @@ void display_unused_variables()
             }
         }
     }
+}
+
+int remove_file()
+{
+    remove("symbol_table.txt");
 }
 
 // int main()

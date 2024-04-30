@@ -1605,7 +1605,7 @@ yyreduce:
 
   case 93: /* $@12: %empty  */
 #line 218 "./parser.y"
-                              {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);insertResult = -1;}
+                              {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);exit(1);insertResult = -1;}
 #line 1610 "parser.tab.c"
     break;
 
@@ -1828,11 +1828,12 @@ int yywrap()
 
 int main(int argc, char *argv[])
 { 
+    remove_file();
     yyin = fopen(argv[1], "r");
     yyparse();
     // display();
-    display_to_file("symbol_table.txt");
     // display_unused_variables();
+    display_to_file("symbol_table.txt");
 
     return 0;
 }

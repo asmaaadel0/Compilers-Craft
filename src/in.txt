@@ -1,1 +1,2 @@
-char s = "gc";
+char C = "g";
+C = "c";

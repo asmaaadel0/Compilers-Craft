@@ -215,7 +215,7 @@ FOR_STATEMENT:
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
                 IDENTIFIER EQ {insertResult = lookup($1, 1, number_of_line);} EXPRESSION SEMICOLON   
-                | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);insertResult = -1;} EXPRESSION SEMICOLON   
+                | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);exit(1);insertResult = -1;} EXPRESSION SEMICOLON   
                 ;
 
 //________________________________________________ FUNCTION CALL ________________________________________________
@@ -239,11 +239,12 @@ int yywrap()
 
 int main(int argc, char *argv[])
 { 
+    remove_file();
     yyin = fopen(argv[1], "r");
     yyparse();
     // display();
-    display_to_file("symbol_table.txt");
     // display_unused_variables();
+    display_to_file("symbol_table.txt");
 
     return 0;
 }
