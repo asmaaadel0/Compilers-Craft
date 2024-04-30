@@ -33,16 +33,16 @@
 %token IF ELSE
 %token FOR WHILE DO 
 
-%token BOOL_LITERAL LOGIC_AND LOGIC_OR LOGIC_NOT NOT
+%token BOOL_LITERAL LOGIC_AND LOGIC_OR LOGIC_NOT
 %token EQUALITY NEG_EQUALITY DEC INC 
-%token GT LT SHR SHL EQ
+%token GT LT EQ
 %token SEMICOLON MODULO PLUS SUB MUL DIV POW
 
 %token CONSTANT IDENTIFIER STRING_LITERAL CHAR_LITERAL
 %token DIGIT FLOAT_DIGIT
 
 %left LOGIC_AND LOGIC_OR
-%right LOGIC_NOT NOT
+%right LOGIC_NOT
 
 %left EQUALITY NEG_EQUALITY
 %left PLUS SUB INC DEC MODULO
@@ -51,8 +51,6 @@
 
 %left MUL DIV 
 %right EQ GT LT
-
-%left SHR SHL
 
 
 %type <str> INT FLOAT BOOL STRING CHAR VOID CONSTANT IDENTIFIER TYPE STRING_LITERAL PLUS CHAR_LITERAL
@@ -119,7 +117,6 @@ EXPRESSION:
                 | EXPRESSION LOGIC_OR EXPRESSION  
 
                 | LOGIC_NOT EXPRESSION  
-                | NOT EXPRESSION
 
                 | EXPRESSION EQUALITY EXPRESSION       
                 | EXPRESSION NEG_EQUALITY EXPRESSION  
@@ -142,9 +139,6 @@ EXPRESSION:
                 | EXPRESSION MUL EXPRESSION             
                 | EXPRESSION DIV EXPRESSION              
                 | EXPRESSION POW EXPRESSION
-                            
-                | EXPRESSION SHR EXPRESSION  
-                | EXPRESSION SHL EXPRESSION  
 
                 | FUNC_CALL                                
                 | '(' EXPRESSION ')'

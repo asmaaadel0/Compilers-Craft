@@ -38,7 +38,6 @@
 "and"                    { num_of_words++; num_of_char+=yyleng;  return LOGIC_AND;}
 "or"                     { num_of_words++; num_of_char+=yyleng;  return LOGIC_OR;}
 "!"                      { num_of_words++; num_of_char+=yyleng;  return LOGIC_NOT;}
-"~"                      { num_of_words++; num_of_char+=yyleng;  return NOT;}
 
 "=="                     { num_of_words++; num_of_char+=yyleng;  return EQUALITY;}
 "!="                     { num_of_words++; num_of_char+=yyleng;  return NEG_EQUALITY;}
@@ -47,9 +46,6 @@
 
 ">"                      { num_of_words++; num_of_char+=yyleng;  return GT;}
 "<"                      { num_of_words++; num_of_char+=yyleng;  return LT;}
-
-"<<"                     { num_of_words++; num_of_char+=yyleng;  return SHL;}
-">>"                     { num_of_words++; num_of_char+=yyleng;  return SHR;}
 
 "="                      { num_of_words++; num_of_char+=yyleng;  return EQ;}         
 ";"                      { num_of_words++; num_of_char+=yyleng;  return SEMICOLON;}
