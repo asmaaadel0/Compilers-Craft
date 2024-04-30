@@ -393,19 +393,23 @@ void check_type(int i, int number_of_line)
     {
         if (strcmp(symbolTable[i].type, "func") == 0)
         {
-            printf("Type Mismatch Error at line %d: %s is %s variable  but %s return %s value\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            printf("Type Mismatch Error at line %d: %s is %s variable but %s return %s value\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            exit(1);
         }
         else if (strcmp(symbolTable[insertResult].type, "func") == 0)
         {
-            printf("Type Mismatch Error at line %d: %s is %s variable  but %s return %s value\n", number_of_line, symbolTable[i].identifierName, symbolTable[i].datatype, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype);
+            printf("Type Mismatch Error at line %d: %s is %s variable but %s return %s value\n", number_of_line, symbolTable[i].identifierName, symbolTable[i].datatype, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype);
+            exit(1);
         }
         else if (isParameter == 1)
         {
             printf("Type Mismatch Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            exit(1);
         }
         else
         {
-            printf("Type Mismatch Error at line %d: %s is %s variable  but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            printf("Type Mismatch Error at line %d: %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            exit(1);
         }
     }
     else if (strcmp(symbolTable[insertResult].type, "func") != 0)

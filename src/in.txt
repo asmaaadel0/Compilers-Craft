@@ -1,2 +1,2 @@
-char C = "g";
-C = "c";
+int x = 5;
+string s = x;
