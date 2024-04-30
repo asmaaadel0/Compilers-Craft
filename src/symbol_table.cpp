@@ -34,7 +34,7 @@ symbol symbolTable[500];
 int symbolTableSize = 0;
 
 int scopeStack[500];
-int scopeIndex = 0;
+// int scopeIndex = 0;
 int inLoop = 0;
 int blockNumber = 0;
 int symbolTableIndex = 0;
@@ -50,8 +50,8 @@ int insertResult = 0;
 void scope_start()
 {
     blockNumber++;
-    scopeIndex++;
-    scopeStack[scopeIndex] = blockNumber;
+    // scopeIndex++;
+    scopeStack[blockNumber] = blockNumber;
 }
 
 void scope_end(int number_of_line)
@@ -71,13 +71,13 @@ void scope_end(int number_of_line)
     returnExist = 0;
     for (int i = 0; i < symbolTableIndex; i++)
     {
-        if (symbolTable[i].scope == scopeStack[scopeIndex])
+        if (symbolTable[i].scope == scopeStack[blockNumber])
         {
             symbolTable[i].outOfScope = 1;
         }
     }
-    scopeIndex--;
-    // blockNumber--;
+    // scopeIndex--;
+    blockNumber--;
 }
 
 int is_exist(char *identifierName)
@@ -119,7 +119,7 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
     }
     else
     {
-        newnode.scope = scopeStack[scopeIndex];
+        newnode.scope = scopeStack[blockNumber];
     }
     if (strcmp(type, "func") == 0)
     {
