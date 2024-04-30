@@ -572,34 +572,3 @@ int remove_file()
 {
     remove("symbol_table.txt");
 }
-
-// int main()
-// {
-//     initialize_symbol_table(100);
-
-//     // Example usage
-//     scopeStack[0] = 0;
-//     insert("int", "lamiaa", "var", 3, false);
-//     insert("float", "asmaa", "var", 2, false);
-//     insert("bool", "test", "var", 2, false);
-
-//     assign_int(0, 5, 3);
-//     assign_float(1, 5.5, 3);
-//     assign_bool(2, true, 3);
-
-//     // Display the symbol table
-//     display();
-//     display_to_file("symbol_table.txt");
-//     display_unused_variables();
-
-//     // Free dynamically allocated memory
-//     for (int i = 0; i < symbolTableIndex; ++i)
-//     {
-//         free(symbolTable[i].identifierName);
-//         free(symbolTable[i].datatype);
-//         free(symbolTable[i].type);
-//     }
-//     free(symbolTable);
-
-//     return 0;
-// }
