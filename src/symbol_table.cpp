@@ -442,10 +442,12 @@ void arg_count_check(int i, int number_of_line)
     if (argCount > symbolTable[i].argCount)
     {
         printf("Error at line %d : too many arguments for function call expected %d got %d\n", number_of_line, symbolTable[i].argCount, argCount);
+        exit(1);
     }
     else if (argCount < symbolTable[i].argCount)
     {
         printf("Error at line %d : too few arguments for function call expected %d got %d\n", number_of_line, symbolTable[i].argCount, argCount);
+        exit(1);
     }
 }
 
