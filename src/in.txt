@@ -1,9 +1,4 @@
-int add ( int x, int y)
-{
-    int z;
-    z= x+y ;
-    return z;
-}
-int a = 5;
-int b = 6;
-int c = add (a,b);
+int a  = 5;
+int b  = 5;
+int x = 6 ;
+x = x + "asmaa";

@@ -129,14 +129,14 @@ EXPRESSION:
                 | INC EXPRESSION                
                 | DEC EXPRESSION 
                 | SUB EXPRESSION             
-
+    
                 | EXPRESSION MODULO EXPRESSION         
-                | EXPRESSION PLUS EXPRESSION //{int i = lookup($1, 0, number_of_line);int j = lookup($3, 0, number_of_line);arithmatic(i, j, "+", number_of_line);}          
+                | EXPRESSION PLUS EXPRESSION
                 | EXPRESSION SUB EXPRESSION             
                 | EXPRESSION MUL EXPRESSION             
                 | EXPRESSION DIV EXPRESSION              
                 | EXPRESSION POW EXPRESSION
-
+    
                 | FUNC_CALL                                
                 | '(' EXPRESSION ')'
                 ;               

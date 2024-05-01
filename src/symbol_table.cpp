@@ -12,7 +12,6 @@ typedef struct symbol
 {
 
     int id, scope;
-    char *name, value;
     int intValue;
     float floatValue;
     bool boolValue;
@@ -31,6 +30,7 @@ typedef struct symbol
 } symbol;
 
 symbol symbolTable[500];
+
 int symbolTableSize = 0;
 
 int scopeStack[500];
@@ -97,6 +97,7 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
         printf("Error at line %d: %s is already declared in this scope at line %d\n", number_of_line, identifier, L);
         exit(1);
     }
+
     struct symbol newnode;
 
     newnode.identifierName = identifier;
