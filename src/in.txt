@@ -1,1 +1,1 @@
-char x = "c";
+char x = 'c';
