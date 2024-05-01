@@ -214,11 +214,11 @@ ASSIGNMENT_STATEMENT:
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-                IDENTIFIER {calledFuncIndex = lookup($1, 0, number_of_line);check_type(calledFuncIndex, number_of_line);} '(' ARGUMENTS  ')' { printf("Parsed Function Call\n");}
+                IDENTIFIER {calledFuncIndex = lookup($1, 0, number_of_line);check_type(calledFuncIndex, number_of_line);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;arg_count_check(calledFuncIndex, number_of_line);} ')' { printf("Parsed Function Call\n");}
                 ;       
 ARGUMENTS:      
-                EXPRESSION ',' ARGUMENTS 
-                | EXPRESSION  
+                EXPRESSION { argCount++; } ',' ARGUMENTS 
+                | EXPRESSION { argCount++; } 
                 |  
                 ;
 %%

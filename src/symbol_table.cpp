@@ -168,7 +168,7 @@ void assign_int(int index, int value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if (strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope)
+    if ((strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
@@ -185,6 +185,7 @@ void assign_int(int index, int value, int number_of_line)
     }
     else
     {
+        printf("%s \n", "enter");
         printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
@@ -212,7 +213,7 @@ void assign_float(int index, float value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if (strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope)
+    if ((strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
@@ -255,7 +256,7 @@ void assign_bool(int index, bool value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if (strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope)
+    if ((strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
@@ -298,7 +299,7 @@ void assign_string(int index, char *value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if (strcmp(symbolTable[index].datatype, "string") == 0 && !symbolTable[index].outOfScope)
+    if ((strcmp(symbolTable[index].datatype, "string") == 0 && !symbolTable[index].outOfScope) || isParameter)
     {
         symbolTable[index].strValue = value;
     }
@@ -330,7 +331,7 @@ void assign_char(int index, char *value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if (strcmp(symbolTable[index].datatype, "char") == 0 && !symbolTable[index].outOfScope)
+    if ((strcmp(symbolTable[index].datatype, "char") == 0 && !symbolTable[index].outOfScope) || isParameter)
     {
         symbolTable[index].charValue = value;
     }
@@ -433,6 +434,18 @@ void check_type(int i, int number_of_line)
     if (isParameter == 0)
     {
         insertResult = -1;
+    }
+}
+
+void arg_count_check(int i, int number_of_line)
+{
+    if (argCount > symbolTable[i].argCount)
+    {
+        printf("Error at line %d : too many arguments for function call expected %d got %d\n", number_of_line, symbolTable[i].argCount, argCount);
+    }
+    else if (argCount < symbolTable[i].argCount)
+    {
+        printf("Error at line %d : too few arguments for function call expected %d got %d\n", number_of_line, symbolTable[i].argCount, argCount);
     }
 }
 
