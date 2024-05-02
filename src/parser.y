@@ -5,6 +5,7 @@
     #include <stdbool.h>
     #include "parser.tab.h"
     #include "symbol_table.cpp"
+    #include "operation.cpp"
     
     void yyerror(char* );
     int yylex();
@@ -108,8 +109,8 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER      {int i = lookup($1, 0, number_of_line);$$ = getType(i);check_type(i, number_of_line);}                
-                | CONSTANT      {int i = lookup($1, 0, number_of_line);$$ = getType(i);check_type(i, number_of_line);}
+                IDENTIFIER      {int i = lookup($1, 0, number_of_line);char *type = symbolTable[i].datatype;$$ = getType(type);check_type(i, number_of_line);}                
+                | CONSTANT      {int i = lookup($1, 0, number_of_line);char *type = symbolTable[i].datatype;$$ = getType(type);check_type(i, number_of_line);}
                 | DIGIT         {$$ = con("int");assign_int(insertResult, $1, number_of_line);}       
                 | FLOAT_DIGIT   {$$ = con("float");assign_float(insertResult, $1, number_of_line);}                 
                 | BOOL_LITERAL  {$$ = con("bool");assign_bool(insertResult, $1, number_of_line);}   
