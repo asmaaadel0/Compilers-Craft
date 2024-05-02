@@ -116,29 +116,31 @@ EXPRESSION:
                 | STRING_LITERAL{$$ = con("string");assign_string(insertResult, $1, number_of_line);}                
                 | CHAR_LITERAL  {$$ = con("char");assign_char(insertResult, $1, number_of_line);}                
 
-                | EXPRESSION LOGIC_AND EXPRESSION     
-                | EXPRESSION LOGIC_OR EXPRESSION  
+                | EXPRESSION LOGIC_AND EXPRESSION{$$ = logical($1, $3, '&', number_of_line);}    
+                | EXPRESSION LOGIC_OR EXPRESSION {$$ = logical($1, $3, '|', number_of_line);} 
 
-                | LOGIC_NOT EXPRESSION  
+                | LOGIC_NOT EXPRESSION           {$$ = not_operator($2, number_of_line);}
 
-                | EXPRESSION EQUALITY EXPRESSION       
-                | EXPRESSION NEG_EQUALITY EXPRESSION  
+                | EXPRESSION EQUALITY EXPRESSION    {comparison($1, $3, "==", number_of_line);}  
+                | EXPRESSION NEG_EQUALITY EXPRESSION{comparison($1, $3, "!=", number_of_line);} 
 
-                | EXPRESSION LT EXPRESSION              
-                | EXPRESSION LT EQ EXPRESSION           
-                | EXPRESSION GT EXPRESSION                
-                | EXPRESSION GT EQ EXPRESSION    
+                | EXPRESSION LT EXPRESSION    {$$ = comparison($1, $3, "<", number_of_line);}             
+                | EXPRESSION LT EQ EXPRESSION {$$ = comparison($1, $4, "<=", number_of_line);}         
+                | EXPRESSION GT EXPRESSION    {$$ = comparison($1, $3, ">", number_of_line);}            
+                | EXPRESSION GT EQ EXPRESSION {$$ = comparison($1, $4, ">=", number_of_line);}   
 
-                | INC EXPRESSION                
-                | DEC EXPRESSION 
-                | SUB EXPRESSION           
+                | INC EXPRESSION  {unary_operator($2, number_of_line);}                 
+                | DEC EXPRESSION  {unary_operator($2, number_of_line);}  
+                | EXPRESSION INC  {unary_operator($1, number_of_line);}                 
+                | EXPRESSION DEC  {unary_operator($1, number_of_line);}  
+                | SUB EXPRESSION  {unary_operator($2, number_of_line);}          
     
-                | EXPRESSION MODULO EXPRESSION         
-                | EXPRESSION PLUS EXPRESSION {check_binary_op_type($1, $3, number_of_line);}
-                | EXPRESSION SUB EXPRESSION  {check_binary_op_type($1, $3, number_of_line);}           
-                | EXPRESSION MUL EXPRESSION  {check_binary_op_type($1, $3, number_of_line);}          
-                | EXPRESSION DIV EXPRESSION  {check_binary_op_type($1, $3, number_of_line);}           
-                | EXPRESSION POW EXPRESSION  {check_binary_op_type($1, $3, number_of_line);}
+                | EXPRESSION MODULO EXPRESSION{$$ = arithmatic($1, $3, '%', number_of_line);}         
+                | EXPRESSION PLUS EXPRESSION  {$$ = arithmatic($1, $3, '+', number_of_line);}
+                | EXPRESSION SUB EXPRESSION   {$$ = arithmatic($1, $3, '+', number_of_line);}           
+                | EXPRESSION MUL EXPRESSION   {$$ = arithmatic($1, $3, '*', number_of_line);}          
+                | EXPRESSION DIV EXPRESSION   {$$ = arithmatic($1, $3, '/', number_of_line);}           
+                | EXPRESSION POW EXPRESSION   {$$ = arithmatic($1, $3, '^', number_of_line);}
     
                 | FUNC_CALL                                
                 | '(' EXPRESSION ')'

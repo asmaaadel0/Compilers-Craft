@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <math.h>
 
 #define BUFFER_SIZE 1024
 #define TOKEN_SIZE 32
@@ -11,6 +12,14 @@
 typedef struct nodeType
 {
     char *type;
+
+    union
+    {
+        int intVal;
+        float floatVal;
+        char *stringVal;
+        int boolVal;
+    } value;
 } nodeType;
 
 typedef struct symbol
@@ -77,16 +86,258 @@ nodeType *getType(int i)
     return p;
 }
 
-void check_binary_op_type(struct nodeType *op1, struct nodeType *op2, int number_of_line)
+void unary_operator(struct nodeType *op, int number_of_line)
 {
-    if ((strcmp(op1->type, "string") == 0 && strcmp(op2->type, "string") != 0) ||
-        (strcmp(op1->type, "char") == 0 && strcmp(op2->type, "char") != 0) ||
-        (strcmp(op2->type, "string") == 0 && strcmp(op1->type, "string") != 0) ||
-        (strcmp(op2->type, "char") == 0 && strcmp(op1->type, "char") != 0))
+    if (strcmp(op->type, "int") == 0 ||
+        strcmp(op->type, "float") == 0)
     {
-        printf("Type mismatch error at line %d: first operand type is '%s' but second operand type is '%s'\n", number_of_line, op1->type, op2->type);
+    }
+    else
+    {
+        printf("Error at line %d: cannot apply this operator to operand with type is '%s'\n", number_of_line, op->type);
         exit(1);
     }
+}
+
+struct nodeType *arithmatic(struct nodeType *op1, struct nodeType *op2, char op, int number_of_line)
+{
+    struct nodeType *p = (nodeType *)malloc(sizeof(struct nodeType));
+    if (strcmp(op1->type, "int") == 0 && strcmp(op2->type, "int") == 0)
+    {
+        p->type = "int";
+        switch (op)
+        {
+        case '+':
+            p->value.intVal = op1->value.intVal + op2->value.intVal;
+            break;
+        case '-':
+            p->value.intVal = op1->value.intVal - op2->value.intVal;
+            break;
+        case '*':
+            p->value.intVal = op1->value.intVal * op2->value.intVal;
+            break;
+        case '/':
+            p->value.intVal = op1->value.intVal / op2->value.intVal;
+            break;
+        case '%':
+            p->value.intVal = op1->value.intVal % op2->value.intVal;
+            break;
+        case '^':
+            p->value.intVal = pow(op1->value.intVal, op2->value.intVal);
+            break;
+        default:
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
+    }
+    else if (strcmp(op1->type, "float") == 0 && strcmp(op2->type, "float") == 0)
+    {
+        p->type = "float";
+        switch (op)
+        {
+        case '+':
+            p->value.floatVal = op1->value.floatVal + op2->value.floatVal;
+            break;
+        case '-':
+            p->value.floatVal = op1->value.floatVal - op2->value.floatVal;
+            break;
+        case '*':
+            p->value.floatVal = op1->value.floatVal * op2->value.floatVal;
+            break;
+        case '/':
+            p->value.floatVal = op1->value.floatVal / op2->value.floatVal;
+            break;
+        case '^':
+            p->value.floatVal = pow(op1->value.floatVal, op2->value.floatVal);
+            break;
+        default:
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
+    }
+    else if (strcmp(op1->type, "int") == 0 && strcmp(op2->type, "float") == 0)
+    {
+        p->type = "float";
+        switch (op)
+        {
+        case '+':
+            p->value.floatVal = op1->value.intVal + op2->value.floatVal;
+            break;
+        case '-':
+            p->value.floatVal = op1->value.intVal - op2->value.floatVal;
+            break;
+        case '*':
+            p->value.floatVal = op1->value.intVal * op2->value.floatVal;
+            break;
+        case '/':
+            p->value.floatVal = op1->value.intVal / op2->value.floatVal;
+            break;
+        case '^':
+            p->value.floatVal = pow(op1->value.intVal, op2->value.floatVal);
+            break;
+        default:
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
+    }
+    else if (strcmp(op1->type, "float") == 0 && strcmp(op2->type, "int") == 0)
+    {
+        p->type = "float";
+        switch (op)
+        {
+        case '+':
+            p->value.floatVal = op1->value.floatVal + op2->value.intVal;
+            break;
+        case '-':
+            p->value.floatVal = op1->value.floatVal - op2->value.intVal;
+            break;
+        case '*':
+            p->value.floatVal = op1->value.floatVal * op2->value.intVal;
+            break;
+        case '/':
+            p->value.floatVal = op1->value.floatVal / op2->value.intVal;
+            break;
+        case '^':
+            p->value.floatVal = pow(op1->value.floatVal, op2->value.intVal);
+            break;
+        default:
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
+    }
+    else
+    {
+        printf("Error at line %d: Invalid operator\n", number_of_line);
+        exit(1);
+    }
+    return p;
+}
+
+struct nodeType *logical(struct nodeType *op1, struct nodeType *op2, char op, int number_of_line)
+{
+    struct nodeType *p = (nodeType *)malloc(sizeof(struct nodeType));
+    if (strcmp(op1->type, "bool") == 0 && strcmp(op2->type, "bool") == 0)
+    {
+        p->type = "bool";
+        switch (op)
+        {
+        case '&':
+            p->value.boolVal = op1->value.boolVal && op2->value.boolVal;
+            break;
+        case '|':
+            p->value.boolVal = op1->value.boolVal || op2->value.boolVal;
+            break;
+        default:
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
+    }
+    else
+    {
+        printf("Error at line %d: Invalid operator\n", number_of_line);
+        exit(1);
+    }
+    return p;
+}
+
+struct nodeType *not_operator(struct nodeType *op, int number_of_line)
+{
+    struct nodeType *p = (nodeType *)malloc(sizeof(struct nodeType));
+    if (op->type == "bool")
+    {
+        p->type == "bool";
+        p->value.boolVal = !op->value.boolVal;
+    }
+    else
+    {
+        if (op->value.intVal)
+        {
+            p->type == "bool";
+            p->value.boolVal = 0;
+        }
+        else
+        {
+            p->type == "bool";
+            p->value.boolVal = 1;
+        }
+    }
+}
+
+struct nodeType *comparison(struct nodeType *op1, struct nodeType *op2, char *op, int number_of_line)
+{
+    struct nodeType *p = (nodeType *)malloc(sizeof(struct nodeType));
+    p->type = "bool";
+    if (strcmp(op1->type, op2->type) != 0)
+    {
+        printf("Error at line %d: Invalid operator\n", number_of_line);
+        exit(1);
+    }
+
+    if (strcmp(op1->type, "float") == 0)
+    {
+        if (strcmp(op, "==") == 0)
+        {
+            p->value.boolVal = op1->value.floatVal == op2->value.floatVal;
+        }
+        else if (strcmp(op, "!=") == 0)
+        {
+            p->value.boolVal = op1->value.floatVal != op2->value.floatVal;
+        }
+        else if (strcmp(op, ">") == 0)
+        {
+            p->value.boolVal = op1->value.floatVal > op2->value.floatVal;
+        }
+        else if (strcmp(op, ">=") == 0)
+        {
+            p->value.boolVal = op1->value.floatVal >= op2->value.floatVal;
+        }
+        else if (strcmp(op, "<") == 0)
+        {
+            p->value.boolVal = op1->value.floatVal < op2->value.floatVal;
+        }
+        else if (strcmp(op, "<=") == 0)
+        {
+            p->value.boolVal = op1->value.floatVal <= op2->value.floatVal;
+        }
+        else
+        {
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
+    }
+    else
+    {
+        if (strcmp(op, "==") == 0)
+        {
+            p->value.boolVal = op1->value.intVal == op2->value.intVal;
+        }
+        else if (strcmp(op, "!=") == 0)
+        {
+            p->value.boolVal = op1->value.intVal != op2->value.intVal;
+        }
+        else if (strcmp(op, ">") == 0)
+        {
+            p->value.boolVal = op1->value.intVal > op2->value.intVal;
+        }
+        else if (strcmp(op, ">=") == 0)
+        {
+            p->value.boolVal = op1->value.intVal >= op2->value.intVal;
+        }
+        else if (strcmp(op, "<") == 0)
+        {
+            p->value.boolVal = op1->value.intVal < op2->value.intVal;
+        }
+        else if (strcmp(op, "<=") == 0)
+        {
+            p->value.boolVal = op1->value.intVal <= op2->value.intVal;
+        }
+        else
+        {
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
+    }
+    return p;
 }
 
 void scope_start()
