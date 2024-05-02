@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 23 "./parser.y"
+#line 25 "./parser.y"
 
 #include<stdbool.h>
 
@@ -117,7 +117,9 @@ union YYSTYPE
  float float_val;
  bool bool_val;
 
-#line 121 "parser.tab.h"
+ struct nodeType *nPtr;
+
+#line 123 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

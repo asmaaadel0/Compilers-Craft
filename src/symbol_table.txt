@@ -1,4 +1,0 @@
-ID	Name	Type	DataType	Line	Scope	isInit	Value		Args
-0	a	var	int		1	0	1	5		-
-1	b	var	int		2	0	1	5		-
-2	x	var	int		3	0	1	6		-

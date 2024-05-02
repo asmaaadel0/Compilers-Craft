@@ -8,6 +8,11 @@
 #define BUFFER_SIZE 1024
 #define TOKEN_SIZE 32
 
+typedef struct nodeType
+{
+    char *type;
+} nodeType;
+
 typedef struct symbol
 {
 
@@ -45,6 +50,44 @@ int calledFuncIndex = 0;
 int isParameter = 0;
 
 int insertResult = 0;
+
+nodeType *con(char *value)
+{
+    nodeType *p;
+
+    if ((p = (nodeType *)malloc(sizeof(nodeType))) == NULL)
+    {
+        printf("out of memory");
+        exit(1);
+    }
+    p->type = value;
+    return p;
+}
+
+nodeType *getType(int i)
+{
+    nodeType *p;
+
+    if ((p = (nodeType *)malloc(sizeof(nodeType))) == NULL)
+    {
+        printf("out of memory");
+        exit(1);
+    }
+    p->type = symbolTable[i].datatype;
+    return p;
+}
+
+void check_binary_op_type(struct nodeType *op1, struct nodeType *op2, int number_of_line)
+{
+    if ((strcmp(op1->type, "string") == 0 && strcmp(op2->type, "string") != 0) ||
+        (strcmp(op1->type, "char") == 0 && strcmp(op2->type, "char") != 0) ||
+        (strcmp(op2->type, "string") == 0 && strcmp(op1->type, "string") != 0) ||
+        (strcmp(op2->type, "char") == 0 && strcmp(op1->type, "char") != 0))
+    {
+        printf("Type mismatch error at line %d: first operand type is '%s' but second operand type is '%s'\n", number_of_line, op1->type, op2->type);
+        exit(1);
+    }
+}
 
 void scope_start()
 {
@@ -169,7 +212,7 @@ void assign_int(int index, int value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if ((strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope) || isParameter)
+    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0) && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
@@ -186,7 +229,6 @@ void assign_int(int index, int value, int number_of_line)
     }
     else
     {
-        printf("%s \n", "enter");
         printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
@@ -214,7 +256,7 @@ void assign_float(int index, float value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if ((strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope) || isParameter)
+    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0) && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
@@ -257,7 +299,7 @@ void assign_bool(int index, bool value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if ((strcmp(symbolTable[index].datatype, "string") != 0 && !symbolTable[index].outOfScope) || isParameter)
+    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0) && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {

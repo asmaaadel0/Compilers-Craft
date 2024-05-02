@@ -17,6 +17,8 @@
  char* str; 
  float float_val;
  bool bool_val;
+
+ struct nodeType *nPtr;
 }
 
 %code requires
@@ -58,6 +60,7 @@
 %type <num> DIGIT
 %type <bool_val> BOOL_LITERAL
 
+%type <nPtr> STATEMENT EXPRESSION FUNC_CALL RETURN_STATEMENT DECLARATION_STATEMENT BREAK CONTINUE LOGIC_NOT RETURN INC DEC SUB '(' ')'
 %%
 PROGRAM:                                                    
                 PROGRAM STATEMENT  {printf("Parsed Line %d Succesfully\n\n", number_of_line);}        
@@ -105,13 +108,13 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);}                
-                | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);}
-                | DIGIT         {assign_int(insertResult, $1, number_of_line);}       
-                | FLOAT_DIGIT   {assign_float(insertResult, $1, number_of_line);}                 
-                | BOOL_LITERAL  {assign_bool(insertResult, $1, number_of_line);}   
-                | STRING_LITERAL{assign_string(insertResult, $1, number_of_line);}                
-                | CHAR_LITERAL  {assign_char(insertResult, $1, number_of_line);}                
+                IDENTIFIER      {int i = lookup($1, 0, number_of_line);$$ = getType(i);check_type(i, number_of_line);}                
+                | CONSTANT      {int i = lookup($1, 0, number_of_line);$$ = getType(i);check_type(i, number_of_line);}
+                | DIGIT         {$$ = con("int");assign_int(insertResult, $1, number_of_line);}       
+                | FLOAT_DIGIT   {$$ = con("float");assign_float(insertResult, $1, number_of_line);}                 
+                | BOOL_LITERAL  {$$ = con("bool");assign_bool(insertResult, $1, number_of_line);}   
+                | STRING_LITERAL{$$ = con("string");assign_string(insertResult, $1, number_of_line);}                
+                | CHAR_LITERAL  {$$ = con("char");assign_char(insertResult, $1, number_of_line);}                
 
                 | EXPRESSION LOGIC_AND EXPRESSION     
                 | EXPRESSION LOGIC_OR EXPRESSION  
@@ -128,14 +131,14 @@ EXPRESSION:
 
                 | INC EXPRESSION                
                 | DEC EXPRESSION 
-                | SUB EXPRESSION             
+                | SUB EXPRESSION           
     
                 | EXPRESSION MODULO EXPRESSION         
-                | EXPRESSION PLUS EXPRESSION
-                | EXPRESSION SUB EXPRESSION             
-                | EXPRESSION MUL EXPRESSION             
-                | EXPRESSION DIV EXPRESSION              
-                | EXPRESSION POW EXPRESSION
+                | EXPRESSION PLUS EXPRESSION {check_binary_op_type($1, $3, number_of_line);}
+                | EXPRESSION SUB EXPRESSION  {check_binary_op_type($1, $3, number_of_line);}           
+                | EXPRESSION MUL EXPRESSION  {check_binary_op_type($1, $3, number_of_line);}          
+                | EXPRESSION DIV EXPRESSION  {check_binary_op_type($1, $3, number_of_line);}           
+                | EXPRESSION POW EXPRESSION  {check_binary_op_type($1, $3, number_of_line);}
     
                 | FUNC_CALL                                
                 | '(' EXPRESSION ')'

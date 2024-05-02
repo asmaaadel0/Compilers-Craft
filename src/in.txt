@@ -1,4 +1,4 @@
 int a  = 5;
-int b  = 5;
+float b  = 5;
 int x = 6 ;
-x = x + "asmaa";
+x = x + "b";
