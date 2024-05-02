@@ -47,7 +47,6 @@ int isParameter = 0;
 
 int insertResult = 0;
 
-
 void scope_start()
 {
     blockNumber++;

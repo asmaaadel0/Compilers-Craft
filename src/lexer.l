@@ -50,12 +50,18 @@
 "="                      { num_of_words++; num_of_char+=yyleng;  return EQ;}         
 ";"                      { num_of_words++; num_of_char+=yyleng;  return SEMICOLON;}
 
-"%"                      { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext);return MODULO;}
-"+"                      { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext);return PLUS;}
-"-"                      { num_of_words++; num_of_char+=yyleng;                             return SUB;}
-"*"                      { num_of_words++; num_of_char+=yyleng;                             return MUL;}
-"/"                      { num_of_words++; num_of_char+=yyleng;                             return DIV;}
-"^"                      { num_of_words++; num_of_char+=yyleng;                             return POW;}
+"%"                      { num_of_words++; num_of_char+=yyleng; return MODULO;}
+"+"                      { num_of_words++; num_of_char+=yyleng; return PLUS;}
+"-"                      { num_of_words++; num_of_char+=yyleng; return SUB;}
+"*"                      { num_of_words++; num_of_char+=yyleng; return MUL;}
+"/"                      { num_of_words++; num_of_char+=yyleng; return DIV;}
+"^"                      { num_of_words++; num_of_char+=yyleng; return POW;}
+
+"|"                      { num_of_words++; num_of_char+=yyleng; return BITWISE_OR;}
+"&"                      { num_of_words++; num_of_char+=yyleng; return BITWISE_AND;}
+"<<"                     { num_of_words++; num_of_char+=yyleng; return SHL;}
+">>"                     { num_of_words++; num_of_char+=yyleng; return SHR;}
+
 
 [){}(:,]                 { num_of_words++; num_of_char+=yyleng;                              return *yytext;}
 [A-Z]+                   { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext); return CONSTANT;}

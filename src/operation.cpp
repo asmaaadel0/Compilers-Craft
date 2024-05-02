@@ -298,3 +298,36 @@ struct nodeType *comparison(struct nodeType *op1, struct nodeType *op2, char *op
     }
     return p;
 }
+
+struct nodeType *bitwise(struct nodeType *op1, struct nodeType *op2, char op, int number_of_line)
+{
+    struct nodeType *p = (nodeType *)malloc(sizeof(struct nodeType));
+    if (strcmp(op1->type, "int") == 0 && strcmp(op2->type, "int") == 0)
+    {
+        p->type = "int";
+        switch (op)
+        {
+        case '|':
+            p->value.intVal = op1->value.intVal | op2->value.intVal;
+            break;
+        case '&':
+            p->value.intVal = op1->value.intVal & op2->value.intVal;
+            break;
+        case '<':
+            p->value.intVal = op1->value.intVal << op2->value.intVal;
+            break;
+        case '>':
+            p->value.intVal = op1->value.intVal >> op2->value.intVal;
+            break;
+        default:
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
+    }
+    else
+    {
+        printf("Error at line %d: Invalid operator\n", number_of_line);
+        exit(1);
+    }
+    return p;
+}

@@ -39,7 +39,7 @@
 %token BOOL_LITERAL LOGIC_AND LOGIC_OR LOGIC_NOT
 %token EQUALITY NEG_EQUALITY DEC INC 
 %token GT LT EQ
-%token SEMICOLON MODULO PLUS SUB MUL DIV POW
+%token SEMICOLON MODULO PLUS SUB MUL DIV POW BITWISE_OR BITWISE_AND SHL SHR
 
 %token CONSTANT IDENTIFIER STRING_LITERAL CHAR_LITERAL
 %token DIGIT FLOAT_DIGIT
@@ -53,6 +53,7 @@
 %right POW
 
 %left MUL DIV 
+%left BITWISE_OR BITWISE_AND SHL SHR
 %right EQ GT LT
 
 
@@ -142,7 +143,12 @@ EXPRESSION:
                 | EXPRESSION MUL EXPRESSION   {$$ = arithmatic($1, $3, '*', number_of_line);}          
                 | EXPRESSION DIV EXPRESSION   {$$ = arithmatic($1, $3, '/', number_of_line);}           
                 | EXPRESSION POW EXPRESSION   {$$ = arithmatic($1, $3, '^', number_of_line);}
-    
+                
+                | EXPRESSION BITWISE_OR EXPRESSION  {$$ = bitwise($1, $3, '|', number_of_line);}
+                | EXPRESSION BITWISE_AND EXPRESSION {$$ = bitwise($1, $3, '&', number_of_line);}
+                | EXPRESSION SHL EXPRESSION         {$$ = bitwise($1, $3, '<', number_of_line);}
+                | EXPRESSION SHR EXPRESSION         {$$ = bitwise($1, $3, '>', number_of_line);}
+                        
                 | FUNC_CALL                                
                 | '(' EXPRESSION ')'
                 ;               
