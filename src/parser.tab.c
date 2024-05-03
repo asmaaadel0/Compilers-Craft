@@ -598,14 +598,14 @@ static const yytype_uint8 yyrline[] =
        0,    68,    68,    69,    73,    73,    78,    79,    80,    81,
       83,    84,    85,    86,    87,    88,    89,    91,    92,    93,
       99,   100,   104,   105,   106,   107,   108,   113,   114,   115,
-     116,   117,   118,   119,   121,   122,   124,   126,   127,   129,
-     130,   131,   132,   134,   135,   136,   137,   138,   140,   141,
-     142,   143,   144,   145,   147,   148,   149,   150,   152,   153,
-     158,   158,   159,   159,   162,   163,   167,   168,   168,   173,
-     173,   176,   179,   180,   181,   186,   186,   187,   187,   188,
-     188,   189,   189,   192,   193,   196,   201,   202,   207,   211,
-     215,   215,   215,   220,   220,   221,   221,   226,   226,   226,
-     226,   229,   229,   230,   231
+     116,   117,   118,   119,   121,   122,   123,   125,   126,   128,
+     129,   130,   131,   133,   134,   135,   136,   137,   139,   140,
+     141,   142,   143,   144,   146,   147,   148,   149,   151,   152,
+     157,   157,   158,   158,   161,   162,   166,   167,   167,   172,
+     172,   175,   178,   179,   180,   185,   185,   186,   186,   187,
+     187,   188,   188,   191,   192,   195,   200,   201,   206,   210,
+     214,   214,   214,   219,   219,   220,   220,   225,   225,   225,
+     225,   228,   228,   229,   230
 };
 #endif
 
@@ -1551,271 +1551,277 @@ yyreduce:
     break;
 
   case 36: /* EXPRESSION: LOGIC_NOT EXPRESSION  */
-#line 124 "./parser.y"
+#line 123 "./parser.y"
                                                  {(yyval.nPtr) = not_operator((yyvsp[0].nPtr), number_of_line);}
 #line 1557 "parser.tab.c"
     break;
 
   case 37: /* EXPRESSION: EXPRESSION EQUALITY EXPRESSION  */
-#line 126 "./parser.y"
+#line 125 "./parser.y"
                                                     {(yyval.nPtr) = comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), "==", number_of_line);}
 #line 1563 "parser.tab.c"
     break;
 
   case 38: /* EXPRESSION: EXPRESSION NEG_EQUALITY EXPRESSION  */
-#line 127 "./parser.y"
+#line 126 "./parser.y"
                                                     {(yyval.nPtr) = comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), "!=", number_of_line);}
 #line 1569 "parser.tab.c"
     break;
 
   case 39: /* EXPRESSION: EXPRESSION LT EXPRESSION  */
-#line 129 "./parser.y"
+#line 128 "./parser.y"
                                               {(yyval.nPtr) = comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), "<", number_of_line);}
 #line 1575 "parser.tab.c"
     break;
 
   case 40: /* EXPRESSION: EXPRESSION LT EQ EXPRESSION  */
-#line 130 "./parser.y"
+#line 129 "./parser.y"
                                               {(yyval.nPtr) = comparison((yyvsp[-3].nPtr), (yyvsp[0].nPtr), "<=", number_of_line);}
 #line 1581 "parser.tab.c"
     break;
 
   case 41: /* EXPRESSION: EXPRESSION GT EXPRESSION  */
-#line 131 "./parser.y"
+#line 130 "./parser.y"
                                               {(yyval.nPtr) = comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), ">", number_of_line);}
 #line 1587 "parser.tab.c"
     break;
 
   case 42: /* EXPRESSION: EXPRESSION GT EQ EXPRESSION  */
-#line 132 "./parser.y"
+#line 131 "./parser.y"
                                               {(yyval.nPtr) = comparison((yyvsp[-3].nPtr), (yyvsp[0].nPtr), ">=", number_of_line);}
 #line 1593 "parser.tab.c"
     break;
 
   case 43: /* EXPRESSION: INC EXPRESSION  */
-#line 134 "./parser.y"
+#line 133 "./parser.y"
                                   {(yyval.nPtr) = unary_operator((yyvsp[0].nPtr), "++", number_of_line);}
 #line 1599 "parser.tab.c"
     break;
 
   case 44: /* EXPRESSION: DEC EXPRESSION  */
-#line 135 "./parser.y"
+#line 134 "./parser.y"
                                   {(yyval.nPtr) = unary_operator((yyvsp[0].nPtr), "--", number_of_line);}
 #line 1605 "parser.tab.c"
     break;
 
   case 45: /* EXPRESSION: EXPRESSION INC  */
-#line 136 "./parser.y"
+#line 135 "./parser.y"
                                   {(yyval.nPtr) = unary_operator((yyvsp[-1].nPtr), "++", number_of_line);}
 #line 1611 "parser.tab.c"
     break;
 
   case 46: /* EXPRESSION: EXPRESSION DEC  */
-#line 137 "./parser.y"
+#line 136 "./parser.y"
                                   {(yyval.nPtr) = unary_operator((yyvsp[-1].nPtr), "--", number_of_line);}
 #line 1617 "parser.tab.c"
     break;
 
   case 47: /* EXPRESSION: SUB EXPRESSION  */
-#line 138 "./parser.y"
+#line 137 "./parser.y"
                                   {(yyval.nPtr) = unary_operator((yyvsp[0].nPtr), "-",  number_of_line);}
 #line 1623 "parser.tab.c"
     break;
 
   case 48: /* EXPRESSION: EXPRESSION MODULO EXPRESSION  */
-#line 140 "./parser.y"
+#line 139 "./parser.y"
                                               {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), '%', number_of_line);}
 #line 1629 "parser.tab.c"
     break;
 
   case 49: /* EXPRESSION: EXPRESSION PLUS EXPRESSION  */
-#line 141 "./parser.y"
+#line 140 "./parser.y"
                                               {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), '+', number_of_line);}
 #line 1635 "parser.tab.c"
     break;
 
   case 50: /* EXPRESSION: EXPRESSION SUB EXPRESSION  */
-#line 142 "./parser.y"
+#line 141 "./parser.y"
                                               {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), '+', number_of_line);}
 #line 1641 "parser.tab.c"
     break;
 
   case 51: /* EXPRESSION: EXPRESSION MUL EXPRESSION  */
-#line 143 "./parser.y"
+#line 142 "./parser.y"
                                               {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), '*', number_of_line);}
 #line 1647 "parser.tab.c"
     break;
 
   case 52: /* EXPRESSION: EXPRESSION DIV EXPRESSION  */
-#line 144 "./parser.y"
+#line 143 "./parser.y"
                                               {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), '/', number_of_line);}
 #line 1653 "parser.tab.c"
     break;
 
   case 53: /* EXPRESSION: EXPRESSION POW EXPRESSION  */
-#line 145 "./parser.y"
+#line 144 "./parser.y"
                                               {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), '^', number_of_line);}
 #line 1659 "parser.tab.c"
     break;
 
   case 54: /* EXPRESSION: EXPRESSION BITWISE_OR EXPRESSION  */
-#line 147 "./parser.y"
+#line 146 "./parser.y"
                                                     {(yyval.nPtr) = bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), '|', number_of_line);}
 #line 1665 "parser.tab.c"
     break;
 
   case 55: /* EXPRESSION: EXPRESSION BITWISE_AND EXPRESSION  */
-#line 148 "./parser.y"
+#line 147 "./parser.y"
                                                     {(yyval.nPtr) = bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), '&', number_of_line);}
 #line 1671 "parser.tab.c"
     break;
 
   case 56: /* EXPRESSION: EXPRESSION SHL EXPRESSION  */
-#line 149 "./parser.y"
+#line 148 "./parser.y"
                                                     {(yyval.nPtr) = bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), '<', number_of_line);}
 #line 1677 "parser.tab.c"
     break;
 
   case 57: /* EXPRESSION: EXPRESSION SHR EXPRESSION  */
-#line 150 "./parser.y"
+#line 149 "./parser.y"
                                                     {(yyval.nPtr) = bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), '>', number_of_line);}
 #line 1683 "parser.tab.c"
     break;
 
-  case 60: /* $@2: %empty  */
-#line 158 "./parser.y"
-                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "var", number_of_line, false);}
+  case 59: /* EXPRESSION: '(' EXPRESSION ')'  */
+#line 152 "./parser.y"
+                                                    {(yyval.nPtr) = (yyvsp[-1].nPtr);}
 #line 1689 "parser.tab.c"
     break;
 
-  case 61: /* DECLARATION_STATEMENT: TYPE IDENTIFIER $@2 DECLARATION_TAIL  */
-#line 158 "./parser.y"
-                                                                                                                 { insertResult = -1;printf("Parsed Declaration\n");}
+  case 60: /* $@2: %empty  */
+#line 157 "./parser.y"
+                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "var", number_of_line, false);}
 #line 1695 "parser.tab.c"
     break;
 
-  case 62: /* $@3: %empty  */
-#line 159 "./parser.y"
-                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);}
+  case 61: /* DECLARATION_STATEMENT: TYPE IDENTIFIER $@2 DECLARATION_TAIL  */
+#line 157 "./parser.y"
+                                                                                                                 { insertResult = -1;printf("Parsed Declaration\n");}
 #line 1701 "parser.tab.c"
     break;
 
-  case 63: /* DECLARATION_STATEMENT: TYPE CONSTANT $@3 DECLARATION_TAIL  */
-#line 159 "./parser.y"
-                                                                                                                 { insertResult = -1;printf("Parsed Const Declaration\n"); }
+  case 62: /* $@3: %empty  */
+#line 158 "./parser.y"
+                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);}
 #line 1707 "parser.tab.c"
     break;
 
-  case 67: /* $@4: %empty  */
-#line 168 "./parser.y"
-                         {insertResult = funcIndex;}
+  case 63: /* DECLARATION_STATEMENT: TYPE CONSTANT $@3 DECLARATION_TAIL  */
+#line 158 "./parser.y"
+                                                                                                                 { insertResult = -1;printf("Parsed Const Declaration\n"); }
 #line 1713 "parser.tab.c"
     break;
 
-  case 68: /* RETURN_STATEMENT: RETURN $@4 EXPRESSION  */
-#line 168 "./parser.y"
-                                                                {returnExist = 1;}
+  case 67: /* $@4: %empty  */
+#line 167 "./parser.y"
+                         {insertResult = funcIndex;}
 #line 1719 "parser.tab.c"
     break;
 
-  case 69: /* $@5: %empty  */
-#line 173 "./parser.y"
-                                       {lookup((yyvsp[0].str), 0, number_of_line);}
+  case 68: /* RETURN_STATEMENT: RETURN $@4 EXPRESSION  */
+#line 167 "./parser.y"
+                                                                {returnExist = 1;}
 #line 1725 "parser.tab.c"
     break;
 
-  case 75: /* $@6: %empty  */
-#line 186 "./parser.y"
-                                             {funcIndex = insert((yyvsp[-4].str), (yyvsp[-3].str),"func", number_of_line, 0);}
+  case 69: /* $@5: %empty  */
+#line 172 "./parser.y"
+                                       {lookup((yyvsp[0].str), 0, number_of_line);}
 #line 1731 "parser.tab.c"
     break;
 
-  case 77: /* $@7: %empty  */
-#line 187 "./parser.y"
-                                              {funcIndex = insert("void", (yyvsp[-3].str),"func", number_of_line, 0);}
+  case 75: /* $@6: %empty  */
+#line 185 "./parser.y"
+                                             {funcIndex = insert((yyvsp[-4].str), (yyvsp[-3].str),"func", number_of_line, 0);}
 #line 1737 "parser.tab.c"
     break;
 
-  case 79: /* $@8: %empty  */
-#line 188 "./parser.y"
-                                          {funcIndex = insert((yyvsp[-3].str), (yyvsp[-2].str),"func", number_of_line, 0);}
+  case 77: /* $@7: %empty  */
+#line 186 "./parser.y"
+                                              {funcIndex = insert("void", (yyvsp[-3].str),"func", number_of_line, 0);}
 #line 1743 "parser.tab.c"
     break;
 
-  case 81: /* $@9: %empty  */
-#line 189 "./parser.y"
-                                          {funcIndex = insert("void", (yyvsp[-2].str),"func", number_of_line, 0);}
+  case 79: /* $@8: %empty  */
+#line 187 "./parser.y"
+                                          {funcIndex = insert((yyvsp[-3].str), (yyvsp[-2].str),"func", number_of_line, 0);}
 #line 1749 "parser.tab.c"
     break;
 
-  case 85: /* ARG_DECL: TYPE IDENTIFIER  */
-#line 196 "./parser.y"
-                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str),"var", number_of_line, true);}
+  case 81: /* $@9: %empty  */
+#line 188 "./parser.y"
+                                          {funcIndex = insert("void", (yyvsp[-2].str),"func", number_of_line, 0);}
 #line 1755 "parser.tab.c"
     break;
 
-  case 90: /* $@10: %empty  */
-#line 215 "./parser.y"
-                        {inLoop = 1;}
+  case 85: /* ARG_DECL: TYPE IDENTIFIER  */
+#line 195 "./parser.y"
+                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str),"var", number_of_line, true);}
 #line 1761 "parser.tab.c"
     break;
 
-  case 91: /* $@11: %empty  */
-#line 215 "./parser.y"
-                                                                        {inLoop = 0;}
+  case 90: /* $@10: %empty  */
+#line 214 "./parser.y"
+                        {inLoop = 1;}
 #line 1767 "parser.tab.c"
     break;
 
-  case 93: /* $@12: %empty  */
-#line 220 "./parser.y"
-                              {insertResult = lookup((yyvsp[-1].str), 1, number_of_line);}
+  case 91: /* $@11: %empty  */
+#line 214 "./parser.y"
+                                                                        {inLoop = 0;}
 #line 1773 "parser.tab.c"
     break;
 
-  case 95: /* $@13: %empty  */
-#line 221 "./parser.y"
-                              {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);exit(1);insertResult = -1;}
+  case 93: /* $@12: %empty  */
+#line 219 "./parser.y"
+                              {insertResult = lookup((yyvsp[-1].str), 1, number_of_line);}
 #line 1779 "parser.tab.c"
     break;
 
-  case 97: /* $@14: %empty  */
-#line 226 "./parser.y"
-                           {calledFuncIndex = lookup((yyvsp[0].str), 0, number_of_line);check_type(calledFuncIndex, number_of_line);}
+  case 95: /* $@13: %empty  */
+#line 220 "./parser.y"
+                              {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);exit(1);insertResult = -1;}
 #line 1785 "parser.tab.c"
     break;
 
-  case 98: /* $@15: %empty  */
-#line 226 "./parser.y"
-                                                                                                                              {isParameter=1;}
+  case 97: /* $@14: %empty  */
+#line 225 "./parser.y"
+                           {calledFuncIndex = lookup((yyvsp[0].str), 0, number_of_line);check_type(calledFuncIndex, number_of_line);}
 #line 1791 "parser.tab.c"
     break;
 
-  case 99: /* $@16: %empty  */
-#line 226 "./parser.y"
-                                                                                                                                                         {isParameter=0;arg_count_check(calledFuncIndex, number_of_line);}
+  case 98: /* $@15: %empty  */
+#line 225 "./parser.y"
+                                                                                                                              {isParameter=1;}
 #line 1797 "parser.tab.c"
     break;
 
-  case 100: /* FUNC_CALL: IDENTIFIER $@14 '(' $@15 ARGUMENTS $@16 ')'  */
-#line 226 "./parser.y"
-                                                                                                                                                                                                                               { printf("Parsed Function Call\n");}
+  case 99: /* $@16: %empty  */
+#line 225 "./parser.y"
+                                                                                                                                                         {isParameter=0;arg_count_check(calledFuncIndex, number_of_line);}
 #line 1803 "parser.tab.c"
     break;
 
-  case 101: /* $@17: %empty  */
-#line 229 "./parser.y"
-                           { argCount++; }
+  case 100: /* FUNC_CALL: IDENTIFIER $@14 '(' $@15 ARGUMENTS $@16 ')'  */
+#line 225 "./parser.y"
+                                                                                                                                                                                                                               { printf("Parsed Function Call\n");}
 #line 1809 "parser.tab.c"
     break;
 
-  case 103: /* ARGUMENTS: EXPRESSION  */
-#line 230 "./parser.y"
-                             { argCount++; }
+  case 101: /* $@17: %empty  */
+#line 228 "./parser.y"
+                           { argCount++; }
 #line 1815 "parser.tab.c"
     break;
 
+  case 103: /* ARGUMENTS: EXPRESSION  */
+#line 229 "./parser.y"
+                             { argCount++; }
+#line 1821 "parser.tab.c"
+    break;
 
-#line 1819 "parser.tab.c"
+
+#line 1825 "parser.tab.c"
 
       default: break;
     }
@@ -2008,7 +2014,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 233 "./parser.y"
+#line 232 "./parser.y"
 
 
 void yyerror(char *s) { 

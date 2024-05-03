@@ -149,7 +149,7 @@ EXPRESSION:
                 | EXPRESSION SHR EXPRESSION         {$$ = bitwise($1, $3, '>', number_of_line);}
                         
                 | FUNC_CALL                                
-                | '(' EXPRESSION ')'
+                | '(' EXPRESSION ')'                {$$ = $2;}
                 ;               
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
