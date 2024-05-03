@@ -1498,43 +1498,43 @@ yyreduce:
 
   case 27: /* EXPRESSION: IDENTIFIER  */
 #line 113 "./parser.y"
-                                {int i = lookup((yyvsp[0].str), 0, number_of_line);char *type = symbolTable[i].datatype;(yyval.nPtr) = getType(type);check_type(i, number_of_line);}
+                                {int i = lookup((yyvsp[0].str), 0, number_of_line);check_type(i, number_of_line);(yyval.nPtr) = getType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);}
 #line 1503 "parser.tab.c"
     break;
 
   case 28: /* EXPRESSION: CONSTANT  */
 #line 114 "./parser.y"
-                                {int i = lookup((yyvsp[0].str), 0, number_of_line);char *type = symbolTable[i].datatype;(yyval.nPtr) = getType(type);check_type(i, number_of_line);}
+                                {int i = lookup((yyvsp[0].str), 0, number_of_line);check_type(i, number_of_line);(yyval.nPtr) = getType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);}
 #line 1509 "parser.tab.c"
     break;
 
   case 29: /* EXPRESSION: DIGIT  */
 #line 115 "./parser.y"
-                                {(yyval.nPtr) = con("int");assign_int(insertResult, (yyvsp[0].num), number_of_line);}
+                                {assign_int(insertResult, (yyvsp[0].num), number_of_line);}
 #line 1515 "parser.tab.c"
     break;
 
   case 30: /* EXPRESSION: FLOAT_DIGIT  */
 #line 116 "./parser.y"
-                                {(yyval.nPtr) = con("float");assign_float(insertResult, (yyvsp[0].float_val), number_of_line);}
+                                {assign_float(insertResult, (yyvsp[0].float_val), number_of_line);}
 #line 1521 "parser.tab.c"
     break;
 
   case 31: /* EXPRESSION: BOOL_LITERAL  */
 #line 117 "./parser.y"
-                                {(yyval.nPtr) = con("bool");assign_bool(insertResult, (yyvsp[0].bool_val), number_of_line);}
+                                {assign_bool(insertResult, (yyvsp[0].bool_val), number_of_line);}
 #line 1527 "parser.tab.c"
     break;
 
   case 32: /* EXPRESSION: STRING_LITERAL  */
 #line 118 "./parser.y"
-                                {(yyval.nPtr) = con("string");assign_string(insertResult, (yyvsp[0].str), number_of_line);}
+                                {assign_string(insertResult, (yyvsp[0].str), number_of_line);}
 #line 1533 "parser.tab.c"
     break;
 
   case 33: /* EXPRESSION: CHAR_LITERAL  */
 #line 119 "./parser.y"
-                                {(yyval.nPtr) = con("char");assign_char(insertResult, (yyvsp[0].str), number_of_line);}
+                                {assign_char(insertResult, (yyvsp[0].str), number_of_line);}
 #line 1539 "parser.tab.c"
     break;
 
@@ -1558,13 +1558,13 @@ yyreduce:
 
   case 37: /* EXPRESSION: EXPRESSION EQUALITY EXPRESSION  */
 #line 126 "./parser.y"
-                                                    {comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), "==", number_of_line);}
+                                                    {(yyval.nPtr) = comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), "==", number_of_line);}
 #line 1563 "parser.tab.c"
     break;
 
   case 38: /* EXPRESSION: EXPRESSION NEG_EQUALITY EXPRESSION  */
 #line 127 "./parser.y"
-                                                    {comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), "!=", number_of_line);}
+                                                    {(yyval.nPtr) = comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), "!=", number_of_line);}
 #line 1569 "parser.tab.c"
     break;
 

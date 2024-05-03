@@ -14,25 +14,13 @@ typedef struct nodeType
     {
         int intVal;
         float floatVal;
+        bool boolVal;
         char *stringVal;
-        int boolVal;
+        char *charVal;
     } value;
 } nodeType;
 
-nodeType *con(char *value)
-{
-    nodeType *p;
-
-    if ((p = (nodeType *)malloc(sizeof(nodeType))) == NULL)
-    {
-        printf("out of memory");
-        exit(1);
-    }
-    p->type = value;
-    return p;
-}
-
-nodeType *getType(char *type)
+nodeType *getType(char *type, int intVal, float floatVal, bool boolVal, char *stringVal, char *charVal)
 {
     nodeType *p;
 
@@ -42,6 +30,21 @@ nodeType *getType(char *type)
         exit(1);
     }
     p->type = type;
+    if (type == "int") {
+        p->value.intVal = intVal;
+    }
+    else if (type == "float") {
+        p->value.floatVal = floatVal;
+    }
+    else if (type == "bool") {
+        p->value.boolVal = boolVal;
+    }
+    else if (type == "string") {
+        p->value.stringVal = stringVal;
+    }
+    else if (type == "char") {
+        p->value.charVal = charVal;
+    }
     return p;
 }
 

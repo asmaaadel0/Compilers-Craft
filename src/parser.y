@@ -110,17 +110,16 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER      {int i = lookup($1, 0, number_of_line);char *type = symbolTable[i].datatype;$$ = getType(type);check_type(i, number_of_line);}                
-                | CONSTANT      {int i = lookup($1, 0, number_of_line);char *type = symbolTable[i].datatype;$$ = getType(type);check_type(i, number_of_line);}
-                | DIGIT         {$$ = con("int");assign_int(insertResult, $1, number_of_line);}       
-                | FLOAT_DIGIT   {$$ = con("float");assign_float(insertResult, $1, number_of_line);}                 
-                | BOOL_LITERAL  {$$ = con("bool");assign_bool(insertResult, $1, number_of_line);}   
-                | STRING_LITERAL{$$ = con("string");assign_string(insertResult, $1, number_of_line);}                
-                | CHAR_LITERAL  {$$ = con("char");assign_char(insertResult, $1, number_of_line);}                
+                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = getType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);}                
+                | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = getType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);}
+                | DIGIT         {assign_int(insertResult, $1, number_of_line);}       
+                | FLOAT_DIGIT   {assign_float(insertResult, $1, number_of_line);}                 
+                | BOOL_LITERAL  {assign_bool(insertResult, $1, number_of_line);}   
+                | STRING_LITERAL{assign_string(insertResult, $1, number_of_line);}                
+                | CHAR_LITERAL  {assign_char(insertResult, $1, number_of_line);}                
 
                 | EXPRESSION LOGIC_AND EXPRESSION{$$ = logical($1, $3, '&', number_of_line);}    
                 | EXPRESSION LOGIC_OR EXPRESSION {$$ = logical($1, $3, '|', number_of_line);} 
-
                 | LOGIC_NOT EXPRESSION           {$$ = not_operator($2, number_of_line);}
 
                 | EXPRESSION EQUALITY EXPRESSION    {$$ = comparison($1, $3, "==", number_of_line);}  
