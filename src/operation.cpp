@@ -20,7 +20,7 @@ typedef struct nodeType
     } value;
 } nodeType;
 
-nodeType *getType(char *type, int intVal, float floatVal, bool boolVal, char *stringVal, char *charVal)
+nodeType *setType(char *type, int intVal, float floatVal, bool boolVal, char *stringVal, char *charVal)
 {
     nodeType *p;
 
@@ -30,19 +30,24 @@ nodeType *getType(char *type, int intVal, float floatVal, bool boolVal, char *st
         exit(1);
     }
     p->type = type;
-    if (type == "int") {
+    if (type == "int")
+    {
         p->value.intVal = intVal;
     }
-    else if (type == "float") {
+    else if (type == "float")
+    {
         p->value.floatVal = floatVal;
     }
-    else if (type == "bool") {
+    else if (type == "bool")
+    {
         p->value.boolVal = boolVal;
     }
-    else if (type == "string") {
+    else if (type == "string")
+    {
         p->value.stringVal = stringVal;
     }
-    else if (type == "char") {
+    else if (type == "char")
+    {
         p->value.charVal = charVal;
     }
     return p;

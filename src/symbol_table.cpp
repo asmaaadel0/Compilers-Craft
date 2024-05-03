@@ -93,7 +93,7 @@ int is_exist(char *identifierName)
 int insert(char *datatype, char *identifier, char *type, int number_of_line, bool isArg)
 {
     int L = is_exist(identifier);
-    if (L != -1)
+    if (L != -1 && !isArg)
     {
         printf("Error at line %d: %s is already declared in this scope at line %d\n", number_of_line, identifier, L);
         exit(1);

@@ -1,0 +1,14 @@
+POP x
+
+PUSH 5
+POP y
+
+PUSH 6.500000
+POP z
+
+PUSH 1
+POP w
+
+PUSH 0
+POP k
+
