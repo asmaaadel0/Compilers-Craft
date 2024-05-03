@@ -123,8 +123,8 @@ EXPRESSION:
 
                 | LOGIC_NOT EXPRESSION           {$$ = not_operator($2, number_of_line);}
 
-                | EXPRESSION EQUALITY EXPRESSION    {comparison($1, $3, "==", number_of_line);}  
-                | EXPRESSION NEG_EQUALITY EXPRESSION{comparison($1, $3, "!=", number_of_line);} 
+                | EXPRESSION EQUALITY EXPRESSION    {$$ = comparison($1, $3, "==", number_of_line);}  
+                | EXPRESSION NEG_EQUALITY EXPRESSION{$$ = comparison($1, $3, "!=", number_of_line);} 
 
                 | EXPRESSION LT EXPRESSION    {$$ = comparison($1, $3, "<", number_of_line);}             
                 | EXPRESSION LT EQ EXPRESSION {$$ = comparison($1, $4, "<=", number_of_line);}         
