@@ -585,4 +585,5 @@ void display_unused_variables()
 int remove_file()
 {
     remove("symbol_table.txt");
+    remove("quadruples.txt");
 }

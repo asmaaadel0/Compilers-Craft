@@ -76,16 +76,14 @@ void quadPushString(char *str)
 }
 void quadPopIdentifier(char *symbol)
 {
-    fprintf(quadFileP, "POP %s\n\n", symbol);
+    fprintf(quadFileP, "POP %s\n", symbol);
 }
 void quadPushEndLabel(int endLabelNum)
 {
-    /* push the labelNum to the stack */
     endLabelStack[++endLabelstackPointer] = endLabelNum;
 }
 void quadJumpEndLabel() // jump to the first end label in the stack
 {
-    /* get last  endLabelNum from the stack*/
     int endLabelNum = endLabelStack[endLabelstackPointer];
     fprintf(quadFileP, "JMP EndLabel_%d\n", endLabelNum);
 }
@@ -93,12 +91,11 @@ void quadPopEndLabel()
 {
     if (endLabelstackPointer < 0)
     {
-        fprintf(quadFileP, "Quads(%d) Error: No end label to add. Segmenration Fault\n");
+        fprintf(quadFileP, "Error: No end label to add. Segmenration Fault\n");
         return;
     }
-    /* get the last endLabelNum from the stack */
     int endLabelNum = endLabelStack[endLabelstackPointer--];
-    fprintf(quadFileP, "Quads(%d) EndLabel_%d:\n", endLabelNum);
+    fprintf(quadFileP, "EndLabel_%d:\n", endLabelNum);
 }
 void quadJumpFalseLabel(int labelNum)
 {
@@ -111,13 +108,13 @@ void quadPopLabel()
 {
     if (labelStackPointer < 0)
     {
-        fprintf(quadFileP, "Quads(%d) Error: No end label to add. Segmenration Fault\n");
+        fprintf(quadFileP, "Error: No end label to add. Segmenration Fault\n");
         return;
     }
     /* get the last labelNum from the stack */
     int labelNum = labelStack[--labelStackPointer];
 
-    fprintf(quadFileP, "Quads(%d) Label_%d:\n", labelNum);
+    fprintf(quadFileP, "Label_%d:\n", labelNum);
 }
 void quadPushLastIdentifierStack(char *identifier)
 {
@@ -128,7 +125,7 @@ void quadPeakLastIdentifierStack()
 {
     if (lastIdentifierStackPointer < 0)
     {
-        fprintf(quadFileP, "Quads(%d) Error: No last identifier to peak. Segmenration Fault\n");
+        fprintf(quadFileP, "Error: No last identifier to peak. Segmenration Fault\n");
         return;
     }
     /* get the last identifier from the stack */
@@ -140,7 +137,7 @@ void quadPopLastIdentifierStack()
 {
     if (lastIdentifierStackPointer < 0)
     {
-        fprintf(quadFileP, "Quads(%d) Error: No last identifier to pop. Segmenration Fault\n");
+        fprintf(quadFileP, "Error: No last identifier to pop. Segmenration Fault\n");
         return;
     }
     /* get the last IDENTIFIER from the stack */
@@ -151,7 +148,7 @@ void quadPushStartLabel(int startLabelNum)
 {
     /* push the labelNum to the stack */
     startLabelStack[++startLabelstackPointer] = startLabelNum;
-    fprintf(quadFileP, "Quads(%d) StartLabel_%d:\n", startLabelNum);
+    fprintf(quadFileP, "StartLabel_%d:\n", startLabelNum);
 }
 void quadJumpStartLabel()
 {
@@ -163,7 +160,7 @@ void quadPopStartLabel()
 {
     if (startLabelstackPointer < 0)
     {
-        fprintf(quadFileP, "Quads(%d) Error: No start label to add. Segmenration Fault\n");
+        fprintf(quadFileP, "Error: No start label to add. Segmenration Fault\n");
         return;
     }
     /* get the last endLabelNum from the stack */
