@@ -45,11 +45,50 @@ nodeType *getType(char *type)
     return p;
 }
 
-void unary_operator(struct nodeType *op, int number_of_line)
+struct nodeType *unary_operator(struct nodeType *op, char *operand, int number_of_line)
 {
-    if (strcmp(op->type, "int") == 0 ||
-        strcmp(op->type, "float") == 0)
+    struct nodeType *p = (nodeType *)malloc(sizeof(struct nodeType));
+    if (strcmp(op->type, "int") == 0)
     {
+        p->type = "int";
+        if (strcmp(operand, "++") == 0)
+        {
+            p->value.intVal = op->value.intVal + 1;
+        }
+        else if (strcmp(operand, "--") == 0)
+        {
+            p->value.intVal = op->value.intVal - 1;
+        }
+        else if (strcmp(operand, "-") == 0)
+        {
+            p->value.intVal = -op->value.intVal;
+        }
+        else
+        {
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
+    }
+    else if (strcmp(op->type, "float") == 0)
+    {
+        p->type = "float";
+        if (strcmp(operand, "++") == 0)
+        {
+            p->value.floatVal = op->value.floatVal + 1;
+        }
+        else if (strcmp(operand, "--") == 0)
+        {
+            p->value.floatVal = op->value.floatVal - 1;
+        }
+        else if (strcmp(operand, "-") == 0)
+        {
+            p->value.floatVal = -op->value.floatVal;
+        }
+        else
+        {
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
     }
     else
     {

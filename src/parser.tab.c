@@ -1594,31 +1594,31 @@ yyreduce:
 
   case 43: /* EXPRESSION: INC EXPRESSION  */
 #line 134 "./parser.y"
-                                  {unary_operator((yyvsp[0].nPtr), number_of_line);}
+                                  {(yyval.nPtr) = unary_operator((yyvsp[0].nPtr), "++", number_of_line);}
 #line 1599 "parser.tab.c"
     break;
 
   case 44: /* EXPRESSION: DEC EXPRESSION  */
 #line 135 "./parser.y"
-                                  {unary_operator((yyvsp[0].nPtr), number_of_line);}
+                                  {(yyval.nPtr) = unary_operator((yyvsp[0].nPtr), "--", number_of_line);}
 #line 1605 "parser.tab.c"
     break;
 
   case 45: /* EXPRESSION: EXPRESSION INC  */
 #line 136 "./parser.y"
-                                  {unary_operator((yyvsp[-1].nPtr), number_of_line);}
+                                  {(yyval.nPtr) = unary_operator((yyvsp[-1].nPtr), "++", number_of_line);}
 #line 1611 "parser.tab.c"
     break;
 
   case 46: /* EXPRESSION: EXPRESSION DEC  */
 #line 137 "./parser.y"
-                                  {unary_operator((yyvsp[-1].nPtr), number_of_line);}
+                                  {(yyval.nPtr) = unary_operator((yyvsp[-1].nPtr), "--", number_of_line);}
 #line 1617 "parser.tab.c"
     break;
 
   case 47: /* EXPRESSION: SUB EXPRESSION  */
 #line 138 "./parser.y"
-                                  {unary_operator((yyvsp[0].nPtr), number_of_line);}
+                                  {(yyval.nPtr) = unary_operator((yyvsp[0].nPtr), "-",  number_of_line);}
 #line 1623 "parser.tab.c"
     break;
 

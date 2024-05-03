@@ -131,11 +131,11 @@ EXPRESSION:
                 | EXPRESSION GT EXPRESSION    {$$ = comparison($1, $3, ">", number_of_line);}            
                 | EXPRESSION GT EQ EXPRESSION {$$ = comparison($1, $4, ">=", number_of_line);}   
 
-                | INC EXPRESSION  {unary_operator($2, number_of_line);}                 
-                | DEC EXPRESSION  {unary_operator($2, number_of_line);}  
-                | EXPRESSION INC  {unary_operator($1, number_of_line);}                 
-                | EXPRESSION DEC  {unary_operator($1, number_of_line);}  
-                | SUB EXPRESSION  {unary_operator($2, number_of_line);}          
+                | INC EXPRESSION  {$$ = unary_operator($2, "++", number_of_line);}                 
+                | DEC EXPRESSION  {$$ = unary_operator($2, "--", number_of_line);}  
+                | EXPRESSION INC  {$$ = unary_operator($1, "++", number_of_line);}                 
+                | EXPRESSION DEC  {$$ = unary_operator($1, "--", number_of_line);}  
+                | SUB EXPRESSION  {$$ = unary_operator($2, "-",  number_of_line);}          
     
                 | EXPRESSION MODULO EXPRESSION{$$ = arithmatic($1, $3, '%', number_of_line);}         
                 | EXPRESSION PLUS EXPRESSION  {$$ = arithmatic($1, $3, '+', number_of_line);}
