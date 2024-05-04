@@ -1,33 +1,53 @@
-sum:
-	POP x
-	POP y
-	PUSH x
-	POP res
-	PUSH res
-	PUSH y
-	ADD
-	POP res
-	PUSH res
-	RET
-	end sum
-print2:
-	POP x
-	POP y
-	PUSH 30
-	POP z
-	PUSH 40
-	POP a
-	PUSH 5
-	PUSH 5
-	ADD
-	POP x
-	end print2
 main:
-	PUSH 33
-	POP a
+	POP i
+	PUSH 0
+	POP i
+StartLabel_1:
+	PUSH i
 	PUSH 10
+	LT
+	PUSH i
+	PUSH 1
+	ADD
+	POP i
+	JF Label_1
+	PUSH 10
+	POP b
+	JMP StartLabel_1
+Label_1:
+	PUSH 0
+	POP x
+StartLabel_2:
+	PUSH x
 	PUSH 20
-	CALL sum
-	POP a
-	PUSH a
-	PUSH a
+	LT
+	JF Label_2
+	PUSH x
+	PUSH 1
+	ADD
+	POP x
+	JMP StartLabel_2
+Label_2:
+	PUSH 0
+	POP x
+StartLabel_3:
+	PUSH x
+	PUSH 1
+	ADD
+	POP x
+	PUSH x
+	PUSH 20
+	LT
+	JF Label_3
+	JMP StartLabel_3
+Label_3:
+	PUSH 1
+	PUSH x
+	JF Label_4
+	PUSH 10
+	POP x
+	JMP EndLabel_1
+Label_4:
+	JMP EndLabel_1
+EndLabel_1:
+	end main

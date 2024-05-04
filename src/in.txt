@@ -1,24 +1,27 @@
-int sum(int x, int y) {
-  int res = x;
-  res = res + y;
-  return res;
-}
-
-void print2(int x, int y) {
-  int z = 30;
-  int a = 40;
-
-  x = 5 + 5;
-}
-
 void main() {
-  int a = 33;
-  a = sum(10, 20);
-  a = sum(a, a);
+  int i;
+  for (i = 0; i < 10; i = i + 1;) {
+    int b = 10;
+  }
 
-  print(4);
-  print('4');
-  print("asdasdas");
+  int x = 0;
 
-  print2(10, 20);
+  while (x < 20) {
+    x = x + 1;
+  }
+
+  x = 0;
+
+  do {
+    x = x + 1;
+  } while (x < 20);
+
+  switch (x) {
+    case 1:
+      {x = 10;
+      break;}
+
+    default:
+      {break;}
+  }
 }

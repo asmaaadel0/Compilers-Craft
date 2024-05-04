@@ -27,6 +27,7 @@ typedef struct symbol
     char *datatype; // int, float, bool, string
     int argList[100];
     int argCount;
+    bool assignToFunc;
 
 } symbol;
 
@@ -101,6 +102,7 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
 
     struct symbol newnode;
 
+    newnode.assignToFunc = false;
     newnode.identifierName = identifier;
     newnode.datatype = datatype;
     newnode.type = type;
@@ -125,12 +127,14 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
         int j = 0;
         for (int i = 0; i < symbolTableIndex; i++)
         {
-            if (symbolTable[i].isArg && symbolTable[i].scope == (blockNumber + 1))
+            if (symbolTable[i].isArg && symbolTable[i].scope == (blockNumber + 1) && !symbolTable[i].assignToFunc)
             {
                 newnode.argList[j] = symbolTable[i].id;
+                symbolTable[i].assignToFunc = true;
                 j++;
             }
         }
+        printf("number of args: %d\n", j);
         newnode.argCount = j;
     }
     symbolTable[symbolTableIndex] = newnode;

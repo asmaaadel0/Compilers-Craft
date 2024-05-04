@@ -115,12 +115,12 @@ TYPE:
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
                 IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);if(!isPrint)quadPushIdentifier($1);}                
-                | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);quadPushIdentifier($1);}
-                | DIGIT         {$$ = setType("int", $1, 0.0, 0, "", "");assign_int(insertResult, $1, number_of_line);quadPushInt($1);}       
-                | FLOAT_DIGIT   {$$ = setType("float", 0, $1, 0, "", "");assign_float(insertResult, $1, number_of_line);quadPushFloat($1);}                 
-                | BOOL_LITERAL  {$$ = setType("bool", 0, 0.0, $1, "", "");assign_bool(insertResult, $1, number_of_line);quadPushInt($1);}   
-                | STRING_LITERAL{$$ = setType("string", 0, 0.0, 0, $1, "");assign_string(insertResult, $1, number_of_line);quadPushString($1);}                
-                | CHAR_LITERAL  {$$ = setType("char", 0, 0.0, 0, "", $1);assign_char(insertResult, $1, number_of_line);quadPushChar($1);}                
+                | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);if(!isPrint)quadPushIdentifier($1);}
+                | DIGIT         {$$ = setType("int", $1, 0.0, 0, "", "");assign_int(insertResult, $1, number_of_line);if(!isPrint)quadPushInt($1);}       
+                | FLOAT_DIGIT   {$$ = setType("float", 0, $1, 0, "", "");assign_float(insertResult, $1, number_of_line);if(!isPrint)quadPushFloat($1);}                 
+                | BOOL_LITERAL  {$$ = setType("bool", 0, 0.0, $1, "", "");assign_bool(insertResult, $1, number_of_line);if(!isPrint)quadPushInt($1);}   
+                | STRING_LITERAL{$$ = setType("string", 0, 0.0, 0, $1, "");assign_string(insertResult, $1, number_of_line);if(!isPrint)quadPushString($1);}                
+                | CHAR_LITERAL  {$$ = setType("char", 0, 0.0, 0, "", $1);assign_char(insertResult, $1, number_of_line);if(!isPrint)quadPushChar($1);}                
 
                 | EXPRESSION LOGIC_AND EXPRESSION{$$ = logical($1, $3, '&', number_of_line);quadInstruction("LOGICAL_AND");}    
                 | EXPRESSION LOGIC_OR EXPRESSION {$$ = logical($1, $3, '|', number_of_line);quadInstruction("LOGICAL_OR");} 
@@ -229,7 +229,7 @@ ASSIGNMENT_STATEMENT:
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-                IDENTIFIER {calledFuncIndex = lookup($1, 0, number_of_line);check_type(calledFuncIndex, number_of_line);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;arg_count_check(calledFuncIndex, number_of_line);} ')' {quadCallFunction($1);printf("Parsed Function Call\n");}
+                IDENTIFIER {argCount=0;calledFuncIndex = lookup($1, 0, number_of_line);check_type(calledFuncIndex, number_of_line);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;arg_count_check(calledFuncIndex, number_of_line);} ')' {quadCallFunction($1);printf("Parsed Function Call\n");}
                 ;       
 ARGUMENTS:      
                 EXPRESSION { argCount++; } ',' ARGUMENTS 

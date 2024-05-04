@@ -1559,37 +1559,37 @@ yyreduce:
 
   case 33: /* EXPRESSION: CONSTANT  */
 #line 118 "./parser.y"
-                                {int i = lookup((yyvsp[0].str), 0, number_of_line);check_type(i, number_of_line);(yyval.nPtr) = setType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);quadPushIdentifier((yyvsp[0].str));}
+                                {int i = lookup((yyvsp[0].str), 0, number_of_line);check_type(i, number_of_line);(yyval.nPtr) = setType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);if(!isPrint)quadPushIdentifier((yyvsp[0].str));}
 #line 1564 "parser.tab.c"
     break;
 
   case 34: /* EXPRESSION: DIGIT  */
 #line 119 "./parser.y"
-                                {(yyval.nPtr) = setType("int", (yyvsp[0].num), 0.0, 0, "", "");assign_int(insertResult, (yyvsp[0].num), number_of_line);quadPushInt((yyvsp[0].num));}
+                                {(yyval.nPtr) = setType("int", (yyvsp[0].num), 0.0, 0, "", "");assign_int(insertResult, (yyvsp[0].num), number_of_line);if(!isPrint)quadPushInt((yyvsp[0].num));}
 #line 1570 "parser.tab.c"
     break;
 
   case 35: /* EXPRESSION: FLOAT_DIGIT  */
 #line 120 "./parser.y"
-                                {(yyval.nPtr) = setType("float", 0, (yyvsp[0].float_val), 0, "", "");assign_float(insertResult, (yyvsp[0].float_val), number_of_line);quadPushFloat((yyvsp[0].float_val));}
+                                {(yyval.nPtr) = setType("float", 0, (yyvsp[0].float_val), 0, "", "");assign_float(insertResult, (yyvsp[0].float_val), number_of_line);if(!isPrint)quadPushFloat((yyvsp[0].float_val));}
 #line 1576 "parser.tab.c"
     break;
 
   case 36: /* EXPRESSION: BOOL_LITERAL  */
 #line 121 "./parser.y"
-                                {(yyval.nPtr) = setType("bool", 0, 0.0, (yyvsp[0].bool_val), "", "");assign_bool(insertResult, (yyvsp[0].bool_val), number_of_line);quadPushInt((yyvsp[0].bool_val));}
+                                {(yyval.nPtr) = setType("bool", 0, 0.0, (yyvsp[0].bool_val), "", "");assign_bool(insertResult, (yyvsp[0].bool_val), number_of_line);if(!isPrint)quadPushInt((yyvsp[0].bool_val));}
 #line 1582 "parser.tab.c"
     break;
 
   case 37: /* EXPRESSION: STRING_LITERAL  */
 #line 122 "./parser.y"
-                                {(yyval.nPtr) = setType("string", 0, 0.0, 0, (yyvsp[0].str), "");assign_string(insertResult, (yyvsp[0].str), number_of_line);quadPushString((yyvsp[0].str));}
+                                {(yyval.nPtr) = setType("string", 0, 0.0, 0, (yyvsp[0].str), "");assign_string(insertResult, (yyvsp[0].str), number_of_line);if(!isPrint)quadPushString((yyvsp[0].str));}
 #line 1588 "parser.tab.c"
     break;
 
   case 38: /* EXPRESSION: CHAR_LITERAL  */
 #line 123 "./parser.y"
-                                {(yyval.nPtr) = setType("char", 0, 0.0, 0, "", (yyvsp[0].str));assign_char(insertResult, (yyvsp[0].str), number_of_line);quadPushChar((yyvsp[0].str));}
+                                {(yyval.nPtr) = setType("char", 0, 0.0, 0, "", (yyvsp[0].str));assign_char(insertResult, (yyvsp[0].str), number_of_line);if(!isPrint)quadPushChar((yyvsp[0].str));}
 #line 1594 "parser.tab.c"
     break;
 
@@ -1907,25 +1907,25 @@ yyreduce:
 
   case 107: /* $@24: %empty  */
 #line 232 "./parser.y"
-                           {calledFuncIndex = lookup((yyvsp[0].str), 0, number_of_line);check_type(calledFuncIndex, number_of_line);}
+                           {argCount=0;calledFuncIndex = lookup((yyvsp[0].str), 0, number_of_line);check_type(calledFuncIndex, number_of_line);}
 #line 1912 "parser.tab.c"
     break;
 
   case 108: /* $@25: %empty  */
 #line 232 "./parser.y"
-                                                                                                                              {isParameter=1;}
+                                                                                                                                         {isParameter=1;}
 #line 1918 "parser.tab.c"
     break;
 
   case 109: /* $@26: %empty  */
 #line 232 "./parser.y"
-                                                                                                                                                         {isParameter=0;arg_count_check(calledFuncIndex, number_of_line);}
+                                                                                                                                                                    {isParameter=0;arg_count_check(calledFuncIndex, number_of_line);}
 #line 1924 "parser.tab.c"
     break;
 
   case 110: /* FUNC_CALL: IDENTIFIER $@24 '(' $@25 ARGUMENTS $@26 ')'  */
 #line 232 "./parser.y"
-                                                                                                                                                                                                                               {quadCallFunction((yyvsp[-6].str));printf("Parsed Function Call\n");}
+                                                                                                                                                                                                                                          {quadCallFunction((yyvsp[-6].str));printf("Parsed Function Call\n");}
 #line 1930 "parser.tab.c"
     break;
 
