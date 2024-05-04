@@ -12,6 +12,7 @@
     int yylex();
     extern FILE *yyin;
     extern int number_of_line;
+    int isPrint = 0;
 %}
 
 %union { 
@@ -99,8 +100,8 @@ STATEMENT:
 
 //________________________________________________ PRINT STATEMENT ________________________________________________
 PRINT_STATEMENT:
-                PRINT {insertResult=-1;} '('EXPRESSION')' SEMICOLON
-                ;               
+                PRINT {insertResult=-1;isPrint=1;} '('EXPRESSION')' SEMICOLON {isPrint=0;}
+                ;                            
 //________________________________________________ TYPE ________________________________________________
 TYPE:
                 INT         { $$ = "int";   }
@@ -113,7 +114,7 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);quadPushIdentifier($1);}                
+                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);if(!isPrint)quadPushIdentifier($1);}                
                 | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);quadPushIdentifier($1);}
                 | DIGIT         {$$ = setType("int", $1, 0.0, 0, "", "");assign_int(insertResult, $1, number_of_line);quadPushInt($1);}       
                 | FLOAT_DIGIT   {$$ = setType("float", 0, $1, 0, "", "");assign_float(insertResult, $1, number_of_line);quadPushFloat($1);}                 
@@ -209,15 +210,15 @@ IF_STATEMENT:
 
 //________________________________________________ WHILE STATEMENT ________________________________________________
 WHILE_STATEMENT:
-                WHILE EXPRESSION {quadJumpFalseLabel(++labelNum);} BLOCK {quadPopLabel();quadJumpStartLabel();}
+                WHILE EXPRESSION {quadJumpFalseLabel(++labelNum);} BLOCK {quadJumpStartLabel();quadPopLabel();}
                 ;
 //________________________________________________ DO WHILE STATEMENT ________________________________________________
 DO_WHILE_STATEMENT:
-                DO BLOCK WHILE '(' EXPRESSION ')' SEMICOLON {quadJumpFalseLabel(++labelNum);quadPopLabel();quadJumpStartLabel();}
+                DO BLOCK WHILE '(' EXPRESSION ')' SEMICOLON {quadJumpFalseLabel(++labelNum);quadJumpStartLabel();quadPopLabel();}
                 ;
 //________________________________________________ FOR STATEMENT ________________________________________________
 FOR_STATEMENT:
-                FOR '(' {inLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum);} STATEMENT STATEMENT {quadJumpFalseLabel(++labelNum);} ')' {inLoop = 0;} BLOCK {quadPopLabel();quadJumpStartLabel();}
+                FOR '(' {inLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum);} STATEMENT STATEMENT {quadJumpFalseLabel(++labelNum);} ')' {inLoop = 0;} BLOCK {quadJumpStartLabel();quadPopLabel();}
                 ;
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________

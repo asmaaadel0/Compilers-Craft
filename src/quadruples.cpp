@@ -40,47 +40,47 @@ void setQuadFilePath(char *filePath, FILE *file) {
 
 void quadStartFunction(char *function)
 {
-    fprintf(quadFileP, "PROC %s\n", function);
+    fprintf(quadFileP, "%s:\n", function);
 }
 void quadEndFunction(char *function)
 {
-    fprintf(quadFileP, "ENDPROC %s\n", function);
+    fprintf(quadFileP, "\tend %s\n", function);
 }
 void quadCallFunction(char *function)
 {
-    fprintf(quadFileP, "CALL %s\n", function);
+    fprintf(quadFileP, "\tCALL %s\n", function);
 }
 void quadReturn()
 {
-    fprintf(quadFileP, "RET\n");
+    fprintf(quadFileP, "\tRET\n");
 }
 void quadInstruction(const char *instruction)
 {
-    fprintf(quadFileP, "%s\n", instruction);
+    fprintf(quadFileP, "\t%s\n", instruction);
 }
 void quadPushInt(int val)
 {
-    fprintf(quadFileP, "PUSH %d\n", val);
+    fprintf(quadFileP, "\tPUSH %d\n", val);
 }
 void quadPushFloat(float val)
 {
-    fprintf(quadFileP, "PUSH %f\n", val);
+    fprintf(quadFileP, "\tPUSH %f\n", val);
 }
 void quadPushIdentifier(char *symbol)
 {
-    fprintf(quadFileP, "PUSH %s\n", symbol);
+    fprintf(quadFileP, "\tPUSH %s\n", symbol);
 }
 void quadPushString(char *str)
 {
-    fprintf(quadFileP, "PUSH %s\n", str);
+    fprintf(quadFileP, "\tPUSH %s\n", str);
 }
 void quadPushChar(char *ch)
 {
-    fprintf(quadFileP, "PUSH %s\n", ch);
+    fprintf(quadFileP, "\tPUSH %s\n", ch);
 }
 void quadPopIdentifier(char *symbol)
 {
-    fprintf(quadFileP, "POP %s\n", symbol);
+    fprintf(quadFileP, "\tPOP %s\n", symbol);
 }
 void quadPushEndLabel(int endLabelNum)
 {
@@ -89,7 +89,7 @@ void quadPushEndLabel(int endLabelNum)
 void quadJumpEndLabel() // jump to the first end label in the stack
 {
     int endLabelNum = endLabelStack[endLabelstackPointer];
-    fprintf(quadFileP, "JMP EndLabel_%d\n", endLabelNum);
+    fprintf(quadFileP, "\tJMP EndLabel_%d\n", endLabelNum);
 }
 void quadPopEndLabel()
 {
@@ -104,7 +104,7 @@ void quadPopEndLabel()
 void quadJumpFalseLabel(int labelNum)
 {
 
-    fprintf(quadFileP, "JF Label_%d\n", labelNum);
+    fprintf(quadFileP, "\tJF Label_%d\n", labelNum);
     /* push the labelNum to the stack */
     labelStack[labelStackPointer++] = labelNum;
 }
@@ -135,7 +135,7 @@ void quadPeakLastIdentifierStack()
     /* get the last identifier from the stack */
     char *identifier = lastIdentifierStack[lastIdentifierStackPointer];
 
-    fprintf(quadFileP, "PUSH %s\n", identifier);
+    fprintf(quadFileP, "\tPUSH %s\n", identifier);
 }
 void quadPopLastIdentifierStack()
 {
@@ -158,7 +158,7 @@ void quadJumpStartLabel()
 {
     /* get last  startLabelNum from the stack*/
     int startLabelNum = startLabelStack[startLabelstackPointer];
-    fprintf(quadFileP, "JMP StartLabel_%d\n", startLabelNum);
+    fprintf(quadFileP, "\tJMP StartLabel_%d\n", startLabelNum);
 }
 void quadPopStartLabel()
 {
