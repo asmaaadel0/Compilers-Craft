@@ -1,31 +1,8 @@
-PROC add
-POP x
-POP y
 PUSH 0
-POP z
-PUSH x
-RET
-ENDPROC add
-PROC hello
-POP y
-POP x
-PUSH "hello"
-POP text
-PUSH text
-RET
-ENDPROC hello
-PROC useless
+POP i
+StartLabel_1:
+PUSH i
 PUSH 1
-POP bla
-ENDPROC useless
-PUSH 3
-POP a
-PUSH 7
-POP b
-POP c
-PUSH "j"
-POP g
-PUSH a
-PUSH b
-CALL add
-POP c
+ADD
+PUSH "hellooo"); ) { print("lol"
+JF Label_1

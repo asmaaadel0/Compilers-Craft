@@ -45,7 +45,7 @@ int argCount = 0;
 int calledFuncIndex = 0;
 int isParameter = 0;
 
-int insertResult = 0;
+int insertResult = -1;
 
 void scope_start()
 {

@@ -76,17 +76,19 @@ BLOCK:
 
 //________________________________________________ STATEMENT ________________________________________________
 STATEMENT:
-                PRINT_STATEMENT              {printf("Parsed print statement\n");}
-                | DECLARATION_STATEMENT
-                | ASSIGNMENT_STATEMENT         {printf("Parsed Assignment statement\n");}
+                DECLARATION_STATEMENT
+                | ASSIGNMENT_STATEMENT     {printf("Parsed Assignment statement\n");}
                 | EXPRESSION SEMICOLON
+               
+                | PRINT_STATEMENT            {printf("Parsed print statement\n");}
                 
-                | IF_STATEMENT                 {printf("Parsed if statement\n");}
-                | {quadPushStartLabel(++startLabelNum);} WHILE_STATEMENT {quadPopStartLabel();}              {printf("Parsed While LOOP\n");}
-                | FOR_STATEMENT {quadPopStartLabel();}                {printf("Parsed For LOOP\n");}
-                | {quadPushStartLabel(++startLabelNum);}DO_WHILE_STATEMENT {quadPopStartLabel();}           {printf("Parsed Do While LOOP\n");}
-                | SWITCH_STATEMENT             {printf("Parsed Switch Statement\n");}
-                | BREAK SEMICOLON              {quadJumpEndLabel();}
+                | {quadPushEndLabel(++endLabelNum);}     IF_STATEMENT      {quadPopEndLabel();printf("Parsed if statement\n");}
+                | {quadPushStartLabel(++startLabelNum);} WHILE_STATEMENT   {quadPopStartLabel();printf("Parsed While LOOP\n");}         
+                | {quadPushStartLabel(++startLabelNum);} DO_WHILE_STATEMENT{quadPopStartLabel();printf("Parsed Do While LOOP\n");}      
+                | {quadPushEndLabel(++endLabelNum);}     SWITCH_STATEMENT  {quadPopEndLabel();printf("Parsed Switch Statement\n");}
+                | FOR_STATEMENT {quadPopStartLabel();printf("Parsed For LOOP\n");}
+                
+                | BREAK SEMICOLON  {quadJumpEndLabel();}
                 | CONTINUE SEMICOLON
                 
                 | RETURN_STATEMENT SEMICOLON   {quadReturn();}
@@ -97,8 +99,7 @@ STATEMENT:
 
 //________________________________________________ PRINT STATEMENT ________________________________________________
 PRINT_STATEMENT:
-                PRINT '('EXPRESSION')' SEMICOLON
-                | PRINT '('EXPRESSION ',' EXPRESSION')' SEMICOLON
+                PRINT {insertResult=-1;} '('EXPRESSION')' SEMICOLON
                 ;               
 //________________________________________________ TYPE ________________________________________________
 TYPE:
@@ -171,13 +172,13 @@ RETURN_STATEMENT:
 
 //________________________________________________ SWITCH STATEMENT ________________________________________________
 SWITCH_STATEMENT:
-                SWITCH '(' IDENTIFIER {quadPushLastIdentifierStack($3);quadPushEndLabel(++endLabelNum);lookup($3, 0, number_of_line);} ')' '{' CASES  '}' {quadPopEndLabel();quadPopLastIdentifierStack();}
+                SWITCH '(' IDENTIFIER {quadPushLastIdentifierStack($3);lookup($3, 0, number_of_line);} ')' '{' CASES  '}' {quadPopLastIdentifierStack();}
                 ;
 DEFAULTCASE:
                 DEFAULT ':' BLOCK
                 ;
 CASES:
-                CASE EXPRESSION {quadJumpFalseLabel(++labelNum);}':' {quadPeakLastIdentifierStack();} BLOCK {quadPopLabel();} CASES
+                CASE EXPRESSION {quadPeakLastIdentifierStack();quadJumpFalseLabel(++labelNum);}':' BLOCK {quadPopLabel();} CASES
                 | DEFAULTCASE
                 | 
                 ;
@@ -199,10 +200,11 @@ ARG_DECL:
 //________________________________________________ IF STATEMENT ________________________________________________
 IF_TAIL: 
                 ELSE BLOCK
-                |
+                | ELSE IF_STATEMENT
+                | 
                 ;
 IF_STATEMENT:
-                IF EXPRESSION {quadJumpFalseLabel(++labelNum);} BLOCK {quadPushEndLabel(++endLabelNum);quadJumpEndLabel();quadPopEndLabel();quadPopLabel();} IF_TAIL         
+                IF EXPRESSION {quadJumpFalseLabel(++labelNum);} BLOCK {quadJumpEndLabel();quadPopLabel();} IF_TAIL         
                 ;
 
 //________________________________________________ WHILE STATEMENT ________________________________________________
