@@ -41,8 +41,6 @@
 
 "=="                     { num_of_words++; num_of_char+=yyleng;  return EQUALITY;}
 "!="                     { num_of_words++; num_of_char+=yyleng;  return NEG_EQUALITY;}
-"--"                     { num_of_words++; num_of_char+=yyleng;  return DEC;}
-"++"                     { num_of_words++; num_of_char+=yyleng;  return INC;}
 
 ">"                      { num_of_words++; num_of_char+=yyleng;  return GT;}
 "<"                      { num_of_words++; num_of_char+=yyleng;  return LT;}

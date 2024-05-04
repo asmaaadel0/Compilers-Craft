@@ -1,5 +1,13 @@
 ID	Name	Type	DataType	Line	Scope	isInit	Value		Args
-0	main	func	void		1	0	0	-		
-1	i	var	int		2	1	1	0		-
-2	b	var	int		4	2	1	10		-
-3	x	var	int		7	1	1	10		-
+0	a	var	int		1	0	1	2		-
+1	B	const	int		2	0	1	3		-
+2	c	var	int		5	0	1	2		-
+3	d	var	float		6	0	1	6.500000		-
+4	bo	var	bool		8	0	1	false		-
+5	s	var	string		10	0	1	"MangaCC"		-
+6	aaa	var	string		18	1	1	"C = C / 2"		-
+7	a	var	int		31	1	1	2		-
+8	b	var	int		31	1	1	3		-
+9	func	func	int		31	0	0	-		7,8,
+10	i	var	int		33	0	1	0		-
+11	e	var	int		42	0	1	3		-

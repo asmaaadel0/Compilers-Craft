@@ -59,15 +59,7 @@ struct nodeType *unary_operator(struct nodeType *op, char *operand, int number_o
     if (strcmp(op->type, "int") == 0)
     {
         p->type = "int";
-        if (strcmp(operand, "++") == 0)
-        {
-            p->value.intVal = op->value.intVal + 1;
-        }
-        else if (strcmp(operand, "--") == 0)
-        {
-            p->value.intVal = op->value.intVal - 1;
-        }
-        else if (strcmp(operand, "-") == 0)
+        if (strcmp(operand, "-") == 0)
         {
             p->value.intVal = -op->value.intVal;
         }
@@ -80,15 +72,7 @@ struct nodeType *unary_operator(struct nodeType *op, char *operand, int number_o
     else if (strcmp(op->type, "float") == 0)
     {
         p->type = "float";
-        if (strcmp(operand, "++") == 0)
-        {
-            p->value.floatVal = op->value.floatVal + 1;
-        }
-        else if (strcmp(operand, "--") == 0)
-        {
-            p->value.floatVal = op->value.floatVal - 1;
-        }
-        else if (strcmp(operand, "-") == 0)
+        if (strcmp(operand, "-") == 0)
         {
             p->value.floatVal = -op->value.floatVal;
         }

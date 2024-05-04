@@ -39,7 +39,7 @@
 %token FOR WHILE DO 
 
 %token BOOL_LITERAL LOGIC_AND LOGIC_OR LOGIC_NOT
-%token EQUALITY NEG_EQUALITY DEC INC 
+%token EQUALITY NEG_EQUALITY
 %token GT LT EQ
 %token SEMICOLON MODULO PLUS SUB MUL DIV POW BITWISE_OR BITWISE_AND SHL SHR
 
@@ -50,7 +50,7 @@
 %right LOGIC_NOT
 
 %left EQUALITY NEG_EQUALITY
-%left PLUS SUB INC DEC MODULO
+%left PLUS SUB MODULO
 
 %right POW
 
@@ -64,7 +64,7 @@
 %type <num> DIGIT
 %type <bool_val> BOOL_LITERAL
 
-%type <nPtr> STATEMENT EXPRESSION FUNC_CALL RETURN_STATEMENT DECLARATION_STATEMENT BREAK CONTINUE LOGIC_NOT RETURN INC DEC SUB '(' ')'
+%type <nPtr> STATEMENT EXPRESSION FUNC_CALL RETURN_STATEMENT DECLARATION_STATEMENT BREAK CONTINUE LOGIC_NOT RETURN SUB '(' ')'
 %%
 PROGRAM:                                                    
                 PROGRAM STATEMENT  {printf("Parsed Line %d Succesfully\n\n", number_of_line);}        
@@ -134,10 +134,6 @@ EXPRESSION:
                 | EXPRESSION GT EXPRESSION    {$$ = comparison($1, $3, ">", number_of_line);quadInstruction("GT");}            
                 | EXPRESSION GT EQ EXPRESSION {$$ = comparison($1, $4, ">=", number_of_line);quadInstruction("GEQ");}   
 
-                | INC EXPRESSION  {$$ = unary_operator($2, "++", number_of_line);quadInstruction("INC");}                 
-                | EXPRESSION INC  {$$ = unary_operator($1, "++", number_of_line);quadInstruction("INC");}                 
-                | DEC EXPRESSION  {$$ = unary_operator($2, "--", number_of_line);quadInstruction("DEC");}  
-                | EXPRESSION DEC  {$$ = unary_operator($1, "--", number_of_line);quadInstruction("DEC");}  
                 | SUB EXPRESSION  {$$ = unary_operator($2, "-",  number_of_line);quadInstruction("NEG");}          
     
                 | EXPRESSION MODULO EXPRESSION{$$ = arithmatic($1, $3, '%', number_of_line);quadInstruction("MOD");}         

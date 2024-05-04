@@ -84,28 +84,26 @@ extern int yydebug;
     LOGIC_NOT = 279,               /* LOGIC_NOT  */
     EQUALITY = 280,                /* EQUALITY  */
     NEG_EQUALITY = 281,            /* NEG_EQUALITY  */
-    DEC = 282,                     /* DEC  */
-    INC = 283,                     /* INC  */
-    GT = 284,                      /* GT  */
-    LT = 285,                      /* LT  */
-    EQ = 286,                      /* EQ  */
-    SEMICOLON = 287,               /* SEMICOLON  */
-    MODULO = 288,                  /* MODULO  */
-    PLUS = 289,                    /* PLUS  */
-    SUB = 290,                     /* SUB  */
-    MUL = 291,                     /* MUL  */
-    DIV = 292,                     /* DIV  */
-    POW = 293,                     /* POW  */
-    BITWISE_OR = 294,              /* BITWISE_OR  */
-    BITWISE_AND = 295,             /* BITWISE_AND  */
-    SHL = 296,                     /* SHL  */
-    SHR = 297,                     /* SHR  */
-    CONSTANT = 298,                /* CONSTANT  */
-    IDENTIFIER = 299,              /* IDENTIFIER  */
-    STRING_LITERAL = 300,          /* STRING_LITERAL  */
-    CHAR_LITERAL = 301,            /* CHAR_LITERAL  */
-    DIGIT = 302,                   /* DIGIT  */
-    FLOAT_DIGIT = 303              /* FLOAT_DIGIT  */
+    GT = 282,                      /* GT  */
+    LT = 283,                      /* LT  */
+    EQ = 284,                      /* EQ  */
+    SEMICOLON = 285,               /* SEMICOLON  */
+    MODULO = 286,                  /* MODULO  */
+    PLUS = 287,                    /* PLUS  */
+    SUB = 288,                     /* SUB  */
+    MUL = 289,                     /* MUL  */
+    DIV = 290,                     /* DIV  */
+    POW = 291,                     /* POW  */
+    BITWISE_OR = 292,              /* BITWISE_OR  */
+    BITWISE_AND = 293,             /* BITWISE_AND  */
+    SHL = 294,                     /* SHL  */
+    SHR = 295,                     /* SHR  */
+    CONSTANT = 296,                /* CONSTANT  */
+    IDENTIFIER = 297,              /* IDENTIFIER  */
+    STRING_LITERAL = 298,          /* STRING_LITERAL  */
+    CHAR_LITERAL = 299,            /* CHAR_LITERAL  */
+    DIGIT = 300,                   /* DIGIT  */
+    FLOAT_DIGIT = 301              /* FLOAT_DIGIT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -123,7 +121,7 @@ union YYSTYPE
 
  struct nodeType *nPtr;
 
-#line 127 "parser.tab.h"
+#line 125 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

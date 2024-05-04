@@ -44,7 +44,7 @@ void quadStartFunction(char *function)
 }
 void quadEndFunction(char *function)
 {
-    fprintf(quadFileP, "\tend %s\n", function);
+    fprintf(quadFileP, "\tEND %s\n", function);
 }
 void quadCallFunction(char *function)
 {
