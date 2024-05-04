@@ -74,6 +74,10 @@ void quadPushString(char *str)
 {
     fprintf(quadFileP, "PUSH %s\n", str);
 }
+void quadPushChar(char *ch)
+{
+    fprintf(quadFileP, "PUSH %s\n", ch);
+}
 void quadPopIdentifier(char *symbol)
 {
     fprintf(quadFileP, "POP %s\n", symbol);

@@ -89,7 +89,7 @@ STATEMENT:
                 | BREAK SEMICOLON              {quadJumpEndLabel();}
                 | CONTINUE SEMICOLON
                 
-                | RETURN_STATEMENT SEMICOLON
+                | RETURN_STATEMENT SEMICOLON   {quadReturn();}
                 | BLOCK                        {printf("Parsed Block\n");}
                 | FUNC_DECLARATION_STATEMENT   {printf("Parsed Function Declaration\n");}
                 
@@ -107,6 +107,7 @@ TYPE:
                 | BOOL      { $$ = "bool";  }
                 | STRING    { $$ = "string";}
                 | CHAR      { $$ = "char";}
+                | VOID      { $$ = "void";}
                 ;
 
 //________________________________________________ EXPRESSION ________________________________________________
@@ -117,7 +118,7 @@ EXPRESSION:
                 | FLOAT_DIGIT   {$$ = setType("float", 0, $1, 0, "", "");assign_float(insertResult, $1, number_of_line);quadPushFloat($1);}                 
                 | BOOL_LITERAL  {$$ = setType("bool", 0, 0.0, $1, "", "");assign_bool(insertResult, $1, number_of_line);quadPushInt($1);}   
                 | STRING_LITERAL{$$ = setType("string", 0, 0.0, 0, $1, "");assign_string(insertResult, $1, number_of_line);quadPushString($1);}                
-                | CHAR_LITERAL  {$$ = setType("char", 0, 0.0, 0, "", $1);assign_char(insertResult, $1, number_of_line);}                
+                | CHAR_LITERAL  {$$ = setType("char", 0, 0.0, 0, "", $1);assign_char(insertResult, $1, number_of_line);quadPushChar($1);}                
 
                 | EXPRESSION LOGIC_AND EXPRESSION{$$ = logical($1, $3, '&', number_of_line);quadInstruction("LOGICAL_AND");}    
                 | EXPRESSION LOGIC_OR EXPRESSION {$$ = logical($1, $3, '|', number_of_line);quadInstruction("LOGICAL_OR");} 
@@ -132,8 +133,8 @@ EXPRESSION:
                 | EXPRESSION GT EQ EXPRESSION {$$ = comparison($1, $4, ">=", number_of_line);quadInstruction("GEQ");}   
 
                 | INC EXPRESSION  {$$ = unary_operator($2, "++", number_of_line);quadInstruction("INC");}                 
-                | DEC EXPRESSION  {$$ = unary_operator($2, "--", number_of_line);quadInstruction("DEC");}  
                 | EXPRESSION INC  {$$ = unary_operator($1, "++", number_of_line);quadInstruction("INC");}                 
+                | DEC EXPRESSION  {$$ = unary_operator($2, "--", number_of_line);quadInstruction("DEC");}  
                 | EXPRESSION DEC  {$$ = unary_operator($1, "--", number_of_line);quadInstruction("DEC");}  
                 | SUB EXPRESSION  {$$ = unary_operator($2, "-",  number_of_line);quadInstruction("NEG");}          
     
@@ -155,8 +156,8 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
-                TYPE IDENTIFIER {insertResult = insert($1, $2, "var", number_of_line, false);quadPopIdentifier($2);}  DECLARATION_TAIL { insertResult = -1;printf("Parsed Declaration\n");}
-                | TYPE CONSTANT {insertResult = insert($1, $2, "const", number_of_line, false);quadPopIdentifier($2);}DECLARATION_TAIL { insertResult = -1;printf("Parsed Const Declaration\n"); }
+                TYPE IDENTIFIER {insertResult = insert($1, $2, "var", number_of_line, false);}  DECLARATION_TAIL { insertResult = -1;quadPopIdentifier($2);printf("Parsed Declaration\n");}
+                | TYPE CONSTANT {insertResult = insert($1, $2, "const", number_of_line, false);}DECLARATION_TAIL { insertResult = -1;quadPopIdentifier($2);printf("Parsed Const Declaration\n");}
                 ;
 DECLARATION_TAIL:
                 EQ EXPRESSION SEMICOLON                                
@@ -164,8 +165,8 @@ DECLARATION_TAIL:
                 ;
 
 RETURN_STATEMENT:
-                RETURN {quadReturn();}                  
-                | RETURN {insertResult = funcIndex;quadReturn();} EXPRESSION {returnExist = 1;}  
+                RETURN               
+                | RETURN {insertResult = funcIndex;} EXPRESSION {returnExist = 1;}  
                 ;
 
 //________________________________________________ SWITCH STATEMENT ________________________________________________
@@ -176,30 +177,32 @@ DEFAULTCASE:
                 DEFAULT ':' BLOCK
                 ;
 CASES:
-                CASE EXPRESSION ':' {quadPeakLastIdentifierStack();quadJumpFalseLabel(++labelNum);} BLOCK {quadPopLabel();} CASES
+                CASE EXPRESSION {quadJumpFalseLabel(++labelNum);}':' {quadPeakLastIdentifierStack();} BLOCK {quadPopLabel();} CASES
                 | DEFAULTCASE
                 | 
                 ;
 
 //________________________________________________ FUNCTION DECLARATION STATEMENT ________________________________________________
+
 FUNC_DECLARATION_STATEMENT:
-                TYPE IDENTIFIER '(' ARGS ')'{quadStartFunction($2);funcIndex = insert($1, $2,"func", number_of_line, 0);} BLOCK {quadEndFunction($2);}                                 
-                | VOID IDENTIFIER '(' ARGS ')'{quadStartFunction($2);funcIndex = insert("void", $2,"func", number_of_line, 0);}BLOCK {quadEndFunction($2);}
-                | TYPE IDENTIFIER '(' ')' {quadStartFunction($2);funcIndex = insert($1, $2,"func", number_of_line, 0);} BLOCK {quadEndFunction($2);}                                  
-                | VOID IDENTIFIER '(' ')' {quadStartFunction($2);funcIndex = insert("void", $2,"func", number_of_line, 0);}BLOCK {quadEndFunction($2);} 
+                TYPE IDENTIFIER {quadStartFunction($2);} '(' ARGS ')'{funcIndex = insert($1, $2,"func", number_of_line, 0);} BLOCK {quadEndFunction($2);}                                 
                 ;
 ARGS:
                 ARG_DECL ',' ARGS
                 | ARG_DECL
+                | 
                 ;
 ARG_DECL:
                 TYPE IDENTIFIER {quadPopIdentifier($2);insertResult = insert($1, $2,"var", number_of_line, true);}
                 ;
 
 //________________________________________________ IF STATEMENT ________________________________________________
+IF_TAIL: 
+                ELSE BLOCK
+                |
+                ;
 IF_STATEMENT:
-                  IF EXPRESSION BLOCK {quadPushEndLabel(++endLabelNum);quadJumpEndLabel();quadPopEndLabel();quadJumpFalseLabel(++labelNum);quadPopLabel();}          
-                | IF EXPRESSION BLOCK {quadPushEndLabel(++endLabelNum);quadJumpEndLabel();} ELSE BLOCK {quadPopLabel();}
+                IF EXPRESSION {quadJumpFalseLabel(++labelNum);} BLOCK {quadPushEndLabel(++endLabelNum);quadJumpEndLabel();quadPopEndLabel();quadPopLabel();} IF_TAIL         
                 ;
 
 //________________________________________________ WHILE STATEMENT ________________________________________________
@@ -212,18 +215,18 @@ DO_WHILE_STATEMENT:
                 ;
 //________________________________________________ FOR STATEMENT ________________________________________________
 FOR_STATEMENT:
-                FOR '(' {inLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum);} STATEMENT STATEMENT ')' {quadJumpFalseLabel(++labelNum);inLoop = 0;} BLOCK {quadPopLabel();quadJumpStartLabel();}
+                FOR '(' {inLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum);} STATEMENT STATEMENT {quadJumpFalseLabel(++labelNum);} ')' {inLoop = 0;} BLOCK {quadPopLabel();quadJumpStartLabel();}
                 ;
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
-                IDENTIFIER EQ {insertResult = lookup($1, 1, number_of_line);quadPopIdentifier($1);} EXPRESSION SEMICOLON   
+                IDENTIFIER EQ {insertResult = lookup($1, 1, number_of_line);} EXPRESSION SEMICOLON {quadPopIdentifier($1);} 
                 | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);exit(1);insertResult = -1;} EXPRESSION SEMICOLON   
                 ;
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-                IDENTIFIER {calledFuncIndex = lookup($1, 0, number_of_line);check_type(calledFuncIndex, number_of_line);quadCallFunction($1);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;arg_count_check(calledFuncIndex, number_of_line);} ')' { printf("Parsed Function Call\n");}
+                IDENTIFIER {calledFuncIndex = lookup($1, 0, number_of_line);check_type(calledFuncIndex, number_of_line);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;arg_count_check(calledFuncIndex, number_of_line);} ')' {quadCallFunction($1);printf("Parsed Function Call\n");}
                 ;       
 ARGUMENTS:      
                 EXPRESSION { argCount++; } ',' ARGUMENTS 
