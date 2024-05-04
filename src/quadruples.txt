@@ -1,8 +1,420 @@
+PUSH 3
+POP a
+PUSH 10
+POP b
+PUSH a
+PUSH b
+ADD
+POP c
+PUSH b
+PUSH a
+SUB
+PUSH c
+ADD
+PUSH 2
+PUSH 3
+MUL
+ADD
+POP d
+PUSH "declaration"
+PUSH 5
+POP A
+PUSH 5
+NEG
+POP b
+PUSH b
+PUSH b
+NEG
+PUSH 5.500000
+POP f
+PUSH b
+PUSH 1
+POP c
+PUSH c
+PUSH d
+PUSH 10
+POP A
+PUSH A
+PUSH "logic"
+PUSH 1
+POP a
 PUSH 0
-POP i
+POP b
+PUSH a
+PUSH b
+PUSH a
+PUSH b
+EQ
+PUSH a
+PUSH b
+NEQ
+PUSH a
+PUSH b
+LT
+PUSH a
+PUSH b
+GT
+PUSH a
+PUSH b
+LEQ
+PUSH a
+PUSH b
+GEQ
+PUSH "More logic"
+PUSH a
+LOGICAL_NOT
+PUSH "assignment"
+PUSH 10
+POP a
+PUSH 10
+POP b
+PUSH 2
+POP c
+PUSH a
+PUSH b
+MUL
+PUSH c
+ADD
+POP d
+PUSH a
+PUSH 10
+EQ
+PUSH b
+PUSH 10
+EQ
+PUSH c
+PUSH 2
+EQ
+PUSH d
+PUSH 102
+EQ
+PUSH "arithmetic"
+PUSH 10
+POP a
+PUSH 10
+POP b
+PUSH a
+NEG
+PUSH 10
+NEG
+EQ
+PUSH a
+PUSH b
+ADD
+PUSH 20
+EQ
+PUSH a
+PUSH b
+SUB
+PUSH 0
+EQ
+PUSH a
+PUSH b
+DIV
+PUSH 1
+EQ
+PUSH a
+PUSH c
+MOD
+PUSH 0
+EQ
+PUSH a
+PUSH b
+MUL
+PUSH b
+SUB
+PUSH a
+PUSH b
+DIV
+ADD
+PUSH 91
+EQ
+PUSH 100
+PUSH 5
+SUB
+PUSH 100
+NEG
+PUSH 5
+SUB
+PUSH 5
+ADD
+PUSH "bitwise"
+PUSH 10
+POP a
+PUSH 10
+POP b
+PUSH 2
+POP c
+PUSH a
+PUSH b
+MUL
+PUSH c
+ADD
+POP d
+PUSH a
+PUSH c
+BITWISE_OR
+PUSH 10
+EQ
+PUSH a
+PUSH c
+BITWISE_AND
+PUSH 2
+EQ
+PUSH a
+PUSH c
+POW
+PUSH 8
+EQ
+PUSH a
+PUSH c
+SHL
+PUSH 40
+EQ
+PUSH a
+PUSH c
+SHR
+PUSH 2
+EQ
+PUSH a
+PUSH c
+SHL
+PUSH c
+SHR
+PUSH 10
+EQ
+PUSH 10
+POP a
+PUSH a
+PUSH 10
+EQ
+JF Label_1
+PUSH "if"
+JMP EndLabel_1
+Label_1:
+PUSH a
+PUSH 11
+EQ
+JF Label_2
+PUSH "elif"
+JMP EndLabel_1
+Label_2:
+PUSH a
+PUSH 12
+EQ
+JF Label_3
+PUSH "elif"
+JMP EndLabel_1
+Label_3:
+PUSH 10
+POP a
+PUSH a
+PUSH 10
+EQ
+JF Label_4
+PUSH "if"
+PUSH "another if"
+JMP EndLabel_2
+Label_4:
+PUSH a
+PUSH 11
+EQ
+JF Label_5
+PUSH "else"
+PUSH "another else"
+JMP EndLabel_2
+Label_5:
+EndLabel_2:
+EndLabel_1:
+PUSH 10
+POP a
+PUSH "while loops"
 StartLabel_1:
-PUSH i
+PUSH a
+PUSH 20
+LT
+JF Label_6
+PUSH a
+PUSH a
 PUSH 1
 ADD
-PUSH "hellooo"); ) { print("lol"
-JF Label_1
+POP a
+Label_6:
+JMP StartLabel_1
+PUSH a
+StartLabel_2:
+PUSH a
+PUSH 20
+LT
+JF Label_7
+PUSH a
+PUSH 10
+EQ
+JF Label_8
+PUSH a
+JMP EndLabel_3
+Label_8:
+EndLabel_3:
+PUSH a
+PUSH 1
+ADD
+POP a
+Label_7:
+JMP StartLabel_2
+PUSH a
+PUSH "for loops"
+PUSH 2
+POP a
+StartLabel_3:
+PUSH a
+PUSH 10
+LT
+PUSH a
+PUSH 1
+ADD
+POP a
+JF Label_9
+PUSH a
+Label_9:
+JMP StartLabel_3
+PUSH 2
+POP a
+StartLabel_4:
+PUSH a
+PUSH 10
+LT
+PUSH a
+PUSH 1
+ADD
+POP a
+JF Label_10
+PUSH a
+PUSH a
+POP b
+StartLabel_5:
+PUSH b
+PUSH 10
+LT
+JF Label_11
+PUSH b
+PUSH 5
+EQ
+JF Label_12
+PUSH "hi"
+PUSH b
+JMP EndLabel_4
+Label_12:
+EndLabel_4:
+PUSH b
+PUSH 1
+ADD
+POP b
+Label_11:
+JMP StartLabel_5
+Label_10:
+JMP StartLabel_4
+PUSH "do loops"
+PUSH 0
+POP a
+StartLabel_6:
+PUSH a
+PUSH a
+PUSH 1
+ADD
+POP a
+PUSH a
+PUSH a
+PUSH 1
+EQ
+JF Label_13
+Label_13:
+JMP StartLabel_6
+StartLabel_7:
+PUSH a
+PUSH a
+PUSH 1
+ADD
+POP a
+PUSH a
+PUSH 1
+EQ
+JF Label_14
+PUSH a
+JMP EndLabel_5
+Label_14:
+EndLabel_5:
+PUSH a
+PUSH 1
+EQ
+JF Label_15
+Label_15:
+JMP StartLabel_7
+PUSH "switch case loops"
+PUSH "default"
+JMP EndLabel_6
+EndLabel_6:
+PUSH 1
+PUSH a
+JF Label_16
+PUSH "1"
+JMP EndLabel_7
+Label_16:
+PUSH 2
+PUSH a
+JF Label_17
+PUSH "2"
+JMP EndLabel_7
+Label_17:
+PUSH 3
+PUSH a
+JF Label_18
+PUSH "3"
+JMP EndLabel_7
+Label_18:
+EndLabel_7:
+PUSH 1
+PUSH a
+JF Label_19
+PUSH "1"
+JMP EndLabel_8
+Label_19:
+PUSH 2
+PUSH a
+JF Label_20
+PUSH "2"
+JMP EndLabel_8
+Label_20:
+PUSH 3
+PUSH a
+JF Label_21
+PUSH "3"
+JMP EndLabel_8
+Label_21:
+PUSH "default"
+JMP EndLabel_8
+EndLabel_8:
+PROC y
+PUSH "y"
+PUSH 1
+RET
+ENDPROC y
+PROC x
+POP a
+POP b
+PUSH "add"
+PUSH a
+PUSH b
+ADD
+RET
+ENDPROC x
+PUSH "functions"
+PUSH 0
+POP a
+PUSH a
+PUSH 1
+ADD
+PUSH "x"
+PUSH 1
+PUSH 2
+CALL x
+POP a
