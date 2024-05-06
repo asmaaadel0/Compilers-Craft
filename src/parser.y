@@ -83,10 +83,10 @@ STATEMENT:
                
                 | PRINT_STATEMENT            {printf("Parsed print statement\n");}
                 
-                | {quadPushEndLabel(++endLabelNum);}     IF_STATEMENT      {quadPopEndLabel();printf("Parsed if statement\n");}
-                | {quadPushStartLabel(++startLabelNum);} WHILE_STATEMENT   {quadPopStartLabel();printf("Parsed While LOOP\n");}         
-                | {quadPushStartLabel(++startLabelNum);} DO_WHILE_STATEMENT{quadPopStartLabel();printf("Parsed Do While LOOP\n");}      
-                | {quadPushEndLabel(++endLabelNum);}     SWITCH_STATEMENT  {quadPopEndLabel();printf("Parsed Switch Statement\n");}
+                | {quadPushEndLabel(++endLabelNum);}    IF_STATEMENT      {quadPopEndLabel();printf("Parsed if statement\n");}
+                | {quadPushStartLabel(++startLabelNum);}WHILE_STATEMENT   {quadPopStartLabel();printf("Parsed While LOOP\n");}         
+                | {quadPushStartLabel(++startLabelNum);}DO_WHILE_STATEMENT{quadPopStartLabel();printf("Parsed Do While LOOP\n");}      
+                | {quadPushEndLabel(++endLabelNum);}    SWITCH_STATEMENT  {quadPopEndLabel();printf("Parsed Switch Statement\n");}
                 | FOR_STATEMENT {quadPopStartLabel();printf("Parsed For LOOP\n");}
                 
                 | BREAK SEMICOLON  {quadJumpEndLabel();}
@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
     yyin = fopen(argv[1], "r");
     yyparse();
     // display();
-    // display_unused_variables();
+    display_unused_variables();
     display_to_file("symbol_table.txt");
 
     return 0;

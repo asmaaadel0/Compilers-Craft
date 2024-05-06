@@ -1412,7 +1412,7 @@ yyreduce:
 
   case 11: /* STATEMENT: $@2 IF_STATEMENT  */
 #line 86 "./parser.y"
-                                                                           {quadPopEndLabel();printf("Parsed if statement\n");}
+                                                                          {quadPopEndLabel();printf("Parsed if statement\n");}
 #line 1417 "parser.tab.c"
     break;
 
@@ -1424,7 +1424,7 @@ yyreduce:
 
   case 13: /* STATEMENT: $@3 WHILE_STATEMENT  */
 #line 87 "./parser.y"
-                                                                           {quadPopStartLabel();printf("Parsed While LOOP\n");}
+                                                                          {quadPopStartLabel();printf("Parsed While LOOP\n");}
 #line 1429 "parser.tab.c"
     break;
 
@@ -1436,7 +1436,7 @@ yyreduce:
 
   case 15: /* STATEMENT: $@4 DO_WHILE_STATEMENT  */
 #line 88 "./parser.y"
-                                                                           {quadPopStartLabel();printf("Parsed Do While LOOP\n");}
+                                                                          {quadPopStartLabel();printf("Parsed Do While LOOP\n");}
 #line 1441 "parser.tab.c"
     break;
 
@@ -1448,7 +1448,7 @@ yyreduce:
 
   case 17: /* STATEMENT: $@5 SWITCH_STATEMENT  */
 #line 89 "./parser.y"
-                                                                           {quadPopEndLabel();printf("Parsed Switch Statement\n");}
+                                                                          {quadPopEndLabel();printf("Parsed Switch Statement\n");}
 #line 1453 "parser.tab.c"
     break;
 
@@ -2108,7 +2108,7 @@ int main(int argc, char *argv[])
     yyin = fopen(argv[1], "r");
     yyparse();
     // display();
-    // display_unused_variables();
+    display_unused_variables();
     display_to_file("symbol_table.txt");
 
     return 0;

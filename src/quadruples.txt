@@ -1,6 +1,2 @@
 	PUSH 0
 	POP x
-	PUSH x
-	PUSH 1
-	ADD
-	POP x
