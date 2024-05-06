@@ -1,2 +1,19 @@
-int x = 5.5;
-print("enter");
+int x =5;
+int y=6.5;
+int z= true;
+int w = false;
+print(x);
+
+float a=7.7;
+float b= 6;
+float c= true;
+float d= false;
+
+bool q= true;
+bool r =false;
+bool s =6;
+bool t =6.5;
+bool m = 0;
+bool n =0.0;
+
+string s1 ="hello";

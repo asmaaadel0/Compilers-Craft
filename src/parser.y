@@ -6,13 +6,11 @@
     #include "parser.tab.h"
     #include "symbol_table.cpp"
     #include "operation.cpp"
-    #include "quadruples.cpp"
     
     void yyerror(char* );
     int yylex();
     extern FILE *yyin;
     extern int number_of_line;
-    int isPrint = 0;
 %}
 
 %union { 
@@ -116,11 +114,11 @@ TYPE:
 EXPRESSION:
                 IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype);if(!isPrint)quadPushIdentifier($1);}                
                 | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype);if(!isPrint)quadPushIdentifier($1);}
-                | DIGIT         {$$ = setType("int");assign_int(insertResult, $1, number_of_line);if(!isPrint)quadPushInt($1);}       
-                | FLOAT_DIGIT   {$$ = setType("float");assign_float(insertResult, $1, number_of_line);if(!isPrint)quadPushFloat($1);}                 
-                | BOOL_LITERAL  {$$ = setType("bool");assign_bool(insertResult, $1, number_of_line);if(!isPrint)quadPushInt($1);}   
-                | STRING_LITERAL{$$ = setType("string");assign_string(insertResult, $1, number_of_line);if(!isPrint)quadPushString($1);}                
-                | CHAR_LITERAL  {$$ = setType("char");assign_char(insertResult, $1, number_of_line);if(!isPrint)quadPushChar($1);}                
+                | DIGIT         {$$ = setType("int");assign_int(insertResult, $1, number_of_line);}       
+                | FLOAT_DIGIT   {$$ = setType("float");assign_float(insertResult, $1, number_of_line);}                 
+                | BOOL_LITERAL  {$$ = setType("bool");assign_bool(insertResult, $1, number_of_line);}   
+                | STRING_LITERAL{$$ = setType("string");assign_string(insertResult, $1, number_of_line);}                
+                | CHAR_LITERAL  {$$ = setType("char");assign_char(insertResult, $1, number_of_line);}                
 
                 | '(' EXPRESSION ')'  {$$ = $2;}
                 | FUNC_CALL                                
