@@ -251,8 +251,6 @@ int main(int argc, char *argv[])
     // display_unused_variables();
     display_unused_variables_to_file("unused_variables");
     display_symbol_table_to_file("symbol_table.txt");
-
-    printf("compiled successfully!");
-
+    
     return 0;
 }

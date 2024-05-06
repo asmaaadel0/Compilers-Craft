@@ -22,22 +22,21 @@ def compile_code():
         file.write(code)
     
     status_bar.config(text="Compiling...", fg="white", bg="blue")
+   
     compiler = "..\src\out.exe temp.txt"
     process = subprocess.Popen(compiler, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    out, err = process.communicate()
-    
-    if err:
+    out, _ = process.communicate()
+
+    with open('error_file.txt') as f:
+        contents = f.read()
+    if contents:    
         output_panel.delete(1.0, tk.END)
-        output_panel.insert(tk.END, err.decode("utf-8"), "error") 
-        
-        status_bar.config(text="Syntax Error", fg="white", bg="red")
-    else:
-        output_panel.delete(1.0, tk.END)
-        
         output_panel.insert(tk.END, out.decode("utf-8"))
-        
+        status_bar.config(text="Error", fg="white", bg="red")
+    else: 
+        output_panel.delete(1.0, tk.END)
+        output_panel.insert(tk.END, out.decode("utf-8"))
         status_bar.config(text="Compiled Successfully!", fg="white", bg="green")
-    os.remove(file_path)    
 
 
 root = tk.Tk()
@@ -52,7 +51,6 @@ file_menu.add_separator()
 file_menu.add_command(label="Exit", command=root.quit)
 menu_bar.add_cascade(label="File", menu=file_menu)
 root.config(menu=menu_bar)
-
 code_editor = tk.Text(root, wrap=tk.WORD)
 code_editor.pack(expand=True, fill=tk.BOTH)
 
