@@ -1,77 +1,76 @@
 %{
     #include "parser.tab.h"
     int number_of_line = 1;
-    int num_of_char;
-    int num_of_words;
 %}
 
 %%
 \/\/[\s\t]*.*[\s\t]*        {/* Ignore comments */ }
 
-"int"                    { num_of_words++; num_of_char+=yyleng;  return INT;}
-"float"                  { num_of_words++; num_of_char+=yyleng;  return FLOAT;}
-"string"                 { num_of_words++; num_of_char+=yyleng;  return STRING;}
-"char"                   { num_of_words++; num_of_char+=yyleng;  return CHAR;}
-"bool"                   { num_of_words++; num_of_char+=yyleng;  return BOOL;}
+"int"                    {return INT;}
+"float"                  {return FLOAT;}
+"string"                 {return STRING;}
+"char"                   {return CHAR;}
+"bool"                   {return BOOL;}
 
-"print"                  { num_of_words++; num_of_char+=yyleng;  return PRINT;}
-"void"                   { num_of_words++; num_of_char+=yyleng;  return VOID;}
-"return"                 { num_of_words++; num_of_char+=yyleng;  return RETURN;}
+"print"                  {return PRINT;}
+"void"                   {return VOID;}
+"return"                 {return RETURN;}
 
-"switch"                 { num_of_words++; num_of_char+=yyleng;  return SWITCH;}
-"break"                  { num_of_words++; num_of_char+=yyleng;  return BREAK;}
-"continue"               { num_of_words++; num_of_char+=yyleng;  return CONTINUE;}
+"switch"                 {return SWITCH;}
+"break"                  {return BREAK;}
+"continue"               {return CONTINUE;}
 
-"case"                   { num_of_words++; num_of_char+=yyleng;  return CASE;}
-"default"                { num_of_words++; num_of_char+=yyleng;  return DEFAULT;}
+"case"                   {return CASE;}
+"default"                {return DEFAULT;}
 
-"if"                     { num_of_words++; num_of_char+=yyleng;  return IF;}
-"else"                   { num_of_words++; num_of_char+=yyleng;  return ELSE;}
+"if"                     {return IF;}
+"else"                   {return ELSE;}
 
-"for"                    { num_of_words++; num_of_char+=yyleng;  return FOR;}
-"while"                  { num_of_words++; num_of_char+=yyleng;  return WHILE;}
-"do"                     { num_of_words++; num_of_char+=yyleng;  return DO;}
+"for"                    {return FOR;}
+"while"                  {return WHILE;}
+"do"                     {return DO;}
 
-"true"                   { num_of_words++; num_of_char+=yyleng; yylval.bool_val = true; return BOOL_LITERAL;}
-"false"                  { num_of_words++; num_of_char+=yyleng; yylval.bool_val = false;return BOOL_LITERAL;}     
+"true"                   {yylval.bool_val = true; return BOOL_LITERAL;}
+"false"                  {yylval.bool_val = false;return BOOL_LITERAL;}     
 
-"and"                    { num_of_words++; num_of_char+=yyleng;  return LOGIC_AND;}
-"or"                     { num_of_words++; num_of_char+=yyleng;  return LOGIC_OR;}
-"!"                      { num_of_words++; num_of_char+=yyleng;  return LOGIC_NOT;}
+"and"                    {return LOGIC_AND;}
+"or"                     {return LOGIC_OR;}
+"!"                      {return LOGIC_NOT;}
 
-"=="                     { num_of_words++; num_of_char+=yyleng;  return EQUALITY;}
-"!="                     { num_of_words++; num_of_char+=yyleng;  return NEG_EQUALITY;}
+"=="                     {return EQUALITY;}
+"!="                     {return NEG_EQUALITY;}
 
-">"                      { num_of_words++; num_of_char+=yyleng;  return GT;}
-"<"                      { num_of_words++; num_of_char+=yyleng;  return LT;}
+">"                      {return GT;}
+"<"                      {return LT;}
 
-"="                      { num_of_words++; num_of_char+=yyleng;  return EQ;}         
-";"                      { num_of_words++; num_of_char+=yyleng;  return SEMICOLON;}
+"="                      {return EQ;}         
+";"                      {return SEMICOLON;}
 
-"%"                      { num_of_words++; num_of_char+=yyleng; return MODULO;}
-"+"                      { num_of_words++; num_of_char+=yyleng; return PLUS;}
-"-"                      { num_of_words++; num_of_char+=yyleng; return SUB;}
-"*"                      { num_of_words++; num_of_char+=yyleng; return MUL;}
-"/"                      { num_of_words++; num_of_char+=yyleng; return DIV;}
-"^"                      { num_of_words++; num_of_char+=yyleng; return POW;}
+"%"                      {return MODULO;}
+"+"                      {return PLUS;}
+"-"                      {return SUB;}
+"*"                      {return MUL;}
+"/"                      {return DIV;}
+"^"                      {return POW;}
 
-"|"                      { num_of_words++; num_of_char+=yyleng; return BITWISE_OR;}
-"&"                      { num_of_words++; num_of_char+=yyleng; return BITWISE_AND;}
-"<<"                     { num_of_words++; num_of_char+=yyleng; return SHL;}
-">>"                     { num_of_words++; num_of_char+=yyleng; return SHR;}
+"|"                      {return BITWISE_OR;}
+"&"                      {return BITWISE_AND;}
+"<<"                     {return SHL;}
+">>"                     {return SHR;}
 
 
-[){}(:,]                 { num_of_words++; num_of_char+=yyleng;                              return *yytext;}
-[A-Z]+                   { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext); return CONSTANT;}
-[a-zA-Z_][a-zA-Z0-9_]*   { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext); return IDENTIFIER;}
-\'.\'         { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext); return CHAR_LITERAL;}
-\".*\"        { num_of_words++; num_of_char+=yyleng; yylval.str = strdup(yytext); return STRING_LITERAL;}
+[){}(:,]               {return *yytext;}
+[A-Z]+                 {yylval.str = strdup(yytext); return CONSTANT;}
+[a-zA-Z_][a-zA-Z0-9_]* {yylval.str = strdup(yytext); return IDENTIFIER;}
 
-[0-9]+                   { num_of_words++; num_of_char+=yyleng; yylval.num = atoi(yytext);     return DIGIT;}
-[0-9]+\.[0-9]+           { num_of_words++; num_of_char+=yyleng; yylval.float_val= atof(yytext);return FLOAT_DIGIT;}
+\'.\'         {yylval.str = strdup(yytext); return CHAR_LITERAL;}
+\".*\"        {yylval.str = strdup(yytext); return STRING_LITERAL;}
 
-[ \t]+                   /* Ignore spaces */                   
-\n                       { num_of_char++; number_of_line++;}
-.                        { num_of_char++; return *yytext;}
+[0-9]+         {yylval.num = atoi(yytext);     return DIGIT;}
+[0-9]+\.[0-9]+ {yylval.float_val= atof(yytext);return FLOAT_DIGIT;}
+
+[ \t]+         /* Ignore spaces */                   
+\n             {number_of_line++;}
+.              {return *yytext;}
 %%
 
