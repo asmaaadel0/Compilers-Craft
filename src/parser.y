@@ -122,34 +122,34 @@ EXPRESSION:
                 | STRING_LITERAL{$$ = setType("string");assign_string(insertResult, $1, number_of_line);if(!isPrint)quadPushString($1);}                
                 | CHAR_LITERAL  {$$ = setType("char");assign_char(insertResult, $1, number_of_line);if(!isPrint)quadPushChar($1);}                
 
-                | '(' EXPRESSION ')'                {$$ = $2;}
+                | '(' EXPRESSION ')'  {$$ = $2;}
                 | FUNC_CALL                                
                 
-                | SUB EXPRESSION  {unary_operator($2,  number_of_line);quadInstruction("NEG");}          
-                | LOGIC_NOT EXPRESSION {logical($2, NULL, number_of_line);quadInstruction("LOGICAL_NOT");}
+                | SUB EXPRESSION      {$$ = unary_operator($2,  number_of_line);quadInstruction("NEG");}          
+                | LOGIC_NOT EXPRESSION{$$ = logical($2, NULL, number_of_line);quadInstruction("LOGICAL_NOT");}
 
-                | EXPRESSION PLUS EXPRESSION  {arithmatic($1, $3, number_of_line);quadInstruction("ADD");}
-                | EXPRESSION SUB EXPRESSION   {arithmatic($1, $3, number_of_line);quadInstruction("SUB");}           
-                | EXPRESSION MUL EXPRESSION   {arithmatic($1, $3, number_of_line);quadInstruction("MUL");}          
-                | EXPRESSION DIV EXPRESSION   {arithmatic($1, $3, number_of_line);quadInstruction("DIV");}           
-                | EXPRESSION POW EXPRESSION   {arithmatic($1, $3, number_of_line);quadInstruction("POW");}
-                | EXPRESSION MODULO EXPRESSION{arithmatic($1, $3, number_of_line);quadInstruction("MOD");}         
+                | EXPRESSION PLUS EXPRESSION  {$$ = arithmatic($1, $3, number_of_line);quadInstruction("ADD");}
+                | EXPRESSION SUB EXPRESSION   {$$ = arithmatic($1, $3, number_of_line);quadInstruction("SUB");}           
+                | EXPRESSION MUL EXPRESSION   {$$ = arithmatic($1, $3, number_of_line);quadInstruction("MUL");}          
+                | EXPRESSION DIV EXPRESSION   {$$ = arithmatic($1, $3, number_of_line);quadInstruction("DIV");}           
+                | EXPRESSION POW EXPRESSION   {$$ = arithmatic($1, $3, number_of_line);quadInstruction("POW");}
+                | EXPRESSION MODULO EXPRESSION{$$ = arithmatic($1, $3, number_of_line);quadInstruction("MOD");}         
                 
-                | EXPRESSION BITWISE_OR EXPRESSION  {bitwise($1, $3, number_of_line);quadInstruction("BITWISE_OR");}
-                | EXPRESSION BITWISE_AND EXPRESSION {bitwise($1, $3, number_of_line);quadInstruction("BITWISE_AND");}
-                | EXPRESSION SHL EXPRESSION         {bitwise($1, $3, number_of_line);quadInstruction("SHL");}
-                | EXPRESSION SHR EXPRESSION         {bitwise($1, $3, number_of_line);quadInstruction("SHR");}
+                | EXPRESSION BITWISE_OR EXPRESSION  {$$ = bitwise($1, $3, number_of_line);quadInstruction("BITWISE_OR");}
+                | EXPRESSION BITWISE_AND EXPRESSION {$$ = bitwise($1, $3, number_of_line);quadInstruction("BITWISE_AND");}
+                | EXPRESSION SHL EXPRESSION         {$$ = bitwise($1, $3, number_of_line);quadInstruction("SHL");}
+                | EXPRESSION SHR EXPRESSION         {$$ = bitwise($1, $3, number_of_line);quadInstruction("SHR");}
                 
-                | EXPRESSION LOGIC_AND EXPRESSION{logical($1, $3, number_of_line);quadInstruction("LOGICAL_AND");}    
-                | EXPRESSION LOGIC_OR EXPRESSION {logical($1, $3, number_of_line);quadInstruction("LOGICAL_OR");} 
+                | EXPRESSION LOGIC_AND EXPRESSION{$$ = logical($1, $3, number_of_line);quadInstruction("LOGICAL_AND");}    
+                | EXPRESSION LOGIC_OR EXPRESSION {$$ = logical($1, $3, number_of_line);quadInstruction("LOGICAL_OR");} 
 
-                | EXPRESSION EQUALITY EXPRESSION    {comparison($1, $3, number_of_line);quadInstruction("EQ");}  
-                | EXPRESSION NEG_EQUALITY EXPRESSION{comparison($1, $3, number_of_line);quadInstruction("NEQ");} 
+                | EXPRESSION EQUALITY EXPRESSION    {$$ = comparison($1, $3, number_of_line);quadInstruction("EQ");}  
+                | EXPRESSION NEG_EQUALITY EXPRESSION{$$ = comparison($1, $3, number_of_line);quadInstruction("NEQ");} 
 
-                | EXPRESSION GT EXPRESSION    {comparison($1, $3, number_of_line);quadInstruction("GT");}            
-                | EXPRESSION GT EQ EXPRESSION {comparison($1, $4, number_of_line);quadInstruction("GEQ");}        
-                | EXPRESSION LT EXPRESSION    {comparison($1, $3, number_of_line);quadInstruction("LT");}             
-                | EXPRESSION LT EQ EXPRESSION {comparison($1, $4, number_of_line);quadInstruction("LEQ");}         
+                | EXPRESSION GT EXPRESSION    {$$ = comparison($1, $3, number_of_line);quadInstruction("GT");}            
+                | EXPRESSION GT EQ EXPRESSION {$$ = comparison($1, $4, number_of_line);quadInstruction("GEQ");}        
+                | EXPRESSION LT EXPRESSION    {$$ = comparison($1, $3, number_of_line);quadInstruction("LT");}             
+                | EXPRESSION LT EQ EXPRESSION {$$ = comparison($1, $4, number_of_line);quadInstruction("LEQ");}         
                 ;               
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
