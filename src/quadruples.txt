@@ -1,28 +1,5 @@
-	PUSH 1
-	POP ahmed
-	PUSH 5
-	POP y
-	PUSH y
-	POP x
-	PUSH 8.300000
-	POP x
-	PUSH 5
-	POP x
-	PUSH 6
-	POP y
-main:
-	PUSH 5
-	POP x
-	PUSH 6
-	POP x
-	END main
-func:
-	POP x
-	POP y
-	PUSH 5.600000
-	POP x
-	PUSH x
-	PUSH y
+	PUSH 100
+	PUSH 200
+	PUSH 10
+	DIV
 	ADD
-	RET
-	END func

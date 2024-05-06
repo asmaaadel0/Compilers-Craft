@@ -611,8 +611,8 @@ static const yytype_uint8 yyrline[] =
       86,    86,    87,    87,    88,    88,    89,    89,    90,    92,
       93,    95,    96,    97,   103,   103,   107,   108,   109,   110,
      111,   112,   117,   118,   119,   120,   121,   122,   123,   125,
-     126,   127,   129,   130,   132,   133,   134,   135,   137,   139,
-     140,   141,   142,   143,   144,   146,   147,   148,   149,   151,
+     126,   128,   129,   131,   132,   133,   134,   135,   136,   138,
+     139,   140,   141,   143,   144,   146,   147,   149,   150,   151,
      152,   157,   157,   158,   158,   159,   159,   160,   160,   165,
      166,   166,   171,   171,   174,   177,   177,   177,   178,   179,
      185,   185,   185,   188,   189,   190,   193,   198,   199,   200,
@@ -704,17 +704,17 @@ static const yytype_int8 yydefact[] =
        3,    10,     1,    26,    27,    29,    28,    30,    24,    31,
       70,     0,     0,     0,    36,     0,     0,    33,    32,    37,
       38,    34,    35,     0,     4,    22,     2,     0,     0,     0,
-       0,     9,     0,     0,     6,     0,    23,    18,     7,    59,
-       0,     0,    19,    20,    96,    33,    32,    41,    48,   103,
+       0,     9,     0,     0,     6,     0,    23,    18,     7,    40,
+       0,     0,    19,    20,    96,    33,    32,    42,    41,   103,
      101,     0,     0,     3,     0,    11,     0,    13,     0,    15,
        0,    17,    65,    61,     0,     0,     0,     0,     0,     0,
        8,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,    21,     0,    71,    10,     0,     0,   106,    60,    10,
-      90,    93,     0,     0,     0,     0,     0,     0,     0,    39,
-      40,    42,    43,     0,    46,     0,    44,    49,    50,    51,
-      52,    53,    54,    55,    56,    57,    58,     0,    97,     0,
+       0,    21,     0,    71,    10,     0,     0,   106,    39,    10,
+      90,    93,     0,     0,     0,     0,     0,     0,     0,    53,
+      54,    55,    56,     0,    57,     0,    59,    48,    43,    44,
+      45,    46,    47,    49,    50,    51,    52,     0,    97,     0,
        0,   112,     5,     0,     0,     0,    72,     0,    68,     0,
-      64,    85,    47,    45,     0,    10,   104,   102,   109,   107,
+      64,    85,    58,    60,     0,    10,   104,   102,   109,   107,
       91,    94,     0,     0,     0,     0,     0,     0,    84,    25,
       10,     0,     0,    89,     0,     0,    66,    62,    86,    81,
       85,    98,   112,   108,     0,    92,     0,    79,     0,    83,
@@ -912,9 +912,9 @@ static const yytype_int8 yyr2[] =
        0,     2,     0,     2,     0,     2,     0,     2,     1,     2,
        2,     2,     1,     1,     0,     6,     1,     1,     1,     1,
        1,     1,     1,     1,     1,     1,     1,     1,     1,     3,
-       3,     2,     3,     3,     3,     4,     3,     4,     2,     3,
-       3,     3,     3,     3,     3,     3,     3,     3,     3,     1,
-       3,     0,     6,     0,     4,     0,     6,     0,     4,     1,
+       1,     2,     2,     3,     3,     3,     3,     3,     3,     3,
+       3,     3,     3,     3,     3,     3,     3,     3,     4,     3,
+       4,     0,     6,     0,     4,     0,     6,     0,     4,     1,
        0,     3,     0,     8,     3,     0,     0,     7,     1,     0,
        0,     0,     8,     3,     1,     0,     2,     2,     2,     0,
        0,     0,     6,     0,     4,     7,     0,     0,     0,     0,
@@ -1580,129 +1580,129 @@ yyreduce:
 #line 1581 "parser.tab.c"
     break;
 
-  case 39: /* EXPRESSION: EXPRESSION LOGIC_AND EXPRESSION  */
+  case 39: /* EXPRESSION: '(' EXPRESSION ')'  */
 #line 125 "./parser.y"
-                                                 {logical((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LOGICAL_AND");}
+                                                    {(yyval.nPtr) = (yyvsp[-1].nPtr);}
 #line 1587 "parser.tab.c"
     break;
 
-  case 40: /* EXPRESSION: EXPRESSION LOGIC_OR EXPRESSION  */
-#line 126 "./parser.y"
-                                                 {logical((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LOGICAL_OR");}
+  case 41: /* EXPRESSION: SUB EXPRESSION  */
+#line 128 "./parser.y"
+                                  {unary_operator((yyvsp[0].nPtr),  number_of_line);quadInstruction("NEG");}
 #line 1593 "parser.tab.c"
     break;
 
-  case 41: /* EXPRESSION: LOGIC_NOT EXPRESSION  */
-#line 127 "./parser.y"
-                                                 {logical((yyvsp[0].nPtr), NULL, number_of_line);quadInstruction("LOGICAL_NOT");}
+  case 42: /* EXPRESSION: LOGIC_NOT EXPRESSION  */
+#line 129 "./parser.y"
+                                       {logical((yyvsp[0].nPtr), NULL, number_of_line);quadInstruction("LOGICAL_NOT");}
 #line 1599 "parser.tab.c"
     break;
 
-  case 42: /* EXPRESSION: EXPRESSION EQUALITY EXPRESSION  */
-#line 129 "./parser.y"
-                                                    {comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("EQ");}
+  case 43: /* EXPRESSION: EXPRESSION PLUS EXPRESSION  */
+#line 131 "./parser.y"
+                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("ADD");}
 #line 1605 "parser.tab.c"
     break;
 
-  case 43: /* EXPRESSION: EXPRESSION NEG_EQUALITY EXPRESSION  */
-#line 130 "./parser.y"
-                                                    {comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("NEQ");}
+  case 44: /* EXPRESSION: EXPRESSION SUB EXPRESSION  */
+#line 132 "./parser.y"
+                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SUB");}
 #line 1611 "parser.tab.c"
     break;
 
-  case 44: /* EXPRESSION: EXPRESSION LT EXPRESSION  */
-#line 132 "./parser.y"
-                                              {comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LT");}
+  case 45: /* EXPRESSION: EXPRESSION MUL EXPRESSION  */
+#line 133 "./parser.y"
+                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("MUL");}
 #line 1617 "parser.tab.c"
     break;
 
-  case 45: /* EXPRESSION: EXPRESSION LT EQ EXPRESSION  */
-#line 133 "./parser.y"
-                                              {comparison((yyvsp[-3].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LEQ");}
+  case 46: /* EXPRESSION: EXPRESSION DIV EXPRESSION  */
+#line 134 "./parser.y"
+                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("DIV");}
 #line 1623 "parser.tab.c"
     break;
 
-  case 46: /* EXPRESSION: EXPRESSION GT EXPRESSION  */
-#line 134 "./parser.y"
-                                              {comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("GT");}
+  case 47: /* EXPRESSION: EXPRESSION POW EXPRESSION  */
+#line 135 "./parser.y"
+                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("POW");}
 #line 1629 "parser.tab.c"
     break;
 
-  case 47: /* EXPRESSION: EXPRESSION GT EQ EXPRESSION  */
-#line 135 "./parser.y"
-                                              {comparison((yyvsp[-3].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("GEQ");}
+  case 48: /* EXPRESSION: EXPRESSION MODULO EXPRESSION  */
+#line 136 "./parser.y"
+                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("MOD");}
 #line 1635 "parser.tab.c"
     break;
 
-  case 48: /* EXPRESSION: SUB EXPRESSION  */
-#line 137 "./parser.y"
-                                  {unary_operator((yyvsp[0].nPtr),  number_of_line);quadInstruction("NEG");}
+  case 49: /* EXPRESSION: EXPRESSION BITWISE_OR EXPRESSION  */
+#line 138 "./parser.y"
+                                                    {bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("BITWISE_OR");}
 #line 1641 "parser.tab.c"
     break;
 
-  case 49: /* EXPRESSION: EXPRESSION MODULO EXPRESSION  */
+  case 50: /* EXPRESSION: EXPRESSION BITWISE_AND EXPRESSION  */
 #line 139 "./parser.y"
-                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("MOD");}
+                                                    {bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("BITWISE_AND");}
 #line 1647 "parser.tab.c"
     break;
 
-  case 50: /* EXPRESSION: EXPRESSION PLUS EXPRESSION  */
+  case 51: /* EXPRESSION: EXPRESSION SHL EXPRESSION  */
 #line 140 "./parser.y"
-                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("ADD");}
+                                                    {bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SHL");}
 #line 1653 "parser.tab.c"
     break;
 
-  case 51: /* EXPRESSION: EXPRESSION SUB EXPRESSION  */
+  case 52: /* EXPRESSION: EXPRESSION SHR EXPRESSION  */
 #line 141 "./parser.y"
-                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SUB");}
+                                                    {bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SHR");}
 #line 1659 "parser.tab.c"
     break;
 
-  case 52: /* EXPRESSION: EXPRESSION MUL EXPRESSION  */
-#line 142 "./parser.y"
-                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("MUL");}
+  case 53: /* EXPRESSION: EXPRESSION LOGIC_AND EXPRESSION  */
+#line 143 "./parser.y"
+                                                 {logical((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LOGICAL_AND");}
 #line 1665 "parser.tab.c"
     break;
 
-  case 53: /* EXPRESSION: EXPRESSION DIV EXPRESSION  */
-#line 143 "./parser.y"
-                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("DIV");}
+  case 54: /* EXPRESSION: EXPRESSION LOGIC_OR EXPRESSION  */
+#line 144 "./parser.y"
+                                                 {logical((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LOGICAL_OR");}
 #line 1671 "parser.tab.c"
     break;
 
-  case 54: /* EXPRESSION: EXPRESSION POW EXPRESSION  */
-#line 144 "./parser.y"
-                                              {arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("POW");}
+  case 55: /* EXPRESSION: EXPRESSION EQUALITY EXPRESSION  */
+#line 146 "./parser.y"
+                                                    {comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("EQ");}
 #line 1677 "parser.tab.c"
     break;
 
-  case 55: /* EXPRESSION: EXPRESSION BITWISE_OR EXPRESSION  */
-#line 146 "./parser.y"
-                                                    {bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("BITWISE_OR");}
+  case 56: /* EXPRESSION: EXPRESSION NEG_EQUALITY EXPRESSION  */
+#line 147 "./parser.y"
+                                                    {comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("NEQ");}
 #line 1683 "parser.tab.c"
     break;
 
-  case 56: /* EXPRESSION: EXPRESSION BITWISE_AND EXPRESSION  */
-#line 147 "./parser.y"
-                                                    {bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("BITWISE_AND");}
+  case 57: /* EXPRESSION: EXPRESSION GT EXPRESSION  */
+#line 149 "./parser.y"
+                                              {comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("GT");}
 #line 1689 "parser.tab.c"
     break;
 
-  case 57: /* EXPRESSION: EXPRESSION SHL EXPRESSION  */
-#line 148 "./parser.y"
-                                                    {bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SHL");}
+  case 58: /* EXPRESSION: EXPRESSION GT EQ EXPRESSION  */
+#line 150 "./parser.y"
+                                              {comparison((yyvsp[-3].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("GEQ");}
 #line 1695 "parser.tab.c"
     break;
 
-  case 58: /* EXPRESSION: EXPRESSION SHR EXPRESSION  */
-#line 149 "./parser.y"
-                                                    {bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SHR");}
+  case 59: /* EXPRESSION: EXPRESSION LT EXPRESSION  */
+#line 151 "./parser.y"
+                                              {comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LT");}
 #line 1701 "parser.tab.c"
     break;
 
-  case 60: /* EXPRESSION: '(' EXPRESSION ')'  */
+  case 60: /* EXPRESSION: EXPRESSION LT EQ EXPRESSION  */
 #line 152 "./parser.y"
-                                                    {(yyval.nPtr) = (yyvsp[-1].nPtr);}
+                                              {comparison((yyvsp[-3].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LEQ");}
 #line 1707 "parser.tab.c"
     break;
 
