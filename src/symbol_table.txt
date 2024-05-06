@@ -1,2 +1,3 @@
 ID	Name	Type	DataType	Line	Scope	isInit	Value		Args
-0	x	var	int		1	0	1	0		-
+0	x	var	bool		1	0	1	true		-
+1	y	var	bool		2	0	1	false		-

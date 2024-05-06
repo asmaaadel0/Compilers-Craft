@@ -1,3 +1,5 @@
-int x = 0;
+bool x = true;
+bool y = false;
 
 print(x);
+print(y);

@@ -1,2 +1,4 @@
-	PUSH 0
+	PUSH 1
 	POP x
+	PUSH 0
+	POP y
