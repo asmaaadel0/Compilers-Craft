@@ -154,13 +154,12 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
-                TYPE IDENTIFIER {insertResult = insert($1, $2, "var", number_of_line, false);}  DECLARATION_TAIL { insertResult = -1;quadPopIdentifier($2);printf("Parsed Declaration\n");}
-                | TYPE CONSTANT {insertResult = insert($1, $2, "const", number_of_line, false);}DECLARATION_TAIL { insertResult = -1;quadPopIdentifier($2);printf("Parsed Const Declaration\n");}
+                TYPE IDENTIFIER {insertResult = insert($1, $2, "var", number_of_line, false);}  EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdentifier($2);printf("Parsed Declaration\n");}
+                | TYPE IDENTIFIER {insertResult = insert($1, $2, "var", number_of_line, false);} SEMICOLON { insertResult = -1;printf("Parsed Declaration\n");}
+                | TYPE CONSTANT {insertResult = insert($1, $2, "const", number_of_line, false);} EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdentifier($2);printf("Parsed Const Declaration\n");}
+                | TYPE CONSTANT {insertResult = insert($1, $2, "const", number_of_line, false);} SEMICOLON { insertResult = -1;printf("Parsed Const Declaration\n");}
                 ;
-DECLARATION_TAIL:
-                EQ EXPRESSION SEMICOLON                                
-                | SEMICOLON 
-                ;
+
 
 RETURN_STATEMENT:
                 RETURN               
@@ -249,7 +248,7 @@ int main(int argc, char *argv[])
     yyin = fopen(argv[1], "r");
     yyparse();
     // display();
-    display_unused_variables();
+    // display_unused_variables();
     display_to_file("symbol_table.txt");
 
     return 0;

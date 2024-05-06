@@ -134,7 +134,6 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
                 j++;
             }
         }
-        printf("number of args: %d\n", j);
         newnode.argCount = j;
     }
     symbolTable[symbolTableIndex] = newnode;
