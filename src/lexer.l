@@ -55,9 +55,6 @@
 "/"                      { num_of_words++; num_of_char+=yyleng; return DIV;}
 "^"                      { num_of_words++; num_of_char+=yyleng; return POW;}
 
-"++"                      { num_of_words++; num_of_char+=yyleng; return INC;}
-"--"                      { num_of_words++; num_of_char+=yyleng; return DEC;}
-
 "|"                      { num_of_words++; num_of_char+=yyleng; return BITWISE_OR;}
 "&"                      { num_of_words++; num_of_char+=yyleng; return BITWISE_AND;}
 "<<"                     { num_of_words++; num_of_char+=yyleng; return SHL;}
