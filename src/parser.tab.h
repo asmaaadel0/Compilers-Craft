@@ -98,12 +98,14 @@ extern int yydebug;
     BITWISE_AND = 293,             /* BITWISE_AND  */
     SHL = 294,                     /* SHL  */
     SHR = 295,                     /* SHR  */
-    CONSTANT = 296,                /* CONSTANT  */
-    IDENTIFIER = 297,              /* IDENTIFIER  */
-    STRING_LITERAL = 298,          /* STRING_LITERAL  */
-    CHAR_LITERAL = 299,            /* CHAR_LITERAL  */
-    DIGIT = 300,                   /* DIGIT  */
-    FLOAT_DIGIT = 301              /* FLOAT_DIGIT  */
+    INC = 296,                     /* INC  */
+    DEC = 297,                     /* DEC  */
+    CONSTANT = 298,                /* CONSTANT  */
+    IDENTIFIER = 299,              /* IDENTIFIER  */
+    STRING_LITERAL = 300,          /* STRING_LITERAL  */
+    CHAR_LITERAL = 301,            /* CHAR_LITERAL  */
+    DIGIT = 302,                   /* DIGIT  */
+    FLOAT_DIGIT = 303              /* FLOAT_DIGIT  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -121,7 +123,7 @@ union YYSTYPE
 
  struct nodeType *nPtr;
 
-#line 125 "parser.tab.h"
+#line 127 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

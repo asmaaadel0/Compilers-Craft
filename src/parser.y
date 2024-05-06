@@ -41,7 +41,7 @@
 %token BOOL_LITERAL LOGIC_AND LOGIC_OR LOGIC_NOT
 %token EQUALITY NEG_EQUALITY
 %token GT LT EQ
-%token SEMICOLON MODULO PLUS SUB MUL DIV POW BITWISE_OR BITWISE_AND SHL SHR
+%token SEMICOLON MODULO PLUS SUB MUL DIV POW BITWISE_OR BITWISE_AND SHL SHR INC DEC
 
 %token CONSTANT IDENTIFIER STRING_LITERAL CHAR_LITERAL
 %token DIGIT FLOAT_DIGIT
@@ -50,7 +50,7 @@
 %right LOGIC_NOT
 
 %left EQUALITY NEG_EQUALITY
-%left PLUS SUB MODULO
+%left PLUS SUB MODULO INC DEC
 
 %right POW
 
@@ -64,7 +64,7 @@
 %type <num> DIGIT
 %type <bool_val> BOOL_LITERAL
 
-%type <nPtr> STATEMENT EXPRESSION FUNC_CALL RETURN_STATEMENT DECLARATION_STATEMENT BREAK CONTINUE LOGIC_NOT RETURN SUB '(' ')'
+%type <nPtr> STATEMENT EXPRESSION FUNC_CALL RETURN_STATEMENT DECLARATION_STATEMENT BREAK CONTINUE LOGIC_NOT RETURN SUB '(' ')' INC DEC
 %%
 PROGRAM:                                                    
                 PROGRAM STATEMENT  {printf("Parsed Line %d Succesfully\n\n", number_of_line);}        
@@ -114,39 +114,43 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);if(!isPrint)quadPushIdentifier($1);}                
-                | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype, symbolTable[i].intValue, symbolTable[i].floatValue, symbolTable[i].boolValue, symbolTable[i].strValue, symbolTable[i].charValue);if(!isPrint)quadPushIdentifier($1);}
-                | DIGIT         {$$ = setType("int", $1, 0.0, 0, "", "");assign_int(insertResult, $1, number_of_line);if(!isPrint)quadPushInt($1);}       
-                | FLOAT_DIGIT   {$$ = setType("float", 0, $1, 0, "", "");assign_float(insertResult, $1, number_of_line);if(!isPrint)quadPushFloat($1);}                 
-                | BOOL_LITERAL  {$$ = setType("bool", 0, 0.0, $1, "", "");assign_bool(insertResult, $1, number_of_line);if(!isPrint)quadPushInt($1);}   
-                | STRING_LITERAL{$$ = setType("string", 0, 0.0, 0, $1, "");assign_string(insertResult, $1, number_of_line);if(!isPrint)quadPushString($1);}                
-                | CHAR_LITERAL  {$$ = setType("char", 0, 0.0, 0, "", $1);assign_char(insertResult, $1, number_of_line);if(!isPrint)quadPushChar($1);}                
+                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype);if(!isPrint)quadPushIdentifier($1);}                
+                | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = setType(symbolTable[i].datatype);if(!isPrint)quadPushIdentifier($1);}
+                | DIGIT         {$$ = setType("int");assign_int(insertResult, $1, number_of_line);if(!isPrint)quadPushInt($1);}       
+                | FLOAT_DIGIT   {$$ = setType("float");assign_float(insertResult, $1, number_of_line);if(!isPrint)quadPushFloat($1);}                 
+                | BOOL_LITERAL  {$$ = setType("bool");assign_bool(insertResult, $1, number_of_line);if(!isPrint)quadPushInt($1);}   
+                | STRING_LITERAL{$$ = setType("string");assign_string(insertResult, $1, number_of_line);if(!isPrint)quadPushString($1);}                
+                | CHAR_LITERAL  {$$ = setType("char");assign_char(insertResult, $1, number_of_line);if(!isPrint)quadPushChar($1);}                
 
-                | EXPRESSION LOGIC_AND EXPRESSION{$$ = logical($1, $3, '&', number_of_line);quadInstruction("LOGICAL_AND");}    
-                | EXPRESSION LOGIC_OR EXPRESSION {$$ = logical($1, $3, '|', number_of_line);quadInstruction("LOGICAL_OR");} 
-                | LOGIC_NOT EXPRESSION           {$$ = not_operator($2, number_of_line);quadInstruction("LOGICAL_NOT");}
+                | EXPRESSION LOGIC_AND EXPRESSION{logical($1, $3, number_of_line);quadInstruction("LOGICAL_AND");}    
+                | EXPRESSION LOGIC_OR EXPRESSION {logical($1, $3, number_of_line);quadInstruction("LOGICAL_OR");} 
+                | LOGIC_NOT EXPRESSION           {logical($2, NULL, number_of_line);quadInstruction("LOGICAL_NOT");}
 
-                | EXPRESSION EQUALITY EXPRESSION    {$$ = comparison($1, $3, "==", number_of_line);quadInstruction("EQ");}  
-                | EXPRESSION NEG_EQUALITY EXPRESSION{$$ = comparison($1, $3, "!=", number_of_line);quadInstruction("NEQ");} 
+                | EXPRESSION EQUALITY EXPRESSION    {comparison($1, $3, number_of_line);quadInstruction("EQ");}  
+                | EXPRESSION NEG_EQUALITY EXPRESSION{comparison($1, $3, number_of_line);quadInstruction("NEQ");} 
 
-                | EXPRESSION LT EXPRESSION    {$$ = comparison($1, $3, "<", number_of_line);quadInstruction("LT");}             
-                | EXPRESSION LT EQ EXPRESSION {$$ = comparison($1, $4, "<=", number_of_line);quadInstruction("LEQ");}         
-                | EXPRESSION GT EXPRESSION    {$$ = comparison($1, $3, ">", number_of_line);quadInstruction("GT");}            
-                | EXPRESSION GT EQ EXPRESSION {$$ = comparison($1, $4, ">=", number_of_line);quadInstruction("GEQ");}   
+                | EXPRESSION LT EXPRESSION    {comparison($1, $3, number_of_line);quadInstruction("LT");}             
+                | EXPRESSION LT EQ EXPRESSION {comparison($1, $4, number_of_line);quadInstruction("LEQ");}         
+                | EXPRESSION GT EXPRESSION    {comparison($1, $3, number_of_line);quadInstruction("GT");}            
+                | EXPRESSION GT EQ EXPRESSION {comparison($1, $4, number_of_line);quadInstruction("GEQ");}   
 
-                | SUB EXPRESSION  {$$ = unary_operator($2, "-",  number_of_line);quadInstruction("NEG");}          
+                | SUB EXPRESSION  {unary_operator($2,  number_of_line);quadInstruction("NEG");}          
+                | INC EXPRESSION  {unary_operator($2,  number_of_line);quadInstruction("INC");}          
+                | EXPRESSION INC  {unary_operator($1,  number_of_line);quadInstruction("INC");}          
+                | DEC EXPRESSION  {unary_operator($2,  number_of_line);quadInstruction("DEC");}          
+                | EXPRESSION DEC  {unary_operator($1,  number_of_line);quadInstruction("DEC");}          
     
-                | EXPRESSION MODULO EXPRESSION{$$ = arithmatic($1, $3, '%', number_of_line);quadInstruction("MOD");}         
-                | EXPRESSION PLUS EXPRESSION  {$$ = arithmatic($1, $3, '+', number_of_line);quadInstruction("ADD");}
-                | EXPRESSION SUB EXPRESSION   {$$ = arithmatic($1, $3, '-', number_of_line);quadInstruction("SUB");}           
-                | EXPRESSION MUL EXPRESSION   {$$ = arithmatic($1, $3, '*', number_of_line);quadInstruction("MUL");}          
-                | EXPRESSION DIV EXPRESSION   {$$ = arithmatic($1, $3, '/', number_of_line);quadInstruction("DIV");}           
-                | EXPRESSION POW EXPRESSION   {$$ = arithmatic($1, $3, '^', number_of_line);quadInstruction("POW");}
+                | EXPRESSION MODULO EXPRESSION{arithmatic($1, $3, number_of_line);quadInstruction("MOD");}         
+                | EXPRESSION PLUS EXPRESSION  {arithmatic($1, $3, number_of_line);quadInstruction("ADD");}
+                | EXPRESSION SUB EXPRESSION   {arithmatic($1, $3, number_of_line);quadInstruction("SUB");}           
+                | EXPRESSION MUL EXPRESSION   {arithmatic($1, $3, number_of_line);quadInstruction("MUL");}          
+                | EXPRESSION DIV EXPRESSION   {arithmatic($1, $3, number_of_line);quadInstruction("DIV");}           
+                | EXPRESSION POW EXPRESSION   {arithmatic($1, $3, number_of_line);quadInstruction("POW");}
                 
-                | EXPRESSION BITWISE_OR EXPRESSION  {$$ = bitwise($1, $3, '|', number_of_line);quadInstruction("BITWISE_OR");}
-                | EXPRESSION BITWISE_AND EXPRESSION {$$ = bitwise($1, $3, '&', number_of_line);quadInstruction("BITWISE_AND");}
-                | EXPRESSION SHL EXPRESSION         {$$ = bitwise($1, $3, '<', number_of_line);quadInstruction("SHL");}
-                | EXPRESSION SHR EXPRESSION         {$$ = bitwise($1, $3, '>', number_of_line);quadInstruction("SHR");}
+                | EXPRESSION BITWISE_OR EXPRESSION  {bitwise($1, $3, number_of_line);quadInstruction("BITWISE_OR");}
+                | EXPRESSION BITWISE_AND EXPRESSION {bitwise($1, $3, number_of_line);quadInstruction("BITWISE_AND");}
+                | EXPRESSION SHL EXPRESSION         {bitwise($1, $3, number_of_line);quadInstruction("SHL");}
+                | EXPRESSION SHR EXPRESSION         {bitwise($1, $3, number_of_line);quadInstruction("SHR");}
                         
                 | FUNC_CALL                                
                 | '(' EXPRESSION ')'                {$$ = $2;}
