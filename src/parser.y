@@ -232,7 +232,8 @@ ARGUMENTS:
 %%
 
 void yyerror(char *s) { 
- fprintf(stderr, "line %d: %s\n", number_of_line, s); 
+    printf("line %d: %s\n", number_of_line, s); 
+    fprintf(error_file, "line %d: %s\n", number_of_line, s); 
 } 
 int yywrap()
 {
@@ -243,11 +244,15 @@ int main(int argc, char *argv[])
 { 
     remove_file();
     setQuadFilePath("quadruples.txt", createFile("quadruples.txt"));
+    error_file = fopen("error_file.txt", "w");
     yyin = fopen(argv[1], "r");
     yyparse();
-    // display();
+    // display_symbol_table();
     // display_unused_variables();
-    display_to_file("symbol_table.txt");
+    display_unused_variables_to_file("unused_variables");
+    display_symbol_table_to_file("symbol_table.txt");
+
+    printf("compiled successfully!");
 
     return 0;
 }

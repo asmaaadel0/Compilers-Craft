@@ -2,7 +2,6 @@ int x =5;
 int y=6.5;
 int z= true;
 int w = false;
-print(x);
 
 float a=7.7;
 float b= 6;
