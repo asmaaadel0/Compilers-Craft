@@ -1,55 +1,52 @@
-	PUSH 5
-	POP x
-	PUSH 10.500000
-	POP test
-	PUSH 1
-	POP test1
+main:
+	PUSH 0
+	POP i
 StartLabel_1:
-	PUSH x
-	LEQ
+	PUSH i
+	PUSH 10
+	LT
+	PUSH i
+	PUSH 1
+	ADD
+	POP i
 	JZ Label_1
-	PUSH 6
-	POP z
-	PUSH 6.000000
-	PUSH z
-	ADD
-	POP sum
-	PUSH sum
-	GT
-	JZ Label_2
-	PUSH "nada"
-	POP y
-	JMP EndLabel_1
-Label_2:
-	PUSH 5
-	PUSH x
-	ADD
-	POP x
-EndLabel_1:
+	PUSH 10
+	POP b
 	JMP StartLabel_1
 Label_1:
+	PUSH 0
+	POP x
+StartLabel_2:
 	PUSH x
-	JZ Label_3
-	PUSH 5.000000
+	PUSH 20
+	LT
+	JZ Label_2
 	PUSH x
-	NEG
-	PUSH test
+	PUSH 1
 	ADD
-	POP sum
+	POP x
+	JMP StartLabel_2
+Label_2:
+	PUSH 0
+	POP x
+StartLabel_3:
+	PUSH x
+	PUSH 1
+	ADD
+	POP x
+	PUSH x
+	PUSH 20
+	LT
+	JZ Label_3
+	JMP StartLabel_3
 Label_3:
+	PUSH 1
 	PUSH x
 	JZ Label_4
-	PUSH 1
-	PUSH test
-	PUSH x
-	GT
-	LOGICAL_AND
-	POP temp
-Label_4:
-	PUSH 5
-	PUSH x
-	DIV
+	PUSH 10
 	POP x
-EndLabel_2:
-	PUSH 6
-	POP h
+	JMP EndLabel_1
+Label_4:
+	JMP EndLabel_1
+EndLabel_1:
+	END main

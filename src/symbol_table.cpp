@@ -6,7 +6,6 @@
 #include <string.h>
 #include <math.h>
 
-#include "./quadruples.cpp"
 
 #define BUFFER_SIZE 1024
 #define TOKEN_SIZE 32
@@ -49,7 +48,6 @@ int calledFuncIndex = 0;
 int isParameter = 0;
 
 int insertResult = -1;
-int isPrint = 0;
 
 FILE *error_file = NULL;
 
@@ -187,20 +185,14 @@ void assign_int(int index, int value, int number_of_line)
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
             symbolTable[index].floatValue = (float)value;
-            if (!isPrint)
-                quadPushFloat(symbolTable[index].floatValue);
         }
         else if (strcmp(symbolTable[index].datatype, "bool") == 0)
         {
             symbolTable[index].boolValue = (bool)value;
-            if (!isPrint)
-                quadPushInt(symbolTable[index].boolValue);
         }
         else if (strcmp(symbolTable[index].datatype, "int") == 0)
         {
             symbolTable[index].intValue = value;
-            if (!isPrint)
-                quadPushInt(symbolTable[index].intValue);
         }
     }
     else
@@ -239,20 +231,14 @@ void assign_float(int index, float value, int number_of_line)
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
             symbolTable[index].floatValue = value;
-            if (!isPrint)
-                quadPushFloat(symbolTable[index].floatValue);
         }
         else if (strcmp(symbolTable[index].datatype, "bool") == 0)
         {
             symbolTable[index].boolValue = (bool)value;
-            if (!isPrint)
-                quadPushInt(symbolTable[index].boolValue);
         }
         else if (strcmp(symbolTable[index].datatype, "int") == 0)
         {
             symbolTable[index].intValue = (int)value;
-            if (!isPrint)
-                quadPushInt(symbolTable[index].intValue);
         }
     }
     else
@@ -290,20 +276,14 @@ void assign_bool(int index, bool value, int number_of_line)
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
             symbolTable[index].floatValue = (float)value;
-            if (!isPrint)
-                quadPushFloat(symbolTable[index].floatValue);
         }
         else if (strcmp(symbolTable[index].datatype, "bool") == 0)
         {
             symbolTable[index].boolValue = value;
-            if (!isPrint)
-                quadPushInt(symbolTable[index].boolValue);
         }
         else if (strcmp(symbolTable[index].datatype, "int") == 0)
         {
             symbolTable[index].intValue = (int)value;
-            if (!isPrint)
-                quadPushInt(symbolTable[index].intValue);
         }
     }
     else
@@ -339,8 +319,6 @@ void assign_string(int index, char *value, int number_of_line)
     if ((strcmp(symbolTable[index].datatype, "string") == 0 && !symbolTable[index].outOfScope) || isParameter)
     {
         symbolTable[index].strValue = value;
-        if (!isPrint)
-            quadPushString(symbolTable[index].strValue);
     }
     else
     {
@@ -375,8 +353,6 @@ void assign_char(int index, char *value, int number_of_line)
     if ((strcmp(symbolTable[index].datatype, "char") == 0 && !symbolTable[index].outOfScope) || isParameter)
     {
         symbolTable[index].charValue = value;
-        if (!isPrint)
-            quadPushChar(symbolTable[index].charValue);
     }
     else
     {
