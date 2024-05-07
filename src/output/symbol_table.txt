@@ -1,0 +1,10 @@
+ID	Name	Type	DataType	Line	Scope	isInit	Value		Args
+0	x	var	int		1	0	1	5		-
+1	test	var	float		3	0	1	10.500000		-
+2	test1	var	bool		5	0	1	true		-
+3	z	var	int		9	1	1	6		-
+4	sum	var	float		11	1	1	6.000000		-
+5	y	var	string		15	2	1	"nada"		-
+6	sum	var	float		28	1	1	5.000000		-
+7	temp	var	bool		32	1	1	true		-
+8	h	var	int		41	0	1	6		-

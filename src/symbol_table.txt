@@ -1,5 +1,0 @@
-ID	Name	Type	DataType	Line	Scope	isInit	Value		Args
-0	main	func	void		1	0	0	-		
-1	i	var	int		2	1	1	0		-
-2	b	var	int		4	2	1	10		-
-3	x	var	int		7	1	1	10		-

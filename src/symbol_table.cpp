@@ -664,8 +664,8 @@ void display_unused_variables()
 
 int remove_file()
 {
-    remove("symbol_table.txt");
-    remove("quadruples.txt");
-    remove("unused_variables.txt");
-    remove("error_file.txt");
+    remove("./output/symbol_table.txt");
+    remove("./output/quadruples.txt");
+    remove("./output/unused_variables.txt");
+    remove("./output/error_file.txt");
 }

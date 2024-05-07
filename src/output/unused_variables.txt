@@ -1,0 +1,5 @@
+Unused Identifier test1 Declared at line 5
+Unused Identifier y Declared at line 15
+Unused Identifier sum Declared at line 28
+Unused Identifier temp Declared at line 32
+Unused Identifier h Declared at line 41

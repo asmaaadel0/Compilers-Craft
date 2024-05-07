@@ -1,27 +1,41 @@
-void main() {
-  int i;
-  for (i = 0; i < 10; i = i + 1;) {
-    int b = 10;
-  }
+int x =5;
 
-  int x = 0;
+float test =10.5;
 
-  while (x < 20) {
-    x = x + 1;
-  }
+bool test1 = true;
+ while (x<=20) 
+ {
 
-  x = 0;
+int z =6;
 
-  do {
-    x = x + 1;
-  } while (x < 20);
+float sum = z + 0.5;
 
-  switch (x) {
-    case 1:
-     { x = 10;
-      break;}
-
-    default:
-      {break;}
-  }
+if (sum > 15)
+{
+   string y = "nada";
+   
 }
+else 
+{
+  x = x+1;
+}
+ }
+
+switch (x)
+{
+    case 1 :
+    {
+     float sum = - x + test;
+    }
+    case 2 :
+    {
+      bool temp = test and (x>5);
+    }
+    default:
+    {
+        x = x / 10;
+    }
+
+}
+
+int h = 6;

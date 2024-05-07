@@ -17,17 +17,19 @@ def save_file():
             
 def compile_code():
     code = code_editor.get(1.0, tk.END)
-    file_path = "./temp.txt"
+    file_path = "./output/temp.txt"
     with open(file_path, "w") as file:
         file.write(code)
     
     status_bar.config(text="Compiling...", fg="white", bg="blue")
    
-    compiler = "..\src\out.exe temp.txt"
+    compiler = "..\src\out.exe ./output/temp.txt"
+    print("test")
     process = subprocess.Popen(compiler, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     out, _ = process.communicate()
 
-    with open('error_file.txt') as f:
+    with open('./output/error_file.txt') as f:
+        print("test")
         contents = f.read()
     if contents:    
         output_panel.delete(1.0, tk.END)

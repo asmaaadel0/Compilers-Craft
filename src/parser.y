@@ -243,14 +243,14 @@ int yywrap()
 int main(int argc, char *argv[])
 { 
     remove_file();
-    setQuadFilePath("quadruples.txt", createFile("quadruples.txt"));
-    error_file = fopen("error_file.txt", "w");
+    setQuadFilePath("./output/quadruples.txt", createFile("./output/quadruples.txt"));
+    error_file = fopen("./output/error_file.txt", "w");
     yyin = fopen(argv[1], "r");
     yyparse();
     // display_symbol_table();
     // display_unused_variables();
-    display_unused_variables_to_file("unused_variables");
-    display_symbol_table_to_file("symbol_table.txt");
+    display_unused_variables_to_file("./output/unused_variables.txt");
+    display_symbol_table_to_file("./output/symbol_table.txt");
     
     return 0;
 }
