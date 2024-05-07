@@ -9,7 +9,7 @@ StartLabel_1:
 	PUSH 1
 	ADD
 	POP i
-	JZ Label_1
+	JF Label_1
 	PUSH 10
 	POP b
 	JMP StartLabel_1
@@ -20,7 +20,7 @@ StartLabel_2:
 	PUSH x
 	PUSH 20
 	LT
-	JZ Label_2
+	JF Label_2
 	PUSH x
 	PUSH 1
 	ADD
@@ -37,12 +37,12 @@ StartLabel_3:
 	PUSH x
 	PUSH 20
 	LT
-	JZ Label_3
+	JF Label_3
 	JMP StartLabel_3
 Label_3:
 	PUSH 1
 	PUSH x
-	JZ Label_4
+	JF Label_4
 	PUSH 10
 	POP x
 	JMP EndLabel_1

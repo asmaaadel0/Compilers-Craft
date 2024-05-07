@@ -103,7 +103,7 @@ void quadPopEndLabel()
 }
 void quadJumpFalseLabel(int labelNum)
 {
-    fprintf(quadFileP, "\tJZ Label_%d\n", labelNum);
+    fprintf(quadFileP, "\tJF Label_%d\n", labelNum);
     labelStack[labelStackPointer++] = labelNum;
 }
 void quadPopLabel()
