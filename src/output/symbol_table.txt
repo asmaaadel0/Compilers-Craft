@@ -1,11 +1,10 @@
 ID	Name	Type	DataType	Line	Scope	isInit	Value		Args
-0	x	var	int		1	0	1	5		-
-1	ahmed	var	int		2	0	1	1		-
-2	y	var	int		5	0	1	6		-
-3	x	var	float		12	1	1	8.300000		-
-4	x	var	int		16	2	1	5		-
-5	main	func	void		26	0	0	-		
-6	x	var	int		31	2	1	6		-
-7	x	var	float		39	1	0	-		-
-8	y	var	float		39	1	0	-		-
-9	func	func	int		39	0	0	-		7,8,
+0	x	var	int		2	0	1	5		-
+1	test	var	float		4	0	1	10.500000		-
+2	test1	var	bool		6	0	1	true		-
+3	z	var	int		10	1	1	6		-
+4	sum	var	float		12	1	1	6.000000		-
+5	y	var	string		16	2	1	"nada"		-
+6	sum	var	float		29	1	1	5.000000		-
+7	temp	var	bool		34	1	1	true		-
+8	h	var	int		44	0	1	6		-

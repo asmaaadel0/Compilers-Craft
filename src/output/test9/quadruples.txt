@@ -1,0 +1,16 @@
+add:
+	POP a
+	POP b
+	PUSH 5
+	RET
+	END add
+	PUSH 10
+	POP x
+	PUSH x
+	PUSH 5
+	PUSH 7
+	CALL add
+	ADD
+	PUSH 10
+	ADD
+	POP sum
