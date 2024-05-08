@@ -1,0 +1,53 @@
+main:
+	PUSH 0
+	POP i
+StartLabel_1:
+	PUSH i
+	PUSH 10
+	LT
+	JF Label_1
+	PUSH i
+	PUSH 1
+	ADD
+	POP i
+	PUSH 10
+	POP b
+	JMP StartLabel_1
+Label_1:
+	PUSH 0
+	POP x
+StartLabel_2:
+	PUSH x
+	PUSH 20
+	LT
+	JF Label_2
+	PUSH x
+	PUSH 1
+	ADD
+	POP x
+	JMP StartLabel_2
+Label_2:
+	PUSH 0
+	POP x
+StartLabel_3:
+	PUSH x
+	PUSH 1
+	ADD
+	POP x
+	PUSH x
+	PUSH 20
+	LT
+	JF Label_3
+	JMP StartLabel_3
+Label_3:
+	PUSH 1
+	PUSH x
+	EQ
+	JF Label_4
+	PUSH 10
+	POP x
+	JMP EndLabel_1
+Label_4:
+	JMP EndLabel_1
+EndLabel_1:
+	END main

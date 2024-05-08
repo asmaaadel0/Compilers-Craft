@@ -1,0 +1,39 @@
+sum:
+	POP x
+	POP y
+	PUSH x
+	POP res
+	PUSH res
+	PUSH y
+	ADD
+	POP res
+	PUSH res
+	RET
+	END sum
+print2:
+	POP x
+	POP y
+	PUSH 30
+	POP z
+	PUSH 40
+	POP a
+	PUSH 5
+	PUSH 5
+	ADD
+	POP x
+	END print2
+main:
+	PUSH 33
+	POP a
+	PUSH 10
+	PUSH 20
+	CALL sum
+	POP a
+	PUSH a
+	PUSH a
+	CALL sum
+	POP a
+	PUSH 10
+	PUSH 20
+	CALL print2
+	END main

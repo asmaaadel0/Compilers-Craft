@@ -1,0 +1,10 @@
+main:
+	PUSH 345
+	POP x
+	PUSH 3.140000
+	POP f
+	PUSH 1
+	POP y
+	PUSH 1
+	POP x
+	END main

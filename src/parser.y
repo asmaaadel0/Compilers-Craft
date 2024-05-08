@@ -175,7 +175,7 @@ DEFAULTCASE:
                 DEFAULT ':' BLOCK
                 ;
 CASES:
-                CASE EXPRESSION {quadPeakLastIdentifierStack();quadJumpFalseLabel(++labelNum);}':' BLOCK {quadPopLabel();} CASES
+                CASE EXPRESSION {quadPeakLastIdentifierStack();quadInstruction("EQ");quadJumpFalseLabel(++labelNum);}':' BLOCK {quadPopLabel();} CASES
                 | DEFAULTCASE
                 | 
                 ;
@@ -214,7 +214,7 @@ DO_WHILE_STATEMENT:
                 ;
 //________________________________________________ FOR STATEMENT ________________________________________________
 FOR_STATEMENT:
-                FOR '(' {inLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum);} STATEMENT STATEMENT {quadJumpFalseLabel(++labelNum);} ')' {inLoop = 0;} BLOCK {quadJumpStartLabel();quadPopLabel();}
+                FOR '(' {inLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum);} STATEMENT {quadJumpFalseLabel(++labelNum);} STATEMENT ')' {inLoop = 0;} BLOCK {quadJumpStartLabel();quadPopLabel();}
                 ;
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________

@@ -1,3 +1,8 @@
-Unused Argument a Declared in Function at line 1
-Unused Argument b Declared in Function at line 1
-Unused Identifier sum Declared at line 5
+Unused Identifier ahmed Declared at line 2
+Unused Identifier x Declared at line 12
+Unused Identifier x Declared at line 16
+Function main Declared at line 26 but never called
+Unused Identifier x Declared at line 31
+Unused Argument x Declared in Function at line 39
+Unused Argument y Declared in Function at line 39
+Function func Declared at line 39 but never called

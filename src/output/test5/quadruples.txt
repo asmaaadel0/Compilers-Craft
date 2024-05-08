@@ -1,0 +1,40 @@
+	PUSH 5
+	POP x
+	PUSH 20
+	POP c
+StartLabel_1:
+	PUSH x
+	PUSH 0
+	GT
+	JF Label_1
+	PUSH x
+	PUSH 3
+	GT
+	JF Label_2
+StartLabel_2:
+	PUSH x
+	PUSH 0
+	GT
+	JF Label_3
+	PUSH x
+	PUSH 1
+	SUB
+	POP x
+	JMP StartLabel_2
+Label_3:
+	JMP EndLabel_1
+Label_2:
+EndLabel_1:
+StartLabel_3:
+	PUSH c
+	PUSH 1
+	ADD
+	POP c
+	PUSH c
+	PUSH 10
+	GT
+	JF Label_4
+	JMP StartLabel_3
+Label_4:
+	JMP StartLabel_1
+Label_1:
