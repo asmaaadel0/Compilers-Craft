@@ -15,11 +15,6 @@ typedef struct symbol
 {
 
     int id, scope;
-    int intValue;
-    float floatValue;
-    bool boolValue;
-    char *strValue;
-    char *charValue;
 
     int declareLine;
     bool isConst, isArg, isUsed, isInit, outOfScope;
@@ -188,21 +183,18 @@ void assign_int(int index, int value, int number_of_line)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
-            symbolTable[index].floatValue = (float)value;
             if (!isPrint)
-                quadPushFloat(symbolTable[index].floatValue);
+                quadPushFloat((float)value);
         }
         else if (strcmp(symbolTable[index].datatype, "bool") == 0)
         {
-            symbolTable[index].boolValue = (bool)value;
             if (!isPrint)
-                quadPushInt(symbolTable[index].boolValue);
+                quadPushInt((bool)value);
         }
         else if (strcmp(symbolTable[index].datatype, "int") == 0)
         {
-            symbolTable[index].intValue = value;
             if (!isPrint)
-                quadPushInt(symbolTable[index].intValue);
+                quadPushInt(value);
         }
     }
     else
@@ -242,21 +234,18 @@ void assign_float(int index, float value, int number_of_line)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
-            symbolTable[index].floatValue = value;
             if (!isPrint)
-                quadPushFloat(symbolTable[index].floatValue);
+                quadPushFloat(value);
         }
         else if (strcmp(symbolTable[index].datatype, "bool") == 0)
         {
-            symbolTable[index].boolValue = (bool)value;
             if (!isPrint)
-                quadPushInt(symbolTable[index].boolValue);
+                quadPushInt((bool)value);
         }
         else if (strcmp(symbolTable[index].datatype, "int") == 0)
         {
-            symbolTable[index].intValue = (int)value;
             if (!isPrint)
-                quadPushInt(symbolTable[index].intValue);
+                quadPushInt((int)value);
         }
     }
     else
@@ -295,21 +284,18 @@ void assign_bool(int index, bool value, int number_of_line)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
-            symbolTable[index].floatValue = (float)value;
             if (!isPrint)
-                quadPushFloat(symbolTable[index].floatValue);
+                quadPushFloat((float)value);
         }
         else if (strcmp(symbolTable[index].datatype, "bool") == 0)
         {
-            symbolTable[index].boolValue = value;
             if (!isPrint)
-                quadPushInt(symbolTable[index].boolValue);
+                quadPushInt(value);
         }
         else if (strcmp(symbolTable[index].datatype, "int") == 0)
         {
-            symbolTable[index].intValue = (int)value;
             if (!isPrint)
-                quadPushInt(symbolTable[index].intValue);
+                quadPushInt((int)value);
         }
     }
     else
@@ -346,9 +332,8 @@ void assign_string(int index, char *value, int number_of_line)
     symbolTable[index].isInit = 1;
     if ((strcmp(symbolTable[index].datatype, "string") == 0 && !symbolTable[index].outOfScope) || isParameter)
     {
-        symbolTable[index].strValue = value;
         if (!isPrint)
-            quadPushString(symbolTable[index].strValue);
+            quadPushString(value);
     }
     else
     {
@@ -384,9 +369,8 @@ void assign_char(int index, char *value, int number_of_line)
     symbolTable[index].isInit = 1;
     if ((strcmp(symbolTable[index].datatype, "char") == 0 && !symbolTable[index].outOfScope) || isParameter)
     {
-        symbolTable[index].charValue = value;
         if (!isPrint)
-            quadPushChar(symbolTable[index].charValue);
+            quadPushChar(value);
     }
     else
     {
@@ -474,22 +458,6 @@ void check_type(int i, int number_of_line)
     else if (strcmp(symbolTable[insertResult].type, "func") != 0)
     {
         symbolTable[insertResult].isInit = 1;
-        if (strcmp(symbolTable[i].datatype, "int") == 0)
-        {
-            // assign_int(insertResult, symbolTable[i].intValue, number_of_line);
-        }
-        else if (symbolTable[i].datatype == "float")
-        {
-            // assign_float(insertResult, symbolTable[i].floatValue, number_of_line);
-        }
-        else if (strcmp(symbolTable[i].datatype, "string") == 0)
-        {
-            // assign_string(insertResult, symbolTable[i].strValue, number_of_line);
-        }
-        else if (symbolTable[i].datatype == "bool")
-        {
-            // assign_bool(insertResult, symbolTable[i].boolValue, number_of_line);
-        }
     }
     if (isParameter == 0)
     {
@@ -521,38 +489,11 @@ void display_symbol_table_to_file(const char *filename)
         printf("Error opening file.\n");
         exit(1);
     }
-    fprintf(fp, "ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\t\tArgs\n");
+    fprintf(fp, "ID\tName\tType\tDataType\tLine\tScope\tisInit\tArgs\n");
     for (int i = 0; i < symbolTableIndex; i++)
     {
         struct symbol node = symbolTable[i];
         fprintf(fp, "%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node.id, node.identifierName, node.type, node.datatype, node.declareLine, node.scope, node.isInit);
-        if (node.isInit == 1)
-        {
-            if (strcmp(node.datatype, "int") == 0)
-            {
-                fprintf(fp, "%d\t\t", node.intValue);
-            }
-            else if (strcmp(node.datatype, "float") == 0)
-            {
-                fprintf(fp, "%f\t\t", node.floatValue);
-            }
-            else if (strcmp(node.datatype, "bool") == 0)
-            {
-                fprintf(fp, "%s\t\t", node.boolValue ? "true" : "false");
-            }
-            else if (strcmp(node.datatype, "string") == 0)
-            {
-                fprintf(fp, "%s\t\t", node.strValue);
-            }
-            else if (strcmp(node.datatype, "char") == 0)
-            {
-                fprintf(fp, "%s\t\t", node.charValue);
-            }
-        }
-        else
-        {
-            fprintf(fp, "-\t\t");
-        }
         if (strcmp(node.type, "func") == 0)
         {
             for (int j = 0; j < node.argCount; j++)
@@ -572,38 +513,11 @@ void display_symbol_table_to_file(const char *filename)
 
 void display_symbol_table()
 {
-    printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\tValue\t\tArgs\n");
+    printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\tArgs\n");
     for (int i = 0; i < symbolTableIndex; i++)
     {
         struct symbol node = symbolTable[i];
         printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node.id, node.identifierName, node.type, node.datatype, node.declareLine, node.scope, node.isInit);
-        if (node.isInit == 1)
-        {
-            if (strcmp(node.datatype, "int") == 0)
-            {
-                printf("%d\t\t", node.intValue);
-            }
-            else if (strcmp(node.datatype, "float") == 0)
-            {
-                printf("%f\t\t", node.floatValue);
-            }
-            else if (strcmp(node.datatype, "bool") == 0)
-            {
-                printf("%s\t\t", node.boolValue ? "true" : "false");
-            }
-            else if (strcmp(node.datatype, "string") == 0)
-            {
-                printf("%s\t\t", node.strValue);
-            }
-            else if (strcmp(node.datatype, "char") == 0)
-            {
-                printf("%s\t\t", node.charValue);
-            }
-        }
-        else
-        {
-            printf("-\t\t");
-        }
         if (strcmp(node.type, "func") == 0)
         {
             for (int j = 0; j < node.argCount; j++)

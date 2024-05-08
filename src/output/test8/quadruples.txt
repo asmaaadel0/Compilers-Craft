@@ -21,7 +21,7 @@ main:
 func:
 	POP x
 	POP y
-	PUSH 5.600000
+	PUSH 5
 	POP x
 	PUSH x
 	PUSH y
