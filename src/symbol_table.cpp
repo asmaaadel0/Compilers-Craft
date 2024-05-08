@@ -180,7 +180,7 @@ void assign_int(int index, int value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0) && !symbolTable[index].outOfScope) || isParameter)
+    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0 && strcmp(symbolTable[index].datatype, "void") != 0) && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
@@ -226,7 +226,7 @@ void assign_float(int index, float value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0) && !symbolTable[index].outOfScope) || isParameter)
+    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0 && strcmp(symbolTable[index].datatype, "void") != 0) && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {
@@ -271,7 +271,7 @@ void assign_bool(int index, bool value, int number_of_line)
         exit(1);
     }
     symbolTable[index].isInit = 1;
-    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0) && !symbolTable[index].outOfScope) || isParameter)
+    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0 && strcmp(symbolTable[index].datatype, "void") != 0) && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
         {

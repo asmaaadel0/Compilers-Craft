@@ -1913,7 +1913,7 @@ yyreduce:
 
   case 108: /* FUNC_CALL: IDENTIFIER $@26 '(' $@27 ARGUMENTS $@28 ')'  */
 #line 228 "./parser.y"
-                                                                                                                                                                                                                                          {quadCallFunction((yyvsp[-6].str));printf("Parsed Function Call\n");}
+                                                                                                                                                                                                                                          {quadCallFunction((yyvsp[-6].str));printf("Parsed Function Call\n");(yyval.nPtr) = setType(symbolTable[calledFuncIndex].datatype);}
 #line 1918 "parser.tab.c"
     break;
 
