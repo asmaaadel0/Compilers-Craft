@@ -4,7 +4,7 @@
 	POP test
 	PUSH 1
 	POP test1
-StartLabel_1:
+StartWhile_1:
 	PUSH x
 	PUSH 20
 	LEQ
@@ -27,7 +27,7 @@ Label_2:
 	PUSH 1
 	ADD
 	POP x
-EndLabel_1:
+EndIf_1:
 	JMP StartLabel_1
 Label_1:
 	PUSH 1
@@ -57,6 +57,6 @@ Label_4:
 	PUSH 10
 	DIV
 	POP x
-EndLabel_2:
+EndSwitch_2:
 	PUSH 6
 	POP h

@@ -1419,31 +1419,31 @@ yyreduce:
 
   case 11: /* STATEMENT: $@2 IF_STATEMENT  */
 #line 85 "./parser.y"
-                                                                          {quadPopEndLabel();printf("Parsed if statement\n");}
+                                                                          {quadPopEndLabel("If");printf("Parsed if statement\n");}
 #line 1424 "parser.tab.c"
     break;
 
   case 12: /* $@3: %empty  */
 #line 86 "./parser.y"
-                  {quadPushStartLabel(++startLabelNum);}
+                  {quadPushStartLabel(++startLabelNum, "While");}
 #line 1430 "parser.tab.c"
     break;
 
   case 13: /* STATEMENT: $@3 WHILE_STATEMENT  */
 #line 86 "./parser.y"
-                                                                          {quadPopStartLabel();printf("Parsed While LOOP\n");}
+                                                                                   {quadPopStartLabel();printf("Parsed While LOOP\n");}
 #line 1436 "parser.tab.c"
     break;
 
   case 14: /* $@4: %empty  */
 #line 87 "./parser.y"
-                  {quadPushStartLabel(++startLabelNum);}
+                  {quadPushStartLabel(++startLabelNum, "DoWhile");}
 #line 1442 "parser.tab.c"
     break;
 
   case 15: /* STATEMENT: $@4 DO_WHILE_STATEMENT  */
 #line 87 "./parser.y"
-                                                                          {quadPopStartLabel();printf("Parsed Do While LOOP\n");}
+                                                                                     {quadPopStartLabel();printf("Parsed Do While LOOP\n");}
 #line 1448 "parser.tab.c"
     break;
 
@@ -1455,7 +1455,7 @@ yyreduce:
 
   case 17: /* STATEMENT: $@5 SWITCH_STATEMENT  */
 #line 88 "./parser.y"
-                                                                          {quadPopEndLabel();printf("Parsed Switch Statement\n");}
+                                                                          {quadPopEndLabel("Switch");printf("Parsed Switch Statement\n");}
 #line 1460 "parser.tab.c"
     break;
 
@@ -1851,25 +1851,25 @@ yyreduce:
 
   case 97: /* $@21: %empty  */
 #line 215 "./parser.y"
-                                                {quadPushStartLabel(++startLabelNum);}
+                                                {quadPushStartLabel(++startLabelNum, "For");}
 #line 1856 "parser.tab.c"
     break;
 
   case 98: /* $@22: %empty  */
 #line 215 "./parser.y"
-                                                                                                 {quadJumpFalseLabel(++labelNum);}
+                                                                                                        {quadJumpFalseLabel(++labelNum);}
 #line 1862 "parser.tab.c"
     break;
 
   case 99: /* $@23: %empty  */
 #line 215 "./parser.y"
-                                                                                                                                                 {inLoop = 0;}
+                                                                                                                                                        {inLoop = 0;}
 #line 1868 "parser.tab.c"
     break;
 
   case 100: /* FOR_STATEMENT: FOR '(' $@20 STATEMENT $@21 STATEMENT $@22 STATEMENT ')' $@23 BLOCK  */
 #line 215 "./parser.y"
-                                                                                                                                                                     {quadJumpStartLabel();quadPopLabel();}
+                                                                                                                                                                            {quadJumpStartLabel();quadPopLabel();}
 #line 1874 "parser.tab.c"
     break;
 

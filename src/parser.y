@@ -82,10 +82,10 @@ STATEMENT:
                
                 | PRINT_STATEMENT            {printf("Parsed print statement\n");}
                 
-                | {quadPushEndLabel(++endLabelNum);}    IF_STATEMENT      {quadPopEndLabel();printf("Parsed if statement\n");}
-                | {quadPushStartLabel(++startLabelNum);}WHILE_STATEMENT   {quadPopStartLabel();printf("Parsed While LOOP\n");}         
-                | {quadPushStartLabel(++startLabelNum);}DO_WHILE_STATEMENT{quadPopStartLabel();printf("Parsed Do While LOOP\n");}      
-                | {quadPushEndLabel(++endLabelNum);}    SWITCH_STATEMENT  {quadPopEndLabel();printf("Parsed Switch Statement\n");}
+                | {quadPushEndLabel(++endLabelNum);}    IF_STATEMENT      {quadPopEndLabel("If");printf("Parsed if statement\n");}
+                | {quadPushStartLabel(++startLabelNum, "While");}WHILE_STATEMENT   {quadPopStartLabel();printf("Parsed While LOOP\n");}         
+                | {quadPushStartLabel(++startLabelNum, "DoWhile");}DO_WHILE_STATEMENT{quadPopStartLabel();printf("Parsed Do While LOOP\n");}      
+                | {quadPushEndLabel(++endLabelNum);}    SWITCH_STATEMENT  {quadPopEndLabel("Switch");printf("Parsed Switch Statement\n");}
                 | FOR_STATEMENT {quadPopStartLabel();printf("Parsed For LOOP\n");}
                 
                 | BREAK SEMICOLON  {quadJumpEndLabel();}
@@ -212,7 +212,7 @@ DO_WHILE_STATEMENT:
                 ;
 //________________________________________________ FOR STATEMENT ________________________________________________
 FOR_STATEMENT:
-                FOR '(' {inLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum);} STATEMENT {quadJumpFalseLabel(++labelNum);} STATEMENT ')' {inLoop = 0;} BLOCK {quadJumpStartLabel();quadPopLabel();}
+                FOR '(' {inLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum, "For");} STATEMENT {quadJumpFalseLabel(++labelNum);} STATEMENT ')' {inLoop = 0;} BLOCK {quadJumpStartLabel();quadPopLabel();}
                 ;
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
