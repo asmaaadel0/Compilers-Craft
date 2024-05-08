@@ -144,28 +144,8 @@ int insert(char *datatype, char *identifier, char *type, int number_of_line, boo
     return newnode.id;
 }
 
-void assign_arg_indexes()
-{
-    if (isParameter == 1)
-    {
-        if (argCount <= symbolTable[calledFuncIndex].argCount)
-        {
-            insertResult = symbolTable[calledFuncIndex].argList[argCount];
-        }
-        else
-        {
-            insertResult = -1;
-        }
-    }
-}
-
 void assign_int(int index, int value, int number_of_line)
 {
-    assign_arg_indexes();
-    if (isParameter)
-    {
-        index = insertResult;
-    }
     if (index == -1)
     {
         if (!isPrint)
@@ -203,20 +183,10 @@ void assign_int(int index, int value, int number_of_line)
         fprintf(error_file, "Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
-    if (isParameter)
-    {
-        insertResult = -1;
-    }
 }
 
 void assign_float(int index, float value, int number_of_line)
 {
-    assign_arg_indexes();
-
-    if (isParameter)
-    {
-        index = insertResult;
-    }
     if (index == -1)
     {
         if (!isPrint)
@@ -254,19 +224,10 @@ void assign_float(int index, float value, int number_of_line)
         fprintf(error_file, "Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
-    if (isParameter)
-    {
-        insertResult = -1;
-    }
 }
 
 void assign_bool(int index, bool value, int number_of_line)
 {
-    assign_arg_indexes();
-    if (isParameter)
-    {
-        index = insertResult;
-    }
     if (index == -1)
     {
         if (!isPrint)
@@ -304,19 +265,10 @@ void assign_bool(int index, bool value, int number_of_line)
         fprintf(error_file, "Type Mismatch Error at line %d: %s %s variable assigned bool value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
-    if (isParameter)
-    {
-        insertResult = -1;
-    }
 }
 
 void assign_string(int index, char *value, int number_of_line)
 {
-    assign_arg_indexes();
-    if (isParameter)
-    {
-        index = insertResult;
-    }
     if (index == -1)
     {
         if (!isPrint)
@@ -341,19 +293,10 @@ void assign_string(int index, char *value, int number_of_line)
         fprintf(error_file, "Type Mismatch Error at line %d: %s %s variable assigned string value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
-    if (isParameter)
-    {
-        insertResult = -1;
-    }
 }
 
 void assign_char(int index, char *value, int number_of_line)
 {
-    assign_arg_indexes();
-    if (isParameter)
-    {
-        index = insertResult;
-    }
     if (index == -1)
     {
         if (!isPrint)
@@ -377,10 +320,6 @@ void assign_char(int index, char *value, int number_of_line)
         printf("Type Mismatch Error at line %d: %s %s variable assigned char value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         fprintf(error_file, "Type Mismatch Error at line %d: %s %s variable assigned char value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
-    }
-    if (isParameter)
-    {
-        insertResult = -1;
     }
 }
 
