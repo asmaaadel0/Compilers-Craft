@@ -3,12 +3,12 @@ main:
 	POP x
 	PUSH 6
 	POP y
-StartLabel_1:
+StartWhile_1:
 	PUSH x
 	PUSH 5
 	GT
 	JF Label_1
-StartLabel_2:
+StartWhile_2:
 	PUSH x
 	PUSH 0
 	LT
@@ -16,7 +16,7 @@ StartLabel_2:
 	PUSH 1
 	NEG
 	POP x
-StartLabel_3:
+StartWhile_3:
 	PUSH x
 	PUSH 0
 	GT
@@ -31,7 +31,7 @@ StartLabel_3:
 Label_3:
 	JMP StartLabel_2
 Label_2:
-StartLabel_4:
+StartWhile_4:
 	PUSH y
 	PUSH 0
 	GT

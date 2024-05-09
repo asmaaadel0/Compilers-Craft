@@ -2,7 +2,7 @@
 	POP x
 	PUSH 20
 	POP c
-StartLabel_1:
+StartWhile_1:
 	PUSH x
 	PUSH 0
 	GT
@@ -11,7 +11,7 @@ StartLabel_1:
 	PUSH 3
 	GT
 	JF Label_2
-StartLabel_2:
+StartWhile_2:
 	PUSH x
 	PUSH 0
 	GT
@@ -24,8 +24,8 @@ StartLabel_2:
 Label_3:
 	JMP EndLabel_1
 Label_2:
-EndLabel_1:
-StartLabel_3:
+EndIf_1:
+StartDoWhile_3:
 	PUSH c
 	PUSH 1
 	ADD
