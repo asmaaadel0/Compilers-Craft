@@ -59,7 +59,17 @@ nodeType *arithmatic(struct nodeType *op1, struct nodeType *op2, int number_of_l
 nodeType *logical(struct nodeType *op1, struct nodeType *op2, int number_of_line)
 {
     nodeType *p = (nodeType *)malloc(sizeof(nodeType));
-    if (strcmp(op1->type, "string") == 0 ||
+    if (!op2)
+    {
+        if (strcmp(op1->type, "string") == 0 ||
+            strcmp(op1->type, "char") == 0 ||
+            strcmp(op1->type, "void") == 0)
+        {
+            printf("Error at line %d: Invalid operator\n", number_of_line);
+            exit(1);
+        }
+    }
+    else if (strcmp(op1->type, "string") == 0 ||
         strcmp(op2->type, "string") == 0 ||
         strcmp(op1->type, "char") == 0 ||
         strcmp(op2->type, "char") == 0 ||
