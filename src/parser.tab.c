@@ -1417,7 +1417,7 @@ yyreduce:
 
   case 11: /* STATEMENT: $@2 IF_STATEMENT  */
 #line 90 "./parser.y"
-                                                                          {quadPopEndLabel("If");printf("Parsed if statement\n");}
+                                                                {quadPopEndLabel("If");printf("Parsed if statement\n");}
 #line 1422 "parser.tab.c"
     break;
 
@@ -1429,7 +1429,7 @@ yyreduce:
 
   case 13: /* STATEMENT: $@3 WHILE_STATEMENT  */
 #line 91 "./parser.y"
-                                                                                   {quadPopStartLabel();printf("Parsed While LOOP\n");}
+                                                                                {quadPopStartLabel();printf("Parsed While LOOP\n");}
 #line 1434 "parser.tab.c"
     break;
 
@@ -1453,49 +1453,49 @@ yyreduce:
 
   case 17: /* STATEMENT: $@5 SWITCH_STATEMENT  */
 #line 93 "./parser.y"
-                                                                          {quadPopEndLabel("Switch");printf("Parsed Switch Statement\n");}
+                                                                    {quadPopEndLabel("Switch");printf("Parsed Switch Statement\n");}
 #line 1458 "parser.tab.c"
     break;
 
   case 18: /* STATEMENT: FOR_STATEMENT  */
 #line 94 "./parser.y"
-                                {quadPopStartLabel();printf("Parsed For LOOP\n");}
+                               {quadPopStartLabel();printf("Parsed For LOOP\n");}
 #line 1464 "parser.tab.c"
     break;
 
   case 19: /* STATEMENT: BREAK SEMICOLON  */
 #line 96 "./parser.y"
-                                   {quadJumpEndLabel();}
+                                 {quadJumpEndLabel();}
 #line 1470 "parser.tab.c"
     break;
 
   case 21: /* STATEMENT: RETURN_STATEMENT SEMICOLON  */
 #line 99 "./parser.y"
-                                               {quadReturn();}
+                                            {quadReturn();}
 #line 1476 "parser.tab.c"
     break;
 
   case 22: /* STATEMENT: BLOCK  */
 #line 100 "./parser.y"
-                                               {printf("Parsed Block\n");}
+                                            {printf("Parsed Block\n");}
 #line 1482 "parser.tab.c"
     break;
 
   case 23: /* STATEMENT: FUNC_DECLARATION_STATEMENT  */
 #line 101 "./parser.y"
-                                               {printf("Parsed Function Declaration\n");}
+                                            {printf("Parsed Function Declaration\n");}
 #line 1488 "parser.tab.c"
     break;
 
   case 24: /* $@6: %empty  */
 #line 107 "./parser.y"
-                      {insertResult=-1;isPrint=1;}
+                     {insertResult=-1;isPrint=1;}
 #line 1494 "parser.tab.c"
     break;
 
   case 25: /* PRINT_STATEMENT: PRINT $@6 '(' EXPRESSION ')' SEMICOLON  */
 #line 107 "./parser.y"
-                                                                              {isPrint=0;}
+                                                                             {isPrint=0;}
 #line 1500 "parser.tab.c"
     break;
 
@@ -1537,43 +1537,43 @@ yyreduce:
 
   case 32: /* EXPRESSION: IDENTIFIER  */
 #line 121 "./parser.y"
-                                {int i = lookup((yyvsp[0].str), 0, number_of_line);check_type(i, number_of_line);(yyval.nPtr) = setType(symbolTable[i].datatype);if(!isPrint)quadPushIdentifier((yyvsp[0].str));}
+                                {int i = lookup((yyvsp[0].str), 0, number_of_line);check_type(i, number_of_line);(yyval.nPtr) = set_type(symbolTable[i].datatype);if(!isPrint)quadPushIdent((yyvsp[0].str));}
 #line 1542 "parser.tab.c"
     break;
 
   case 33: /* EXPRESSION: CONSTANT  */
 #line 122 "./parser.y"
-                                {int i = lookup((yyvsp[0].str), 0, number_of_line);check_type(i, number_of_line);(yyval.nPtr) = setType(symbolTable[i].datatype);if(!isPrint)quadPushIdentifier((yyvsp[0].str));}
+                                {int i = lookup((yyvsp[0].str), 0, number_of_line);check_type(i, number_of_line);(yyval.nPtr) = set_type(symbolTable[i].datatype);if(!isPrint)quadPushIdent((yyvsp[0].str));}
 #line 1548 "parser.tab.c"
     break;
 
   case 34: /* EXPRESSION: DIGIT  */
 #line 123 "./parser.y"
-                                {(yyval.nPtr) = setType("int");assign_int(insertResult, (yyvsp[0].num), number_of_line);}
+                                {(yyval.nPtr) = set_type("int");assign_int(insertResult, (yyvsp[0].num), number_of_line);}
 #line 1554 "parser.tab.c"
     break;
 
   case 35: /* EXPRESSION: FLOAT_DIGIT  */
 #line 124 "./parser.y"
-                                {(yyval.nPtr) = setType("float");assign_float(insertResult, (yyvsp[0].float_val), number_of_line);}
+                                {(yyval.nPtr) = set_type("float");assign_float(insertResult, (yyvsp[0].float_val), number_of_line);}
 #line 1560 "parser.tab.c"
     break;
 
   case 36: /* EXPRESSION: BOOL_LITERAL  */
 #line 125 "./parser.y"
-                                {(yyval.nPtr) = setType("bool");assign_bool(insertResult, (yyvsp[0].bool_val), number_of_line);}
+                                {(yyval.nPtr) = set_type("bool");assign_bool(insertResult, (yyvsp[0].bool_val), number_of_line);}
 #line 1566 "parser.tab.c"
     break;
 
   case 37: /* EXPRESSION: STRING_LITERAL  */
 #line 126 "./parser.y"
-                                {(yyval.nPtr) = setType("string");assign_string(insertResult, (yyvsp[0].str), number_of_line);}
+                                {(yyval.nPtr) = set_type("string");assign_string(insertResult, (yyvsp[0].str), number_of_line);}
 #line 1572 "parser.tab.c"
     break;
 
   case 38: /* EXPRESSION: CHAR_LITERAL  */
 #line 127 "./parser.y"
-                                {(yyval.nPtr) = setType("char");assign_char(insertResult, (yyvsp[0].str), number_of_line);}
+                                {(yyval.nPtr) = set_type("char");assign_char(insertResult, (yyvsp[0].str), number_of_line);}
 #line 1578 "parser.tab.c"
     break;
 
@@ -1591,157 +1591,157 @@ yyreduce:
 
   case 42: /* EXPRESSION: LOGIC_NOT EXPRESSION  */
 #line 133 "./parser.y"
-                                      {(yyval.nPtr) = logical((yyvsp[0].nPtr), NULL, number_of_line);quadInstruction("LOGICAL_NOT");}
+                                      {(yyval.nPtr) = logical_operator((yyvsp[0].nPtr), NULL, number_of_line);quadInstruction("LOGICAL_NOT");}
 #line 1596 "parser.tab.c"
     break;
 
   case 43: /* EXPRESSION: EXPRESSION PLUS EXPRESSION  */
 #line 135 "./parser.y"
-                                              {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("ADD");}
+                                              {(yyval.nPtr) = arithmatic_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("ADD");}
 #line 1602 "parser.tab.c"
     break;
 
   case 44: /* EXPRESSION: EXPRESSION SUB EXPRESSION  */
 #line 136 "./parser.y"
-                                              {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SUB");}
+                                              {(yyval.nPtr) = arithmatic_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SUB");}
 #line 1608 "parser.tab.c"
     break;
 
   case 45: /* EXPRESSION: EXPRESSION MUL EXPRESSION  */
 #line 137 "./parser.y"
-                                              {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("MUL");}
+                                              {(yyval.nPtr) = arithmatic_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("MUL");}
 #line 1614 "parser.tab.c"
     break;
 
   case 46: /* EXPRESSION: EXPRESSION DIV EXPRESSION  */
 #line 138 "./parser.y"
-                                              {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("DIV");}
+                                              {(yyval.nPtr) = arithmatic_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("DIV");}
 #line 1620 "parser.tab.c"
     break;
 
   case 47: /* EXPRESSION: EXPRESSION POW EXPRESSION  */
 #line 139 "./parser.y"
-                                              {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("POW");}
+                                              {(yyval.nPtr) = arithmatic_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("POW");}
 #line 1626 "parser.tab.c"
     break;
 
   case 48: /* EXPRESSION: EXPRESSION MODULO EXPRESSION  */
 #line 140 "./parser.y"
-                                              {(yyval.nPtr) = arithmatic((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("MOD");}
+                                              {(yyval.nPtr) = arithmatic_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("MOD");}
 #line 1632 "parser.tab.c"
     break;
 
   case 49: /* EXPRESSION: EXPRESSION BITWISE_OR EXPRESSION  */
 #line 142 "./parser.y"
-                                                    {(yyval.nPtr) = bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("BITWISE_OR");}
+                                                    {(yyval.nPtr) = bitwise_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("BITWISE_OR");}
 #line 1638 "parser.tab.c"
     break;
 
   case 50: /* EXPRESSION: EXPRESSION BITWISE_AND EXPRESSION  */
 #line 143 "./parser.y"
-                                                    {(yyval.nPtr) = bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("BITWISE_AND");}
+                                                    {(yyval.nPtr) = bitwise_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("BITWISE_AND");}
 #line 1644 "parser.tab.c"
     break;
 
   case 51: /* EXPRESSION: EXPRESSION SHL EXPRESSION  */
 #line 144 "./parser.y"
-                                                    {(yyval.nPtr) = bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SHL");}
+                                                    {(yyval.nPtr) = bitwise_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SHL");}
 #line 1650 "parser.tab.c"
     break;
 
   case 52: /* EXPRESSION: EXPRESSION SHR EXPRESSION  */
 #line 145 "./parser.y"
-                                                    {(yyval.nPtr) = bitwise((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SHR");}
+                                                    {(yyval.nPtr) = bitwise_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("SHR");}
 #line 1656 "parser.tab.c"
     break;
 
   case 53: /* EXPRESSION: EXPRESSION LOGIC_AND EXPRESSION  */
 #line 147 "./parser.y"
-                                                 {(yyval.nPtr) = logical((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LOGICAL_AND");}
+                                                 {(yyval.nPtr) = logical_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LOGICAL_AND");}
 #line 1662 "parser.tab.c"
     break;
 
   case 54: /* EXPRESSION: EXPRESSION LOGIC_OR EXPRESSION  */
 #line 148 "./parser.y"
-                                                 {(yyval.nPtr) = logical((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LOGICAL_OR");}
+                                                 {(yyval.nPtr) = logical_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LOGICAL_OR");}
 #line 1668 "parser.tab.c"
     break;
 
   case 55: /* EXPRESSION: EXPRESSION EQUALITY EXPRESSION  */
 #line 150 "./parser.y"
-                                                    {(yyval.nPtr) = comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("EQ");}
+                                                    {(yyval.nPtr) = comparison_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("EQ");}
 #line 1674 "parser.tab.c"
     break;
 
   case 56: /* EXPRESSION: EXPRESSION NEG_EQUALITY EXPRESSION  */
 #line 151 "./parser.y"
-                                                    {(yyval.nPtr) = comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("NEQ");}
+                                                    {(yyval.nPtr) = comparison_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("NEQ");}
 #line 1680 "parser.tab.c"
     break;
 
   case 57: /* EXPRESSION: EXPRESSION GT EXPRESSION  */
 #line 153 "./parser.y"
-                                              {(yyval.nPtr) = comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("GT");}
+                                              {(yyval.nPtr) = comparison_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("GT");}
 #line 1686 "parser.tab.c"
     break;
 
   case 58: /* EXPRESSION: EXPRESSION GT EQ EXPRESSION  */
 #line 154 "./parser.y"
-                                              {(yyval.nPtr) = comparison((yyvsp[-3].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("GEQ");}
+                                              {(yyval.nPtr) = comparison_operator((yyvsp[-3].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("GEQ");}
 #line 1692 "parser.tab.c"
     break;
 
   case 59: /* EXPRESSION: EXPRESSION LT EXPRESSION  */
 #line 155 "./parser.y"
-                                              {(yyval.nPtr) = comparison((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LT");}
+                                              {(yyval.nPtr) = comparison_operator((yyvsp[-2].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LT");}
 #line 1698 "parser.tab.c"
     break;
 
   case 60: /* EXPRESSION: EXPRESSION LT EQ EXPRESSION  */
 #line 156 "./parser.y"
-                                              {(yyval.nPtr) = comparison((yyvsp[-3].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LEQ");}
+                                              {(yyval.nPtr) = comparison_operator((yyvsp[-3].nPtr), (yyvsp[0].nPtr), number_of_line);quadInstruction("LEQ");}
 #line 1704 "parser.tab.c"
     break;
 
   case 61: /* $@7: %empty  */
 #line 161 "./parser.y"
-                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "var", number_of_line, false);}
+                                 {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "var", number_of_line, false);}
 #line 1710 "parser.tab.c"
     break;
 
   case 62: /* DECLARATION_STATEMENT: TYPE IDENTIFIER $@7 EQ EXPRESSION SEMICOLON  */
 #line 161 "./parser.y"
-                                                                                                                        { insertResult = -1;quadPopIdentifier((yyvsp[-4].str));printf("Parsed Declaration\n");}
+                                                                                                                        { insertResult = -1;quadPopIdent((yyvsp[-4].str));printf("Parsed Declaration\n");}
 #line 1716 "parser.tab.c"
     break;
 
   case 63: /* $@8: %empty  */
 #line 162 "./parser.y"
-                                  {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "var", number_of_line, false);}
+                                 {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "var", number_of_line, false);}
 #line 1722 "parser.tab.c"
     break;
 
   case 64: /* DECLARATION_STATEMENT: TYPE IDENTIFIER $@8 SEMICOLON  */
 #line 162 "./parser.y"
-                                                                                                           { insertResult = -1;printf("Parsed Declaration\n");}
+                                                                                                          { insertResult = -1;printf("Parsed Declaration\n");}
 #line 1728 "parser.tab.c"
     break;
 
   case 65: /* $@9: %empty  */
 #line 163 "./parser.y"
-                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);}
+                                 {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);}
 #line 1734 "parser.tab.c"
     break;
 
   case 66: /* DECLARATION_STATEMENT: TYPE CONSTANT $@9 EQ EXPRESSION SEMICOLON  */
 #line 163 "./parser.y"
-                                                                                                                         { insertResult = -1;quadPopIdentifier((yyvsp[-4].str));printf("Parsed Const Declaration\n");}
+                                                                                                                         { insertResult = -1;quadPopIdent((yyvsp[-4].str));printf("Parsed Const Declaration\n");}
 #line 1740 "parser.tab.c"
     break;
 
   case 67: /* $@10: %empty  */
 #line 164 "./parser.y"
-                                {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);}
+                                 {insertResult = insert((yyvsp[-1].str), (yyvsp[0].str), "const", number_of_line, false);}
 #line 1746 "parser.tab.c"
     break;
 
@@ -1765,25 +1765,25 @@ yyreduce:
 
   case 72: /* $@12: %empty  */
 #line 175 "./parser.y"
-                                      {quadPushLastIdentifierStack((yyvsp[0].str));lookup((yyvsp[0].str), 0, number_of_line);}
+                                      {quadPushSwitchIdent((yyvsp[0].str));lookup((yyvsp[0].str), 0, number_of_line);}
 #line 1770 "parser.tab.c"
     break;
 
   case 73: /* SWITCH_STATEMENT: SWITCH '(' IDENTIFIER $@12 ')' '{' CASES '}'  */
 #line 175 "./parser.y"
-                                                                                                                          {quadPopLastIdentifierStack();}
+                                                                                                                  {quadPopSwitchIdent();}
 #line 1776 "parser.tab.c"
     break;
 
   case 75: /* $@13: %empty  */
 #line 181 "./parser.y"
-                                {quadPeakLastIdentifierStack();quadInstruction("EQ");quadJumpFalseLabel(++labelNum);}
+                                {quadPeakSwitchIdent();quadInstruction("EQ");quadJumpFalseLabel(++labelNum);}
 #line 1782 "parser.tab.c"
     break;
 
   case 76: /* $@14: %empty  */
 #line 181 "./parser.y"
-                                                                                                                               {quadPopLabel();}
+                                                                                                                       {quadPopLabel();}
 #line 1788 "parser.tab.c"
     break;
 
@@ -1807,7 +1807,7 @@ yyreduce:
 
   case 86: /* ARG_DECL: TYPE IDENTIFIER  */
 #line 197 "./parser.y"
-                                {quadPopIdentifier((yyvsp[0].str));insertResult = insert((yyvsp[-1].str), (yyvsp[0].str),"var", number_of_line, true);}
+                                {quadPopIdent((yyvsp[0].str));insertResult = insert((yyvsp[-1].str), (yyvsp[0].str),"var", number_of_line, true);}
 #line 1812 "parser.tab.c"
     break;
 
@@ -1879,7 +1879,7 @@ yyreduce:
 
   case 102: /* ASSIGNMENT_STATEMENT: IDENTIFIER EQ $@24 EXPRESSION SEMICOLON  */
 #line 225 "./parser.y"
-                                                                                                   {quadPopIdentifier((yyvsp[-4].str));}
+                                                                                                   {quadPopIdent((yyvsp[-4].str));}
 #line 1884 "parser.tab.c"
     break;
 
@@ -1909,7 +1909,7 @@ yyreduce:
 
   case 108: /* FUNC_CALL: IDENTIFIER $@26 '(' $@27 ARGUMENTS $@28 ')'  */
 #line 231 "./parser.y"
-                                                                                                                                                                                                                                          {quadCallFunction((yyvsp[-6].str));printf("Parsed Function Call\n");(yyval.nPtr) = setType(symbolTable[calledFuncIndex].datatype);}
+                                                                                                                                                                                                                                          {quadCallFunction((yyvsp[-6].str));printf("Parsed Function Call\n");(yyval.nPtr) = set_type(symbolTable[calledFuncIndex].datatype);}
 #line 1914 "parser.tab.c"
     break;
 

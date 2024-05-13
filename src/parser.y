@@ -118,8 +118,8 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = set_type(symbolTable[i].datatype);if(!isPrint)quadPushIdentifier($1);}                
-                | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = set_type(symbolTable[i].datatype);if(!isPrint)quadPushIdentifier($1);}
+                IDENTIFIER      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = set_type(symbolTable[i].datatype);if(!isPrint)quadPushIdent($1);}                
+                | CONSTANT      {int i = lookup($1, 0, number_of_line);check_type(i, number_of_line);$$ = set_type(symbolTable[i].datatype);if(!isPrint)quadPushIdent($1);}
                 | DIGIT         {$$ = set_type("int");assign_int(insertResult, $1, number_of_line);}       
                 | FLOAT_DIGIT   {$$ = set_type("float");assign_float(insertResult, $1, number_of_line);}                 
                 | BOOL_LITERAL  {$$ = set_type("bool");assign_bool(insertResult, $1, number_of_line);}   
@@ -158,9 +158,9 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:                                                            
-                TYPE IDENTIFIER  {insertResult = insert($1, $2, "var", number_of_line, false);} EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdentifier($2);printf("Parsed Declaration\n");}
+                TYPE IDENTIFIER  {insertResult = insert($1, $2, "var", number_of_line, false);} EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);printf("Parsed Declaration\n");}
                 | TYPE IDENTIFIER{insertResult = insert($1, $2, "var", number_of_line, false);} SEMICOLON { insertResult = -1;printf("Parsed Declaration\n");}
-                | TYPE CONSTANT  {insertResult = insert($1, $2, "const", number_of_line, false);}EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdentifier($2);printf("Parsed Const Declaration\n");}
+                | TYPE CONSTANT  {insertResult = insert($1, $2, "const", number_of_line, false);}EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);printf("Parsed Const Declaration\n");}
                 | TYPE CONSTANT  {insertResult = insert($1, $2, "const", number_of_line, false);}SEMICOLON { insertResult = -1;printf("Parsed Const Declaration\n");}
                 ;
 
@@ -172,13 +172,13 @@ RETURN_STATEMENT:
 
 //________________________________________________ SWITCH STATEMENT ________________________________________________
 SWITCH_STATEMENT:
-                SWITCH '(' IDENTIFIER {quadPushLastIdentifierStack($3);lookup($3, 0, number_of_line);} ')' '{' CASES  '}' {quadPopLastIdentifierStack();}
+                SWITCH '(' IDENTIFIER {quadPushSwitchIdent($3);lookup($3, 0, number_of_line);} ')' '{' CASES  '}' {quadPopSwitchIdent();}
                 ;
 DEFAULTCASE:
                 DEFAULT ':' BLOCK
                 ;
 CASES:
-                CASE EXPRESSION {quadPeakLastIdentifierStack();quadInstruction("EQ");quadJumpFalseLabel(++labelNum);}':' BLOCK {quadPopLabel();} CASES
+                CASE EXPRESSION {quadPeakSwitchIdent();quadInstruction("EQ");quadJumpFalseLabel(++labelNum);}':' BLOCK {quadPopLabel();} CASES
                 | DEFAULTCASE
                 | 
                 ;
@@ -194,7 +194,7 @@ ARGS:
                 | 
                 ;
 ARG_DECL:
-                TYPE IDENTIFIER {quadPopIdentifier($2);insertResult = insert($1, $2,"var", number_of_line, true);}
+                TYPE IDENTIFIER {quadPopIdent($2);insertResult = insert($1, $2,"var", number_of_line, true);}
                 ;
 
 //________________________________________________ IF STATEMENT ________________________________________________
@@ -222,7 +222,7 @@ FOR_STATEMENT:
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
-                IDENTIFIER EQ {insertResult = lookup($1, 1, number_of_line);} EXPRESSION SEMICOLON {quadPopIdentifier($1);} 
+                IDENTIFIER EQ {insertResult = lookup($1, 1, number_of_line);} EXPRESSION SEMICOLON {quadPopIdent($1);} 
                 | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", number_of_line);exit(1);insertResult = -1;} EXPRESSION SEMICOLON   
                 ;
 

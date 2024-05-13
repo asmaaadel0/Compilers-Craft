@@ -7,19 +7,19 @@
 #include <math.h>
 
 int labelNum = 0;
-int labelStackPointer = -1;
-int labelStack[100];
+int labelIndex = -1;
+int label[100];
 
 int endLabelNum = 0;
-int endLabelstackPointer = -1;
-int endLabelStack[100];
+int endLabelIndex = -1;
+int endLabel[100];
 
-int lastIdentifierStackPointer = -1;
-char *lastIdentifierStack[100];
+int switchIdentIndex = -1;
+char *switchIdent[100];
 
 int startLabelNum = 0;
-int startLabelstackPointer = -1;
-int startLabelStack[100];
+int startLabelIndex = -1;
+int startLabel[100];
 
 char *quadFile = NULL;
 FILE *quadFileP = NULL;
@@ -73,7 +73,7 @@ void quadPushFloat(float val)
     fprintf(quadFileP, "\tPUSH %f\n", val);
 }
 
-void quadPushIdentifier(char *symbol)
+void quadPushIdent(char *symbol)
 {
     fprintf(quadFileP, "\tPUSH %s\n", symbol);
 }
@@ -88,96 +88,95 @@ void quadPushChar(char *ch)
     fprintf(quadFileP, "\tPUSH %s\n", ch);
 }
 
-void quadPopIdentifier(char *symbol)
+void quadPopIdent(char *symbol)
 {
     fprintf(quadFileP, "\tPOP %s\n", symbol);
 }
 
 void quadPushEndLabel(int endLabelNum)
 {
-    endLabelStack[++endLabelstackPointer] = endLabelNum;
+    endLabel[++endLabelIndex] = endLabelNum;
 }
 
 void quadJumpEndLabel()
 {
-    int endLabelNum = endLabelStack[endLabelstackPointer];
+    int endLabelNum = endLabel[endLabelIndex];
     fprintf(quadFileP, "\tJMP EndLabel_%d\n", endLabelNum);
 }
 
 void quadPopEndLabel(char *label)
 {
-    if (endLabelstackPointer < 0)
+    if (endLabelIndex < 0)
     {
-        fprintf(quadFileP, "Error: No end label to add. Segmenration Fault\n");
+        fprintf(quadFileP, "Error: No end label to add. Segmentation Fault\n");
         return;
     }
-    int endLabelNum = endLabelStack[endLabelstackPointer--];
+    int endLabelNum = endLabel[endLabelIndex--];
     fprintf(quadFileP, "End%s_%d:\n", label, endLabelNum);
 }
 
 void quadJumpFalseLabel(int labelNum)
 {
     fprintf(quadFileP, "\tJF Label_%d\n", labelNum);
-    labelStack[labelStackPointer++] = labelNum;
+    label[labelIndex++] = labelNum;
 }
 
 void quadPopLabel()
 {
-    if (labelStackPointer < 0)
+    if (labelIndex < 0)
     {
-        fprintf(quadFileP, "Error: No end label to add. Segmenration Fault\n");
+        fprintf(quadFileP, "Error: No end label to add. Segmentation Fault\n");
         return;
     }
-    int labelNum = labelStack[--labelStackPointer];
+    int labelNum = label[--labelIndex];
 
     fprintf(quadFileP, "Label_%d:\n", labelNum);
 }
 
-void quadPushLastIdentifierStack(char *identifier)
+void quadPushSwitchIdent(char *identifier)
 {
-    lastIdentifierStack[++lastIdentifierStackPointer] = identifier;
+    switchIdent[++switchIdentIndex] = identifier;
 }
 
-void quadPeakLastIdentifierStack()
+void quadPeakSwitchIdent()
 {
-    if (lastIdentifierStackPointer < 0)
+    if (switchIdentIndex < 0)
     {
-        fprintf(quadFileP, "Error: No last identifier to peak. Segmenration Fault\n");
+        fprintf(quadFileP, "Error: No last identifier to peak. Segmentation Fault\n");
         return;
     }
-    char *identifier = lastIdentifierStack[lastIdentifierStackPointer];
 
-    fprintf(quadFileP, "\tPUSH %s\n", identifier);
+    fprintf(quadFileP, "\tPUSH %s\n", switchIdent[switchIdentIndex]);
 }
 
-void quadPopLastIdentifierStack()
+void quadPopSwitchIdent()
 {
-    if (lastIdentifierStackPointer < 0)
+    if (switchIdentIndex < 0)
     {
-        fprintf(quadFileP, "Error: No last identifier to pop. Segmenration Fault\n");
+        fprintf(quadFileP, "Error: No last identifier to pop. Segmentation Fault\n");
         return;
     }
-    char *identifier = lastIdentifierStack[lastIdentifierStackPointer--];
+    switchIdentIndex--;
 }
 
 void quadPushStartLabel(int startLabelNum, char *label)
 {
-    startLabelStack[++startLabelstackPointer] = startLabelNum;
+    startLabel[++startLabelIndex] = startLabelNum;
     fprintf(quadFileP, "Start%s_%d:\n", label, startLabelNum);
 }
 
 void quadJumpStartLabel()
 {
-    int startLabelNum = startLabelStack[startLabelstackPointer];
+    int startLabelNum = startLabel[startLabelIndex];
     fprintf(quadFileP, "\tJMP StartLabel_%d\n", startLabelNum);
 }
 
 void quadPopStartLabel()
 {
-    if (startLabelstackPointer < 0)
+    if (startLabelIndex < 0)
     {
-        fprintf(quadFileP, "Error: No start label to add. Segmenration Fault\n");
+        fprintf(quadFileP, "Error: No start label to add. Segmentation Fault\n");
         return;
     }
-    int startLabelNum = startLabelStack[startLabelstackPointer--];
+    int startLabelNum = startLabel[startLabelIndex--];
 }
