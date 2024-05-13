@@ -1,0 +1,5 @@
+Unused Identifier d Declared at line 6
+Unused Identifier bo Declared at line 8
+Unused Identifier s Declared at line 10
+Unused Argument a Declared in Function at line 31
+Unused Identifier e Declared at line 42

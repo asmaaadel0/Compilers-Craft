@@ -1,3 +1,93 @@
-sum:
+	PUSH 2
+	POP a
+	PUSH 3
+	POP B
+	PUSH a
+	PUSH B
+	ADD
+	POP c
+	PUSH 4.500000
+	PUSH 6.500000
+	MUL
+	POP d
+	PUSH 1
+	POP bo
+	PUSH "MangaCC"
+	POP s
+	PUSH a
+	PUSH B
+	GT
+	JF Label_1
+	PUSH c
+	PUSH 2
+	MOD
+	POP c
+	JMP EndLabel_1
+Label_1:
+	PUSH 5
+	PUSH 2
+	DIV
+	POP c
+	PUSH "C = C / 2"
+	POP aaa
+EndIf_1:
+	PUSH a
+	PUSH 2
+	LT
+	JF Label_2
+	PUSH 0
+	POP bo
+	JMP EndLabel_2
+Label_2:
+EndIf_2:
+StartWhile_1:
+	PUSH a
+	PUSH 0
+	GT
+	JF Label_3
+	PUSH a
+	PUSH 1
+	SUB
+	POP a
+	JMP StartLabel_1
+Label_3:
+func:
 	POP a
 	POP b
+	PUSH a
+	PUSH b
+	ADD
+	RET
+	END func
+	PUSH 0
+	POP i
+StartFor_2:
+	PUSH i
+	PUSH 10
+	LT
+	JF Label_4
+	PUSH i
+	PUSH 1
+	ADD
+	POP i
+	PUSH c
+	PUSH 1
+	ADD
+	POP c
+	JMP StartLabel_2
+Label_4:
+StartDoWhile_3:
+	PUSH c
+	PUSH 1
+	ADD
+	POP c
+	PUSH c
+	PUSH 10
+	GT
+	JF Label_5
+	JMP StartLabel_3
+Label_5:
+	PUSH 2
+	PUSH 3
+	CALL func
+	POP e

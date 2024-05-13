@@ -20,8 +20,11 @@ typedef struct symbol
     bool isConst, isArg, isUsed, isInit, outOfScope;
 
     char *identifierName;
-    char *type;     // variable, const, func
-    char *datatype; // int, float, bool, string
+    // var, const, func
+    char *type;  
+    // int, float, bool, string, char   
+    char *datatype; 
+    
     int argList[100];
     int argCount;
     bool assignToFunc;
@@ -158,7 +161,7 @@ void assign_int(int index, int value, int number_of_line)
         fprintf(error_file, "Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
-    symbolTable[index].isInit = 1;
+    symbolTable[index].isInit = true;
     if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0 && strcmp(symbolTable[index].datatype, "void") != 0) && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
@@ -199,7 +202,7 @@ void assign_float(int index, float value, int number_of_line)
         fprintf(error_file, "Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
-    symbolTable[index].isInit = 1;
+    symbolTable[index].isInit = true;
     if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0 && strcmp(symbolTable[index].datatype, "void") != 0) && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
@@ -240,7 +243,7 @@ void assign_bool(int index, bool value, int number_of_line)
         fprintf(error_file, "Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
-    symbolTable[index].isInit = 1;
+    symbolTable[index].isInit = true;
     if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0 && strcmp(symbolTable[index].datatype, "void") != 0) && !symbolTable[index].outOfScope) || isParameter)
     {
         if (strcmp(symbolTable[index].datatype, "float") == 0)
@@ -281,7 +284,7 @@ void assign_string(int index, char *value, int number_of_line)
         fprintf(error_file, "Type Mismatch Error at line %d: Function %s return type is %s but assigned string\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
-    symbolTable[index].isInit = 1;
+    symbolTable[index].isInit = true;
     if ((strcmp(symbolTable[index].datatype, "string") == 0 && !symbolTable[index].outOfScope) || isParameter)
     {
         if (!isPrint)
@@ -309,7 +312,7 @@ void assign_char(int index, char *value, int number_of_line)
         fprintf(error_file, "Type Mismatch Error at line %d: Function %s return type is %s but assigned char\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
-    symbolTable[index].isInit = 1;
+    symbolTable[index].isInit = true;
     if ((strcmp(symbolTable[index].datatype, "char") == 0 && !symbolTable[index].outOfScope) || isParameter)
     {
         if (!isPrint)
@@ -396,7 +399,7 @@ void check_type(int i, int number_of_line)
     }
     else if (strcmp(symbolTable[insertResult].type, "func") != 0)
     {
-        symbolTable[insertResult].isInit = 1;
+        symbolTable[insertResult].isInit = true;
     }
     if (isParameter == 0)
     {
