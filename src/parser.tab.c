@@ -1417,7 +1417,7 @@ yyreduce:
 
   case 11: /* STATEMENT: $@2 IF_STATEMENT  */
 #line 90 "./parser.y"
-                                                                {quadPopEndLabel("If");printf("Parsed if statement\n");}
+                                                                {quadPopEndLabel();printf("Parsed if statement\n");}
 #line 1422 "parser.tab.c"
     break;
 
@@ -1453,7 +1453,7 @@ yyreduce:
 
   case 17: /* STATEMENT: $@5 SWITCH_STATEMENT  */
 #line 93 "./parser.y"
-                                                                    {quadPopEndLabel("Switch");printf("Parsed Switch Statement\n");}
+                                                                    {quadPopEndLabel();printf("Parsed Switch Statement\n");}
 #line 1458 "parser.tab.c"
     break;
 
@@ -1831,13 +1831,13 @@ yyreduce:
 
   case 94: /* WHILE_STATEMENT: WHILE EXPRESSION $@19 BLOCK  */
 #line 212 "./parser.y"
-                                                                         {quadJumpStartLabel();quadPopLabel();}
+                                                                         {quadJumpStartLabel("While");quadPopLabel();}
 #line 1836 "parser.tab.c"
     break;
 
   case 95: /* DO_WHILE_STATEMENT: DO BLOCK WHILE '(' EXPRESSION ')' SEMICOLON  */
 #line 216 "./parser.y"
-                                                            {quadJumpFalseLabel(++labelNum);quadJumpStartLabel();quadPopLabel();}
+                                                            {quadJumpFalseLabel(++labelNum);quadJumpStartLabel("DoWhile");quadPopLabel();}
 #line 1842 "parser.tab.c"
     break;
 
@@ -1867,7 +1867,7 @@ yyreduce:
 
   case 100: /* FOR_STATEMENT: FOR '(' $@20 STATEMENT $@21 STATEMENT $@22 STATEMENT ')' $@23 BLOCK  */
 #line 220 "./parser.y"
-                                                                                                                                                                            {quadJumpStartLabel();quadPopLabel();}
+                                                                                                                                                                            {quadJumpStartLabel("For");quadPopLabel();}
 #line 1872 "parser.tab.c"
     break;
 

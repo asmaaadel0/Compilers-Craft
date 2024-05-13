@@ -19,5 +19,5 @@ Label_1:
 Label_2:
 	PUSH x
 	POP b
-EndIf_1:
+EndLabel_1:
 	END main

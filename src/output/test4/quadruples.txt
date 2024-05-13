@@ -12,7 +12,7 @@ StartFor_1:
 	POP i
 	PUSH 10
 	POP b
-	JMP StartLabel_1
+	JMP StartFor_1
 Label_1:
 	PUSH 0
 	POP x
@@ -25,7 +25,7 @@ StartWhile_2:
 	PUSH 1
 	ADD
 	POP x
-	JMP StartLabel_2
+	JMP StartWhile_2
 Label_2:
 	PUSH 0
 	POP x
@@ -38,7 +38,7 @@ StartDoWhile_3:
 	PUSH 20
 	LT
 	JF Label_3
-	JMP StartLabel_3
+	JMP StartDoWhile_3
 Label_3:
 	PUSH 1
 	PUSH x
@@ -49,5 +49,5 @@ Label_3:
 	JMP EndLabel_1
 Label_4:
 	JMP EndLabel_1
-EndSwitch_1:
+EndLabel_1:
 	END main

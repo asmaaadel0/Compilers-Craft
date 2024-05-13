@@ -104,7 +104,7 @@ void quadJumpEndLabel()
     fprintf(quadFileP, "\tJMP EndLabel_%d\n", endLabelNum);
 }
 
-void quadPopEndLabel(char *label)
+void quadPopEndLabel()
 {
     if (endLabelIndex < 0)
     {
@@ -112,7 +112,7 @@ void quadPopEndLabel(char *label)
         return;
     }
     int endLabelNum = endLabel[endLabelIndex--];
-    fprintf(quadFileP, "End%s_%d:\n", label, endLabelNum);
+    fprintf(quadFileP, "EndLabel_%d:\n", endLabelNum);
 }
 
 void quadJumpFalseLabel(int labelNum)
@@ -165,10 +165,10 @@ void quadPushStartLabel(int startLabelNum, char *label)
     fprintf(quadFileP, "Start%s_%d:\n", label, startLabelNum);
 }
 
-void quadJumpStartLabel()
+void quadJumpStartLabel(char *label)
 {
     int startLabelNum = startLabel[startLabelIndex];
-    fprintf(quadFileP, "\tJMP StartLabel_%d\n", startLabelNum);
+    fprintf(quadFileP, "\tJMP Start%s_%d\n", label, startLabelNum);
 }
 
 void quadPopStartLabel()

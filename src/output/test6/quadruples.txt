@@ -27,9 +27,9 @@ StartWhile_3:
 	PUSH 1
 	SUB
 	POP x
-	JMP StartLabel_3
+	JMP StartWhile_3
 Label_3:
-	JMP StartLabel_2
+	JMP StartWhile_2
 Label_2:
 StartWhile_4:
 	PUSH y
@@ -40,8 +40,8 @@ StartWhile_4:
 	PUSH 1
 	SUB
 	POP y
-	JMP StartLabel_4
+	JMP StartWhile_4
 Label_4:
-	JMP StartLabel_1
+	JMP StartWhile_1
 Label_1:
 	END main

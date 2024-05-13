@@ -30,7 +30,7 @@ Label_1:
 	POP c
 	PUSH "C = C / 2"
 	POP aaa
-EndIf_1:
+EndLabel_1:
 	PUSH a
 	PUSH 2
 	LT
@@ -39,7 +39,7 @@ EndIf_1:
 	POP bo
 	JMP EndLabel_2
 Label_2:
-EndIf_2:
+EndLabel_2:
 StartWhile_1:
 	PUSH a
 	PUSH 0
@@ -49,7 +49,7 @@ StartWhile_1:
 	PUSH 1
 	SUB
 	POP a
-	JMP StartLabel_1
+	JMP StartWhile_1
 Label_3:
 func:
 	POP a
@@ -74,7 +74,7 @@ StartFor_2:
 	PUSH 1
 	ADD
 	POP c
-	JMP StartLabel_2
+	JMP StartFor_2
 Label_4:
 StartDoWhile_3:
 	PUSH c
@@ -85,7 +85,7 @@ StartDoWhile_3:
 	PUSH 10
 	GT
 	JF Label_5
-	JMP StartLabel_3
+	JMP StartDoWhile_3
 Label_5:
 	PUSH 2
 	PUSH 3
