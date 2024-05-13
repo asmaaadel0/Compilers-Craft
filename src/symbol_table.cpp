@@ -157,8 +157,8 @@ void assign_int(int index, int value, int number_of_line)
     }
     if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
     {
-        printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
     symbolTable[index].isInit = true;
@@ -182,8 +182,8 @@ void assign_int(int index, int value, int number_of_line)
     }
     else
     {
-        printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        fprintf(error_file, "Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
 }
@@ -198,8 +198,8 @@ void assign_float(int index, float value, int number_of_line)
     }
     if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
     {
-        printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
     symbolTable[index].isInit = true;
@@ -223,8 +223,8 @@ void assign_float(int index, float value, int number_of_line)
     }
     else
     {
-        printf("Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Type Mismatch Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        fprintf(error_file, "Error at line %d: %s %s variable assigned int value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
 }
@@ -239,8 +239,8 @@ void assign_bool(int index, bool value, int number_of_line)
     }
     if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
     {
-        printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Type Mismatch Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned int\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
     symbolTable[index].isInit = true;
@@ -264,8 +264,8 @@ void assign_bool(int index, bool value, int number_of_line)
     }
     else
     {
-        printf("Type Mismatch Error at line %d: %s %s variable assigned bool value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Type Mismatch Error at line %d: %s %s variable assigned bool value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: %s %s variable assigned bool value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        fprintf(error_file, "Error at line %d: %s %s variable assigned bool value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
 }
@@ -280,8 +280,8 @@ void assign_string(int index, char *value, int number_of_line)
     }
     if (strcmp(symbolTable[index].datatype, "string") != 0 && symbolTable[index].type == "func")
     {
-        printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned string\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Type Mismatch Error at line %d: Function %s return type is %s but assigned string\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: Function %s return type is %s but assigned string\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned string\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
     symbolTable[index].isInit = true;
@@ -292,8 +292,8 @@ void assign_string(int index, char *value, int number_of_line)
     }
     else
     {
-        printf("Type Mismatch Error at line %d: %s %s variable assigned string value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Type Mismatch Error at line %d: %s %s variable assigned string value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: %s %s variable assigned string value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        fprintf(error_file, "Error at line %d: %s %s variable assigned string value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
 }
@@ -308,8 +308,8 @@ void assign_char(int index, char *value, int number_of_line)
     }
     if (strcmp(symbolTable[index].datatype, "char") != 0 && symbolTable[index].type == "func")
     {
-        printf("Type Mismatch Error at line %d: Function %s return type is %s but assigned char\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Type Mismatch Error at line %d: Function %s return type is %s but assigned char\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: Function %s return type is %s but assigned char\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned char\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
     symbolTable[index].isInit = true;
@@ -320,8 +320,8 @@ void assign_char(int index, char *value, int number_of_line)
     }
     else
     {
-        printf("Type Mismatch Error at line %d: %s %s variable assigned char value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Type Mismatch Error at line %d: %s %s variable assigned char value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: %s %s variable assigned char value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
+        fprintf(error_file, "Error at line %d: %s %s variable assigned char value\n", number_of_line, symbolTable[index].identifierName, symbolTable[index].datatype);
         exit(1);
     }
 }
@@ -374,26 +374,26 @@ void check_type(int i, int number_of_line)
     {
         if (strcmp(symbolTable[i].type, "func") == 0)
         {
-            printf("Type Mismatch Error at line %d: %s is %s variable but %s return %s value\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
-            fprintf(error_file, "Type Mismatch Error at line %d: %s is %s variable but %s return %s value\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            printf("Error at line %d: %s is %s variable but %s return %s value\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            fprintf(error_file, "Error at line %d: %s is %s variable but %s return %s value\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
             exit(1);
         }
         else if (strcmp(symbolTable[insertResult].type, "func") == 0)
         {
-            printf("Type Mismatch Error at line %d: %s is %s variable but %s return %s value\n", number_of_line, symbolTable[i].identifierName, symbolTable[i].datatype, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype);
-            fprintf(error_file, "Type Mismatch Error at line %d: %s is %s variable but %s return %s value\n", number_of_line, symbolTable[i].identifierName, symbolTable[i].datatype, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype);
+            printf("Error at line %d: %s is %s variable but %s return %s value\n", number_of_line, symbolTable[i].identifierName, symbolTable[i].datatype, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype);
+            fprintf(error_file, "Error at line %d: %s is %s variable but %s return %s value\n", number_of_line, symbolTable[i].identifierName, symbolTable[i].datatype, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype);
             exit(1);
         }
         else if (isParameter == 1)
         {
-            printf("Type Mismatch Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
-            fprintf(error_file, "Type Mismatch Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            printf("Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            fprintf(error_file, "Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
             exit(1);
         }
         else
         {
-            printf("Type Mismatch Error at line %d: %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
-            fprintf(error_file, "Type Mismatch Error at line %d: %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            printf("Error at line %d: %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            fprintf(error_file, "Error at line %d: %s is %s variable but %s %s\n", number_of_line, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
             exit(1);
         }
     }
