@@ -11,7 +11,7 @@ typedef struct nodeType
     char *type;
 } nodeType;
 
-nodeType *setType(char *type)
+nodeType *set_type(char *type)
 {
     nodeType *p;
 
@@ -39,7 +39,7 @@ nodeType *unary_operator(struct nodeType *op, int number_of_line)
     return p;
 }
 
-nodeType *arithmatic(struct nodeType *op1, struct nodeType *op2, int number_of_line)
+nodeType *arithmatic_operator(struct nodeType *op1, struct nodeType *op2, int number_of_line)
 {
     nodeType *p = (nodeType *)malloc(sizeof(nodeType));
     if (strcmp(op1->type, "string") == 0 ||
@@ -56,7 +56,7 @@ nodeType *arithmatic(struct nodeType *op1, struct nodeType *op2, int number_of_l
     return p;
 }
 
-nodeType *logical(struct nodeType *op1, struct nodeType *op2, int number_of_line)
+nodeType *logical_operator(struct nodeType *op1, struct nodeType *op2, int number_of_line)
 {
     nodeType *p = (nodeType *)malloc(sizeof(nodeType));
     if (!op2)
@@ -83,7 +83,7 @@ nodeType *logical(struct nodeType *op1, struct nodeType *op2, int number_of_line
     return p;
 }
 
-nodeType *comparison(struct nodeType *op1, struct nodeType *op2, int number_of_line)
+nodeType *comparison_operator(struct nodeType *op1, struct nodeType *op2, int number_of_line)
 {
     nodeType *p = (nodeType *)malloc(sizeof(nodeType));
     if (strcmp(op1->type, op2->type) != 0 && (strcmp(op1->type, "string") == 0 ||
@@ -100,7 +100,7 @@ nodeType *comparison(struct nodeType *op1, struct nodeType *op2, int number_of_l
     return p;
 }
 
-nodeType *bitwise(struct nodeType *op1, struct nodeType *op2, int number_of_line)
+nodeType *bitwise_operator(struct nodeType *op1, struct nodeType *op2, int number_of_line)
 {
     nodeType *p = (nodeType *)malloc(sizeof(nodeType));
 
