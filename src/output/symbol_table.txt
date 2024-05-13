@@ -1,2 +1,0 @@
-ID	Name	Type	DataType	Line	Scope	isInit	Args
-0	asmaa	var	string		1	0	1	-

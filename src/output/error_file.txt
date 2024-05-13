@@ -1,0 +1,1 @@
+Type Mismatch Error at line 2: a is string variable but sum return int value

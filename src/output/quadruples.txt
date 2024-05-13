@@ -1,2 +1,3 @@
-	PUSH "asmaa" + "adel"
-	POP asmaa
+sum:
+	POP a
+	POP b
