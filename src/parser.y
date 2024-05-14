@@ -119,11 +119,11 @@ TYPE:
 EXPRESSION:
         IDENTIFIER    {int i = lookup($1, 0, yylineno);check_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent($1);}        
         | CONSTANT    {int i = lookup($1, 0, yylineno);check_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent($1);}
-        | INT_VALUE   {$$ = set_type("int");assign_int(insertResult, $1, yylineno);}       
-        | FLOAT_VALUE {$$ = set_type("float");assign_float(insertResult, $1, yylineno);}         
-        | BOOL_VALUE  {$$ = set_type("bool");assign_bool(insertResult, $1, yylineno);}   
-        | STRING_VALUE{$$ = set_type("string");assign_string(insertResult, $1, yylineno);}        
-        | CHAR_VALUE  {$$ = set_type("char");assign_char(insertResult, $1, yylineno);} 
+        | INT_VALUE   {$$ = set_type("int");check_int_value(insertResult, $1, yylineno);}       
+        | FLOAT_VALUE {$$ = set_type("float");check_float_value(insertResult, $1, yylineno);}         
+        | BOOL_VALUE  {$$ = set_type("bool");check_bool_value(insertResult, $1, yylineno);}   
+        | STRING_VALUE{$$ = set_type("string");check_string_value(insertResult, $1, yylineno);}        
+        | CHAR_VALUE  {$$ = set_type("char");check_char_value(insertResult, $1, yylineno);} 
         
         | '(' EXPRESSION ')'  {$$ = $2;}
         | FUNC_CALL
