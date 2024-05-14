@@ -24,91 +24,79 @@ nodeType *set_type(char *type)
     return p;
 }
 
-nodeType *unary_operator(struct nodeType *op, int number_of_line)
+nodeType *arithmatic_operator_checker(struct nodeType *op1, struct nodeType *op2, int line_number)
 {
-    nodeType *p = (nodeType *)malloc(sizeof(nodeType));
-    if (strcmp(op->type, "int") == 0 || strcmp(op->type, "float") == 0)
-    {
-    }
-    else
-    {
-        printf("Error at line %d: cannot apply this operator to operand with type is '%s'\n", number_of_line, op->type);
-        exit(1);
-    }
-    p->type = op->type;
-    return p;
-}
-
-nodeType *arithmatic_operator(struct nodeType *op1, struct nodeType *op2, int number_of_line)
-{
-    nodeType *p = (nodeType *)malloc(sizeof(nodeType));
-    if (strcmp(op1->type, "string") == 0 ||
-        strcmp(op2->type, "string") == 0 ||
-        strcmp(op1->type, "char") == 0 ||
-        strcmp(op2->type, "char") == 0 ||
-        strcmp(op1->type, "void") == 0 ||
-        strcmp(op2->type, "void") == 0)
-    {
-        printf("Error at line %d: Invalid operator\n", number_of_line);
-        exit(1);
-    }
-    p->type = op1->type;
-    return p;
-}
-
-nodeType *logical_operator(struct nodeType *op1, struct nodeType *op2, int number_of_line)
-{
+    // handle (+, -, *, /, ^, %) operators
     nodeType *p = (nodeType *)malloc(sizeof(nodeType));
     if (!op2)
     {
-        if (strcmp(op1->type, "string") == 0 ||
-            strcmp(op1->type, "char") == 0 ||
-            strcmp(op1->type, "void") == 0)
+        // handle (-) negative operator
+        // accept only int and float
+        if (strcmp(op1->type, "int") != 0 && strcmp(op1->type, "float") != 0)
         {
-            printf("Error at line %d: Invalid operator\n", number_of_line);
+            printf("Error at line %d: Invalid operator\n", line_number);
             exit(1);
         }
     }
     else if (strcmp(op1->type, "string") == 0 ||
-        strcmp(op2->type, "string") == 0 ||
-        strcmp(op1->type, "char") == 0 ||
-        strcmp(op2->type, "char") == 0 ||
-        strcmp(op1->type, "void") == 0 ||
-        strcmp(op2->type, "void") == 0)
+             strcmp(op2->type, "string") == 0 ||
+             strcmp(op1->type, "char") == 0 ||
+             strcmp(op2->type, "char") == 0 ||
+             strcmp(op1->type, "void") == 0 ||
+             strcmp(op2->type, "void") == 0)
     {
-        printf("Error at line %d: Invalid operator\n", number_of_line);
-        exit(1);
-    }
-    p->type = "bool";
-    return p;
-}
-
-nodeType *comparison_operator(struct nodeType *op1, struct nodeType *op2, int number_of_line)
-{
-    nodeType *p = (nodeType *)malloc(sizeof(nodeType));
-    if (strcmp(op1->type, op2->type) != 0 && (strcmp(op1->type, "string") == 0 ||
-                                              strcmp(op2->type, "string") == 0 ||
-                                              strcmp(op1->type, "char") == 0 ||
-                                              strcmp(op2->type, "char") == 0 ||
-                                              strcmp(op1->type, "void") == 0 ||
-                                              strcmp(op2->type, "void") == 0))
-    {
-        printf("Error at line %d: Invalid operator\n", number_of_line);
-        exit(1);
-    }
-    p->type = "bool";
-    return p;
-}
-
-nodeType *bitwise_operator(struct nodeType *op1, struct nodeType *op2, int number_of_line)
-{
-    nodeType *p = (nodeType *)malloc(sizeof(nodeType));
-
-    if (strcmp(op1->type, "int") != 0 || strcmp(op2->type, "int") != 0)
-    {
-        printf("Error at line %d: Invalid operator\n", number_of_line);
+        // handle (+, -, *, /, ^, %) operators
+        // not accept string, char or void types
+        printf("Error at line %d: Invalid operator\n", line_number);
         exit(1);
     }
     p->type = op1->type;
+    return p;
+}
+
+nodeType *boolean_operator_checker(struct nodeType *op1, struct nodeType *op2, int line_number)
+{
+    // handle (and, or, !)
+    // handle (<, <=, >, >=, ==, !=)
+    nodeType *p = (nodeType *)malloc(sizeof(nodeType));
+    if (!op2)
+    {
+        // handle (!) operator
+        // not accept string, char or void type
+        if (strcmp(op1->type, "string") == 0 ||
+            strcmp(op1->type, "char") == 0 ||
+            strcmp(op1->type, "void") == 0)
+        {
+            printf("Error at line %d: Invalid operator\n", line_number);
+            exit(1);
+        }
+    }
+    else if (strcmp(op1->type, "string") == 0 ||
+             strcmp(op2->type, "string") == 0 ||
+             strcmp(op1->type, "char") == 0 ||
+             strcmp(op2->type, "char") == 0 ||
+             strcmp(op1->type, "void") == 0 ||
+             strcmp(op2->type, "void") == 0)
+    {
+        // handle (and, or) operator
+        // handle (<, <=, >, >=, ==, !=)
+        // not accept string, char or void type
+        printf("Error at line %d: Invalid operator\n", line_number);
+        exit(1);
+    }
+    p->type = "bool";
+    return p;
+}
+
+nodeType *bitwise_operator_checker(struct nodeType *op1, struct nodeType *op2, int line_number)
+{
+    // handle (|, &, >>, <<)
+    nodeType *p = (nodeType *)malloc(sizeof(nodeType));
+    if (strcmp(op1->type, "int") != 0 || strcmp(op2->type, "int") != 0)
+    {
+        printf("Error at line %d: Invalid operator\n", line_number);
+        exit(1);
+    }
+    p->type = "int";
     return p;
 }
