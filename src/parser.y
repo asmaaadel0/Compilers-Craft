@@ -70,7 +70,7 @@
 
 %type <nodePtr> STATEMENT EXPRESSION FUNC_CALL RETURN_STATEMENT DECLARATION_STATEMENT BREAK CONTINUE LOGICAL_NOT RETURN SUB '(' ')'
 %%
-PROGRAM:                            
+PROGRAM:
         PROGRAM STATEMENT  {printf("Parsed Line %d Succesfully\n\n", yylineno);}        
         |
         ;
@@ -127,7 +127,7 @@ EXPRESSION:
         | CHAR_VALUE  {$$ = set_type("char");assign_char(insertResult, $1, yylineno);} 
         
         | '(' EXPRESSION ')'  {$$ = $2;}
-        | FUNC_CALL                
+        | FUNC_CALL
         
         | SUB EXPRESSION        {$$ = arithmatic_operator_checker($2, NULL, yylineno);quadInstruction("NEG");}          
         | LOGICAL_NOT EXPRESSION{$$ = boolean_operator_checker($2, NULL, yylineno);quadInstruction("LOGICAL_NOT");}
@@ -157,7 +157,7 @@ EXPRESSION:
         ;               
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
-DECLARATION_STATEMENT:                            
+DECLARATION_STATEMENT:
         TYPE IDENTIFIER  {insertResult = insert($1, $2, "var", yylineno, false);} EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);printf("Parsed Declaration\n");}
         | TYPE IDENTIFIER{insertResult = insert($1, $2, "var", yylineno, false);} SEMICOLON { insertResult = -1;printf("Parsed Declaration\n");}
         | TYPE CONSTANT  {insertResult = insert($1, $2, "const", yylineno, false);}EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);printf("Parsed Const Declaration\n");}
@@ -186,7 +186,7 @@ CASES:
 //________________________________________________ FUNCTION DECLARATION STATEMENT ________________________________________________
 
 FUNC_DECLARATION_STATEMENT:
-        TYPE IDENTIFIER {quadStartFunction($2);} '(' ARGS ')'{funcIndex = insert($1, $2,"func", yylineno, 0);} BLOCK {quadEndFunction($2);}                 
+        TYPE IDENTIFIER {quadStartFunction($2);} '(' ARGS ')'{funcIndex = insert($1, $2,"func", yylineno, 0);} BLOCK {quadEndFunction($2);}
         ;
 ARGS:
         ARG_DECL ',' ARGS
