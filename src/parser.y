@@ -31,7 +31,7 @@
 %token INT FLOAT STRING CHAR BOOL
 
 %token PRINT VOID RETURN
-%token SWITCH BREAK CONTINUE
+%token SWITCH BREAK
 %token CASE DEFAULT
 
 %token IF ELSE
@@ -68,7 +68,7 @@
 %type <int_value> INT_VALUE
 %type <bool_value> BOOL_VALUE
 
-%type <nodePtr> STATEMENT EXPRESSION FUNC_CALL RETURN_STATEMENT DECLARATION_STATEMENT BREAK CONTINUE LOGICAL_NOT RETURN SUB '(' ')'
+%type <nodePtr> STATEMENT EXPRESSION FUNC_CALL RETURN_STATEMENT DECLARATION_STATEMENT BREAK LOGICAL_NOT RETURN SUB '(' ')'
 %%
 PROGRAM:
         PROGRAM STATEMENT  {printf("Parsed Line %d Succesfully\n\n", yylineno);}        
@@ -94,7 +94,6 @@ STATEMENT:
         | FOR_STATEMENT{quadPopStartLabel();printf("Parsed For LOOP\n");}
         
         | BREAK SEMICOLON{quadJumpEndLabel();}
-        | CONTINUE SEMICOLON
         
         | RETURN_STATEMENT SEMICOLON{quadReturn();}
         | BLOCK                     {printf("Parsed Block\n");}
