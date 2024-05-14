@@ -76,7 +76,7 @@ PROGRAM:
         ;
 //________________________________________________ BLOCK ________________________________________________
 BLOCK:
-        '{' {scope_start();} PROGRAM '}' {scope_end(yylineno);}             
+        '{' {enter_new_scope();} PROGRAM '}' {leave_scope(yylineno);}             
         ;
 
 //________________________________________________ STATEMENT ________________________________________________
@@ -117,8 +117,8 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-        IDENTIFIER    {int i = lookup($1, 0, yylineno);check_type(i, yylineno);$$ = set_type(symbolTable[i].datatype);if(!isPrint)quadPushIdent($1);}        
-        | CONSTANT    {int i = lookup($1, 0, yylineno);check_type(i, yylineno);$$ = set_type(symbolTable[i].datatype);if(!isPrint)quadPushIdent($1);}
+        IDENTIFIER    {int i = lookup($1, 0, yylineno);check_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent($1);}        
+        | CONSTANT    {int i = lookup($1, 0, yylineno);check_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent($1);}
         | INT_VALUE   {$$ = set_type("int");assign_int(insertResult, $1, yylineno);}       
         | FLOAT_VALUE {$$ = set_type("float");assign_float(insertResult, $1, yylineno);}         
         | BOOL_VALUE  {$$ = set_type("bool");assign_bool(insertResult, $1, yylineno);}   
@@ -216,7 +216,7 @@ DO_WHILE_STATEMENT:
         ;
 //________________________________________________ FOR STATEMENT ________________________________________________
 FOR_STATEMENT:
-        FOR '(' {inLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum, "For");} STATEMENT {quadJumpFalseLabel(++labelNum);} STATEMENT ')' {inLoop = 0;} BLOCK {quadJumpStartLabel("For");quadPopLabel();}
+        FOR '(' {isLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum, "For");} STATEMENT {quadJumpFalseLabel(++labelNum);} STATEMENT ')' {isLoop = 0;} BLOCK {quadJumpStartLabel("For");quadPopLabel();}
         ;
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
@@ -227,11 +227,11 @@ ASSIGNMENT_STATEMENT:
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-        IDENTIFIER {argCount=0;calledFuncIndex = lookup($1, 0, yylineno);check_type(calledFuncIndex, yylineno);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;arg_count_check(calledFuncIndex, yylineno);} ')' {quadCallFunction($1);printf("Parsed Function Call\n");$$ = set_type(symbolTable[calledFuncIndex].datatype);}
+        IDENTIFIER {funcArgCount=0;calledFuncIndex = lookup($1, 0, yylineno);check_type(calledFuncIndex, yylineno);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;arg_count_check(calledFuncIndex, yylineno);} ')' {quadCallFunction($1);printf("Parsed Function Call\n");$$ = set_type(symbolTableArray[calledFuncIndex].datatype);}
         ;       
 ARGUMENTS:      
-        EXPRESSION { argCount++; } ',' ARGUMENTS 
-        | EXPRESSION { argCount++; } 
+        EXPRESSION { funcArgCount++; } ',' ARGUMENTS 
+        | EXPRESSION { funcArgCount++; } 
         |  
         ;
 %%

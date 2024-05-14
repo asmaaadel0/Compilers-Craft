@@ -16,33 +16,33 @@ typedef struct symbol
 
     int id, scope;
 
-    int declareLine;
-    bool isConst, isArg, isUsed, isInit, outOfScope;
+    int declarationLine;
+    bool isArgFunc, isUsed, isInitialized, isScopeEnded;
 
     char *identifierName;
-    // var, const, func
+    // const, var, func.
     char *type;  
-    // int, float, bool, string, char   
+    // int, float, string, char, bool.  
     char *datatype; 
     
-    int argList[100];
-    int argCount;
+    int funcArguments[100];
+    int funcArgCount;
     bool assignToFunc;
 
 } symbol;
 
-symbol symbolTable[500];
+symbol symbolTableArray[500];
 
-int symbolTableSize = 0;
+int symbolTableArraySize = 0;
 
 int scopeStack[500];
-int inLoop = 0;
+int isLoop = 0;
 int blockNumber = 0;
-int symbolTableIndex = 0;
+int symbolTableArrayIndex = 0;
 
 int returnExist = 0;
 int funcIndex = 0;
-int argCount = 0;
+int funcArgCount = 0;
 int calledFuncIndex = 0;
 int isParameter = 0;
 
@@ -51,34 +51,37 @@ int isPrint = 0;
 
 FILE *error_file = NULL;
 
-void scope_start()
+void enter_new_scope()
 {
     blockNumber++;
     scopeStack[blockNumber] = blockNumber;
 }
 
-void scope_end(int line_number)
+void leave_scope(int line_number)
 {
-    if (funcIndex != -1 && strcmp(symbolTable[funcIndex].type, "func") == 0 && returnExist == 0 && strcmp(symbolTable[funcIndex].datatype, "void") != 0)
+    // if it's a function, haven't return, it's type isn't void
+    if (funcIndex != -1 && strcmp(symbolTableArray[funcIndex].type, "func") == 0 && returnExist == 0 && strcmp(symbolTableArray[funcIndex].datatype, "void") != 0)
     {
-        printf("Error at line %d: Missing return statement in Function %s\n", line_number, symbolTable[funcIndex].identifierName);
-        fprintf(error_file, "Error at line %d: Missing return statement in Function %s\n", line_number, symbolTable[funcIndex].identifierName);
+        printf("Error at line %d: Missing 'return' in Function\n", line_number);
+        fprintf(error_file, "Error at line %d: Missing 'return' in Function %s\n", line_number, symbolTableArray[funcIndex].identifierName);
         exit(EXIT_FAILURE);
     }
-    if (funcIndex != -1 && strcmp(symbolTable[funcIndex].type, "func") == 0 && returnExist == 1 && strcmp(symbolTable[funcIndex].datatype, "void") == 0)
+    // if it's a function, have return, it's type is void
+    if (funcIndex != -1 && strcmp(symbolTableArray[funcIndex].type, "func") == 0 && returnExist == 1 && strcmp(symbolTableArray[funcIndex].datatype, "void") == 0)
     {
-        printf("Error at line %d: %s Void Function can't have return statement\n", line_number, symbolTable[funcIndex].identifierName);
-        fprintf(error_file, "Error at line %d: %s Void Function can't have return statement\n", line_number, symbolTable[funcIndex].identifierName);
+        printf("Error at line %d: it's a void Function can't have 'return'\n", line_number);
+        fprintf(error_file, "Error at line %d: it's a void Function can't have 'return'\n", line_number);
         exit(EXIT_FAILURE);
     }
     insertResult = -1;
     funcIndex = -1;
     returnExist = 0;
-    for (int i = 0; i < symbolTableIndex; i++)
+    // make all variables in the end scope --> out of scope
+    for (int i = 0; i < symbolTableArrayIndex; i++)
     {
-        if (symbolTable[i].scope == scopeStack[blockNumber])
+        if (symbolTableArray[i].scope == scopeStack[blockNumber])
         {
-            symbolTable[i].outOfScope = 1;
+            symbolTableArray[i].isScopeEnded = true;
         }
     }
     blockNumber--;
@@ -86,65 +89,68 @@ void scope_end(int line_number)
 
 int is_exist(char *identifierName)
 {
-    for (int i = 0; i < symbolTableIndex; ++i)
+    // search for variables for error already declared
+    for (int i = 0; i < symbolTableArrayIndex; ++i)
     {
-        if (strcmp(symbolTable[i].identifierName, identifierName) == 0 && symbolTable[i].scope == blockNumber && !symbolTable[i].outOfScope)
+        if (strcmp(symbolTableArray[i].identifierName, identifierName) == 0 && symbolTableArray[i].scope == blockNumber && !symbolTableArray[i].isScopeEnded)
         {
-            return symbolTable[i].declareLine;
+            return symbolTableArray[i].declarationLine;
         }
     }
     return -1;
 }
 
-int insert(char *datatype, char *identifier, char *type, int line_number, bool isArg)
+int insert(char *datatype, char *identifier, char *type, int line_number, bool isArgFunc)
 {
     int L = is_exist(identifier);
-    if (L != -1 && !isArg)
+    // function arguments can be 
+    if (L != -1 && !isArgFunc)
     {
         printf("Error at line %d: %s is already declared in this scope at line %d\n", line_number, identifier, L);
         fprintf(error_file, "Error at line %d: %s is already declared in this scope at line %d\n", line_number, identifier, L);
         exit(EXIT_FAILURE);
     }
 
-    struct symbol newnode;
+    struct symbol newItem;
 
-    newnode.assignToFunc = false;
-    newnode.identifierName = identifier;
-    newnode.datatype = datatype;
-    newnode.type = type;
+    newItem.identifierName = identifier;
+    newItem.datatype = datatype;
+    newItem.type = type;
 
-    newnode.declareLine = line_number;
-    newnode.id = symbolTableIndex;
-    newnode.isArg = isArg;
-    newnode.outOfScope = false;
-    newnode.isInit = false;
-    newnode.isUsed = false;
+    newItem.declarationLine = line_number;
+    newItem.id = symbolTableArrayIndex;
+    
+    newItem.isArgFunc = isArgFunc;
+    newItem.assignToFunc = false;
+    newItem.isScopeEnded = false;
+    newItem.isInitialized = false;
+    newItem.isUsed = false;
 
-    if (newnode.isArg == 1 || inLoop == 1)
+    if (newItem.isArgFunc == 1 || isLoop == 1)
     {
-        newnode.scope = blockNumber + 1;
+        newItem.scope = blockNumber + 1;
     }
     else
     {
-        newnode.scope = scopeStack[blockNumber];
+        newItem.scope = scopeStack[blockNumber];
     }
     if (strcmp(type, "func") == 0)
     {
         int j = 0;
-        for (int i = 0; i < symbolTableIndex; i++)
+        for (int i = 0; i < symbolTableArrayIndex; i++)
         {
-            if (symbolTable[i].isArg && symbolTable[i].scope == (blockNumber + 1) && !symbolTable[i].assignToFunc)
+            if (symbolTableArray[i].isArgFunc && symbolTableArray[i].scope == (blockNumber + 1) && !symbolTableArray[i].assignToFunc)
             {
-                newnode.argList[j] = symbolTable[i].id;
-                symbolTable[i].assignToFunc = true;
+                newItem.funcArguments[j] = symbolTableArray[i].id;
+                symbolTableArray[i].assignToFunc = true;
                 j++;
             }
         }
-        newnode.argCount = j;
+        newItem.funcArgCount = j;
     }
-    symbolTable[symbolTableIndex] = newnode;
-    symbolTableIndex++;
-    return newnode.id;
+    symbolTableArray[symbolTableArrayIndex] = newItem;
+    symbolTableArrayIndex++;
+    return newItem.id;
 }
 
 void assign_int(int index, int value, int line_number)
@@ -155,26 +161,26 @@ void assign_int(int index, int value, int line_number)
             quadPushInt(value);
         return;
     }
-    if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
+    if (strcmp(symbolTableArray[index].datatype, "string") == 0 && symbolTableArray[index].type == "func")
     {
-        printf("Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
+        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
-    symbolTable[index].isInit = true;
-    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0 && strcmp(symbolTable[index].datatype, "void") != 0) && !symbolTable[index].outOfScope) || isParameter)
+    symbolTableArray[index].isInitialized = true;
+    if (((strcmp(symbolTableArray[index].datatype, "string") != 0 && strcmp(symbolTableArray[index].datatype, "char") != 0 && strcmp(symbolTableArray[index].datatype, "void") != 0) && !symbolTableArray[index].isScopeEnded) || isParameter)
     {
-        if (strcmp(symbolTable[index].datatype, "float") == 0)
+        if (strcmp(symbolTableArray[index].datatype, "float") == 0)
         {
             if (!isPrint)
                 quadPushFloat((float)value);
         }
-        else if (strcmp(symbolTable[index].datatype, "bool") == 0)
+        else if (strcmp(symbolTableArray[index].datatype, "bool") == 0)
         {
             if (!isPrint)
                 quadPushInt((bool)value);
         }
-        else if (strcmp(symbolTable[index].datatype, "int") == 0)
+        else if (strcmp(symbolTableArray[index].datatype, "int") == 0)
         {
             if (!isPrint)
                 quadPushInt(value);
@@ -182,8 +188,8 @@ void assign_int(int index, int value, int line_number)
     }
     else
     {
-        printf("Error at line %d: %s %s variable assigned int value\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Error at line %d: %s %s variable assigned int value\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: %s %s variable assigned int value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
+        fprintf(error_file, "Error at line %d: %s %s variable assigned int value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
 }
@@ -196,26 +202,26 @@ void assign_float(int index, float value, int line_number)
             quadPushFloat(value);
         return;
     }
-    if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
+    if (strcmp(symbolTableArray[index].datatype, "string") == 0 && symbolTableArray[index].type == "func")
     {
-        printf("Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
+        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
-    symbolTable[index].isInit = true;
-    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0 && strcmp(symbolTable[index].datatype, "void") != 0) && !symbolTable[index].outOfScope) || isParameter)
+    symbolTableArray[index].isInitialized = true;
+    if (((strcmp(symbolTableArray[index].datatype, "string") != 0 && strcmp(symbolTableArray[index].datatype, "char") != 0 && strcmp(symbolTableArray[index].datatype, "void") != 0) && !symbolTableArray[index].isScopeEnded) || isParameter)
     {
-        if (strcmp(symbolTable[index].datatype, "float") == 0)
+        if (strcmp(symbolTableArray[index].datatype, "float") == 0)
         {
             if (!isPrint)
                 quadPushFloat(value);
         }
-        else if (strcmp(symbolTable[index].datatype, "bool") == 0)
+        else if (strcmp(symbolTableArray[index].datatype, "bool") == 0)
         {
             if (!isPrint)
                 quadPushInt((bool)value);
         }
-        else if (strcmp(symbolTable[index].datatype, "int") == 0)
+        else if (strcmp(symbolTableArray[index].datatype, "int") == 0)
         {
             if (!isPrint)
                 quadPushInt((int)value);
@@ -223,8 +229,8 @@ void assign_float(int index, float value, int line_number)
     }
     else
     {
-        printf("Error at line %d: %s %s variable assigned int value\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Error at line %d: %s %s variable assigned int value\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: %s %s variable assigned int value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
+        fprintf(error_file, "Error at line %d: %s %s variable assigned int value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
 }
@@ -237,26 +243,26 @@ void assign_bool(int index, bool value, int line_number)
             quadPushInt(value);
         return;
     }
-    if (strcmp(symbolTable[index].datatype, "string") == 0 && symbolTable[index].type == "func")
+    if (strcmp(symbolTableArray[index].datatype, "string") == 0 && symbolTableArray[index].type == "func")
     {
-        printf("Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
+        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned int\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
-    symbolTable[index].isInit = true;
-    if (((strcmp(symbolTable[index].datatype, "string") != 0 && strcmp(symbolTable[index].datatype, "char") != 0 && strcmp(symbolTable[index].datatype, "void") != 0) && !symbolTable[index].outOfScope) || isParameter)
+    symbolTableArray[index].isInitialized = true;
+    if (((strcmp(symbolTableArray[index].datatype, "string") != 0 && strcmp(symbolTableArray[index].datatype, "char") != 0 && strcmp(symbolTableArray[index].datatype, "void") != 0) && !symbolTableArray[index].isScopeEnded) || isParameter)
     {
-        if (strcmp(symbolTable[index].datatype, "float") == 0)
+        if (strcmp(symbolTableArray[index].datatype, "float") == 0)
         {
             if (!isPrint)
                 quadPushFloat((float)value);
         }
-        else if (strcmp(symbolTable[index].datatype, "bool") == 0)
+        else if (strcmp(symbolTableArray[index].datatype, "bool") == 0)
         {
             if (!isPrint)
                 quadPushInt(value);
         }
-        else if (strcmp(symbolTable[index].datatype, "int") == 0)
+        else if (strcmp(symbolTableArray[index].datatype, "int") == 0)
         {
             if (!isPrint)
                 quadPushInt((int)value);
@@ -264,8 +270,8 @@ void assign_bool(int index, bool value, int line_number)
     }
     else
     {
-        printf("Error at line %d: %s %s variable assigned bool value\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Error at line %d: %s %s variable assigned bool value\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: %s %s variable assigned bool value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
+        fprintf(error_file, "Error at line %d: %s %s variable assigned bool value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
 }
@@ -278,22 +284,22 @@ void assign_string(int index, char *value, int line_number)
             quadPushString(value);
         return;
     }
-    if (strcmp(symbolTable[index].datatype, "string") != 0 && symbolTable[index].type == "func")
+    if (strcmp(symbolTableArray[index].datatype, "string") != 0 && symbolTableArray[index].type == "func")
     {
-        printf("Error at line %d: Function %s return type is %s but assigned string\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned string\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: Function %s return type is %s but assigned string\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
+        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned string\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
-    symbolTable[index].isInit = true;
-    if ((strcmp(symbolTable[index].datatype, "string") == 0 && !symbolTable[index].outOfScope) || isParameter)
+    symbolTableArray[index].isInitialized = true;
+    if ((strcmp(symbolTableArray[index].datatype, "string") == 0 && !symbolTableArray[index].isScopeEnded) || isParameter)
     {
         if (!isPrint)
             quadPushString(value);
     }
     else
     {
-        printf("Error at line %d: %s %s variable assigned string value\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Error at line %d: %s %s variable assigned string value\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: %s %s variable assigned string value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
+        fprintf(error_file, "Error at line %d: %s %s variable assigned string value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
 }
@@ -306,46 +312,46 @@ void assign_char(int index, char *value, int line_number)
             quadPushChar(value);
         return;
     }
-    if (strcmp(symbolTable[index].datatype, "char") != 0 && symbolTable[index].type == "func")
+    if (strcmp(symbolTableArray[index].datatype, "char") != 0 && symbolTableArray[index].type == "func")
     {
-        printf("Error at line %d: Function %s return type is %s but assigned char\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned char\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: Function %s return type is %s but assigned char\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
+        fprintf(error_file, "Error at line %d: Function %s return type is %s but assigned char\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
-    symbolTable[index].isInit = true;
-    if ((strcmp(symbolTable[index].datatype, "char") == 0 && !symbolTable[index].outOfScope) || isParameter)
+    symbolTableArray[index].isInitialized = true;
+    if ((strcmp(symbolTableArray[index].datatype, "char") == 0 && !symbolTableArray[index].isScopeEnded) || isParameter)
     {
         if (!isPrint)
             quadPushChar(value);
     }
     else
     {
-        printf("Error at line %d: %s %s variable assigned char value\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
-        fprintf(error_file, "Error at line %d: %s %s variable assigned char value\n", line_number, symbolTable[index].identifierName, symbolTable[index].datatype);
+        printf("Error at line %d: %s %s variable assigned char value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
+        fprintf(error_file, "Error at line %d: %s %s variable assigned char value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
 }
 
 int lookup(char *identifierName, bool is_assignment, int line_number)
 {
-    for (int i = 0; i < symbolTableIndex; ++i)
+    for (int i = 0; i < symbolTableArrayIndex; ++i)
     {
-        if (strcmp(symbolTable[i].identifierName, identifierName) == 0 && !symbolTable[i].outOfScope)
+        if (strcmp(symbolTableArray[i].identifierName, identifierName) == 0 && !symbolTableArray[i].isScopeEnded)
         {
-            if (!symbolTable[i].isInit && strcmp(symbolTable[i].type, "var") == 0 && !symbolTable[i].isArg)
+            if (!symbolTableArray[i].isInitialized && strcmp(symbolTableArray[i].type, "var") == 0 && !symbolTableArray[i].isArgFunc)
             {
                 if (!is_assignment)
                 {
-                    printf("Error at line %d: %s used before initialization\n", line_number, identifierName);
-                    fprintf(error_file, "Error at line %d: %s used before initialization\n", line_number, identifierName);
+                    printf("Error at line %d: %s isUsed before initialization\n", line_number, identifierName);
+                    fprintf(error_file, "Error at line %d: %s isUsed before initialization\n", line_number, identifierName);
                     exit(EXIT_FAILURE);
                 }
             }
             if (!is_assignment)
             {
-                symbolTable[i].isUsed = true;
+                symbolTableArray[i].isUsed = true;
             }
-            return symbolTable[i].id;
+            return symbolTableArray[i].id;
         }
     }
     printf("Error at line %d: %s undeclared identifier\n", line_number, identifierName);
@@ -357,9 +363,9 @@ void check_type(int i, int line_number)
 {
     if (isParameter == 1)
     {
-        if (argCount < symbolTable[calledFuncIndex].argCount)
+        if (funcArgCount < symbolTableArray[calledFuncIndex].funcArgCount)
         {
-            insertResult = symbolTable[calledFuncIndex].argList[argCount];
+            insertResult = symbolTableArray[calledFuncIndex].funcArguments[funcArgCount];
         }
         else
         {
@@ -370,36 +376,36 @@ void check_type(int i, int line_number)
     {
         return;
     }
-    if (symbolTable[i].datatype != symbolTable[insertResult].datatype && (symbolTable[insertResult].datatype == "string" || symbolTable[i].datatype == "string"))
+    if (symbolTableArray[i].datatype != symbolTableArray[insertResult].datatype && (symbolTableArray[insertResult].datatype == "string" || symbolTableArray[i].datatype == "string"))
     {
-        if (strcmp(symbolTable[i].type, "func") == 0)
+        if (strcmp(symbolTableArray[i].type, "func") == 0)
         {
-            printf("Error at line %d: %s is %s variable but %s return %s value\n", line_number, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
-            fprintf(error_file, "Error at line %d: %s is %s variable but %s return %s value\n", line_number, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            printf("Error at line %d: %s is %s variable but %s return %s value\n", line_number, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype, symbolTableArray[i].identifierName, symbolTableArray[i].datatype);
+            fprintf(error_file, "Error at line %d: %s is %s variable but %s return %s value\n", line_number, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype, symbolTableArray[i].identifierName, symbolTableArray[i].datatype);
             exit(EXIT_FAILURE);
         }
-        else if (strcmp(symbolTable[insertResult].type, "func") == 0)
+        else if (strcmp(symbolTableArray[insertResult].type, "func") == 0)
         {
-            printf("Error at line %d: %s is %s variable but %s return %s value\n", line_number, symbolTable[i].identifierName, symbolTable[i].datatype, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype);
-            fprintf(error_file, "Error at line %d: %s is %s variable but %s return %s value\n", line_number, symbolTable[i].identifierName, symbolTable[i].datatype, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype);
+            printf("Error at line %d: %s is %s variable but %s return %s value\n", line_number, symbolTableArray[i].identifierName, symbolTableArray[i].datatype, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype);
+            fprintf(error_file, "Error at line %d: %s is %s variable but %s return %s value\n", line_number, symbolTableArray[i].identifierName, symbolTableArray[i].datatype, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype);
             exit(EXIT_FAILURE);
         }
         else if (isParameter == 1)
         {
-            printf("Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", line_number, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
-            fprintf(error_file, "Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", line_number, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            printf("Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", line_number, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype, symbolTableArray[i].identifierName, symbolTableArray[i].datatype);
+            fprintf(error_file, "Error at line %d: Incorrect argument type %s is %s variable but %s %s\n", line_number, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype, symbolTableArray[i].identifierName, symbolTableArray[i].datatype);
             exit(EXIT_FAILURE);
         }
         else
         {
-            printf("Error at line %d: %s is %s variable but %s %s\n", line_number, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
-            fprintf(error_file, "Error at line %d: %s is %s variable but %s %s\n", line_number, symbolTable[insertResult].identifierName, symbolTable[insertResult].datatype, symbolTable[i].identifierName, symbolTable[i].datatype);
+            printf("Error at line %d: %s is %s variable but %s %s\n", line_number, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype, symbolTableArray[i].identifierName, symbolTableArray[i].datatype);
+            fprintf(error_file, "Error at line %d: %s is %s variable but %s %s\n", line_number, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype, symbolTableArray[i].identifierName, symbolTableArray[i].datatype);
             exit(EXIT_FAILURE);
         }
     }
-    else if (strcmp(symbolTable[insertResult].type, "func") != 0)
+    else if (strcmp(symbolTableArray[insertResult].type, "func") != 0)
     {
-        symbolTable[insertResult].isInit = true;
+        symbolTableArray[insertResult].isInitialized = true;
     }
     if (isParameter == 0)
     {
@@ -409,16 +415,16 @@ void check_type(int i, int line_number)
 
 void arg_count_check(int i, int line_number)
 {
-    if (argCount > symbolTable[i].argCount)
+    if (funcArgCount > symbolTableArray[i].funcArgCount)
     {
-        printf("Error at line %d : too many arguments for function call expected %d got %d\n", line_number, symbolTable[i].argCount, argCount);
-        fprintf(error_file, "Error at line %d : too many arguments for function call expected %d got %d\n", line_number, symbolTable[i].argCount, argCount);
+        printf("Error at line %d : too many arguments for function call expected %d got %d\n", line_number, symbolTableArray[i].funcArgCount, funcArgCount);
+        fprintf(error_file, "Error at line %d : too many arguments for function call expected %d got %d\n", line_number, symbolTableArray[i].funcArgCount, funcArgCount);
         exit(EXIT_FAILURE);
     }
-    else if (argCount < symbolTable[i].argCount)
+    else if (funcArgCount < symbolTableArray[i].funcArgCount)
     {
-        printf("Error at line %d : too few arguments for function call expected %d got %d\n", line_number, symbolTable[i].argCount, argCount);
-        fprintf(error_file, "Error at line %d : too few arguments for function call expected %d got %d\n", line_number, symbolTable[i].argCount, argCount);
+        printf("Error at line %d : too few arguments for function call expected %d got %d\n", line_number, symbolTableArray[i].funcArgCount, funcArgCount);
+        fprintf(error_file, "Error at line %d : too few arguments for function call expected %d got %d\n", line_number, symbolTableArray[i].funcArgCount, funcArgCount);
         exit(EXIT_FAILURE);
     }
 }
@@ -431,23 +437,11 @@ void display_symbol_table_to_file(const char *filename)
         printf("Error opening file.\n");
         exit(EXIT_FAILURE);
     }
-    fprintf(fp, "ID\tName\tType\tDataType\tLine\tScope\tisInit\tArgs\n");
-    for (int i = 0; i < symbolTableIndex; i++)
+    fprintf(fp, "ID\tName\tType\tDataType\tLine\tScope\tisInitialized\n");
+    for (int i = 0; i < symbolTableArrayIndex; i++)
     {
-        struct symbol node = symbolTable[i];
-        fprintf(fp, "%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node.id, node.identifierName, node.type, node.datatype, node.declareLine, node.scope, node.isInit);
-        if (strcmp(node.type, "func") == 0)
-        {
-            for (int j = 0; j < node.argCount; j++)
-            {
-                fprintf(fp, "%d,", node.argList[j]);
-            }
-        }
-        else
-        {
-            fprintf(fp, "-");
-        }
-
+        struct symbol node = symbolTableArray[i];
+        fprintf(fp, "%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node.id, node.identifierName, node.type, node.datatype, node.declarationLine, node.scope, node.isInitialized);
         fprintf(fp, "\n");
     }
     fclose(fp);
@@ -455,23 +449,11 @@ void display_symbol_table_to_file(const char *filename)
 
 void display_symbol_table()
 {
-    printf("ID\tName\tType\tDataType\tLine\tScope\tisInit\tArgs\n");
-    for (int i = 0; i < symbolTableIndex; i++)
+    printf("ID\tName\tType\tDataType\tLine\tScope\tisInitialized\n");
+    for (int i = 0; i < symbolTableArrayIndex; i++)
     {
-        struct symbol node = symbolTable[i];
-        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node.id, node.identifierName, node.type, node.datatype, node.declareLine, node.scope, node.isInit);
-        if (strcmp(node.type, "func") == 0)
-        {
-            for (int j = 0; j < node.argCount; j++)
-            {
-                printf("%d,", node.argList[j]);
-            }
-        }
-        else
-        {
-            printf("-");
-        }
-
+        struct symbol node = symbolTableArray[i];
+        printf("%d\t%s\t%s\t%s\t\t%d\t%d\t%d\t", node.id, node.identifierName, node.type, node.datatype, node.declarationLine, node.scope, node.isInitialized);
         printf("\n");
     }
 }
@@ -484,22 +466,22 @@ void display_unused_variables_to_file(const char *filename)
         printf("Error opening file.\n");
         exit(EXIT_FAILURE);
     }
-    for (int i = 0; i < symbolTableIndex; ++i)
+    for (int i = 0; i < symbolTableArrayIndex; ++i)
     {
-        symbol current = symbolTable[i];
+        symbol current = symbolTableArray[i];
         if (current.isUsed == false)
         {
             if (strcmp(current.type, "func") == 0)
             {
-                fprintf(fp, "Function %s Declared at line %d but never called\n", current.identifierName, current.declareLine);
+                fprintf(fp, "Function %s Declared at line %d but never called\n", current.identifierName, current.declarationLine);
             }
-            else if (current.isArg == 1)
+            else if (current.isArgFunc == 1)
             {
-                fprintf(fp, "Unused Argument %s Declared in Function at line %d\n", current.identifierName, current.declareLine);
+                fprintf(fp, "unused Argument %s Declared in Function at line %d\n", current.identifierName, current.declarationLine);
             }
             else
             {
-                fprintf(fp, "Unused Identifier %s Declared at line %d\n", current.identifierName, current.declareLine);
+                fprintf(fp, "unused Identifier %s Declared at line %d\n", current.identifierName, current.declarationLine);
             }
         }
     }
@@ -507,22 +489,22 @@ void display_unused_variables_to_file(const char *filename)
 
 void display_unused_variables()
 {
-    for (int i = 0; i < symbolTableIndex; ++i)
+    for (int i = 0; i < symbolTableArrayIndex; ++i)
     {
-        symbol current = symbolTable[i];
+        symbol current = symbolTableArray[i];
         if (current.isUsed == false)
         {
             if (strcmp(current.type, "func") == 0)
             {
-                printf("Function %s Declared at line %d but never called\n", current.identifierName, current.declareLine);
+                printf("Function %s Declared at line %d but never called\n", current.identifierName, current.declarationLine);
             }
-            else if (current.isArg == 1)
+            else if (current.isArgFunc == 1)
             {
-                printf("Unused Argument %s Declared in Function at line %d\n", current.identifierName, current.declareLine);
+                printf("unused Argument %s Declared in Function at line %d\n", current.identifierName, current.declarationLine);
             }
             else
             {
-                printf("Unused Identifier %s Declared at line %d\n", current.identifierName, current.declareLine);
+                printf("unused Identifier %s Declared at line %d\n", current.identifierName, current.declarationLine);
             }
         }
     }

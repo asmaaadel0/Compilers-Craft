@@ -1380,13 +1380,13 @@ yyreduce:
 
   case 4: /* $@1: %empty  */
 #line 79 "./parser.y"
-            {scope_start();}
+            {enter_new_scope();}
 #line 1385 "parser.tab.c"
     break;
 
   case 5: /* BLOCK: '{' $@1 PROGRAM '}'  */
 #line 79 "./parser.y"
-                                         {scope_end(yylineno);}
+                                             {leave_scope(yylineno);}
 #line 1391 "parser.tab.c"
     break;
 
@@ -1530,13 +1530,13 @@ yyreduce:
 
   case 31: /* EXPRESSION: IDENTIFIER  */
 #line 120 "./parser.y"
-                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTable[i].datatype);if(!isPrint)quadPushIdent((yyvsp[0].string_value));}
+                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent((yyvsp[0].string_value));}
 #line 1535 "parser.tab.c"
     break;
 
   case 32: /* EXPRESSION: CONSTANT  */
 #line 121 "./parser.y"
-                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTable[i].datatype);if(!isPrint)quadPushIdent((yyvsp[0].string_value));}
+                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent((yyvsp[0].string_value));}
 #line 1541 "parser.tab.c"
     break;
 
@@ -1836,7 +1836,7 @@ yyreduce:
 
   case 95: /* $@20: %empty  */
 #line 219 "./parser.y"
-                {inLoop = 1;}
+                {isLoop = 1;}
 #line 1841 "parser.tab.c"
     break;
 
@@ -1854,7 +1854,7 @@ yyreduce:
 
   case 98: /* $@23: %empty  */
 #line 219 "./parser.y"
-                                                                                                                                                {inLoop = 0;}
+                                                                                                                                                {isLoop = 0;}
 #line 1859 "parser.tab.c"
     break;
 
@@ -1884,37 +1884,37 @@ yyreduce:
 
   case 104: /* $@26: %empty  */
 #line 230 "./parser.y"
-                   {argCount=0;calledFuncIndex = lookup((yyvsp[0].string_value), 0, yylineno);check_type(calledFuncIndex, yylineno);}
+                   {funcArgCount=0;calledFuncIndex = lookup((yyvsp[0].string_value), 0, yylineno);check_type(calledFuncIndex, yylineno);}
 #line 1889 "parser.tab.c"
     break;
 
   case 105: /* $@27: %empty  */
 #line 230 "./parser.y"
-                                                                                                                     {isParameter=1;}
+                                                                                                                         {isParameter=1;}
 #line 1895 "parser.tab.c"
     break;
 
   case 106: /* $@28: %empty  */
 #line 230 "./parser.y"
-                                                                                                                                                {isParameter=0;arg_count_check(calledFuncIndex, yylineno);}
+                                                                                                                                                    {isParameter=0;arg_count_check(calledFuncIndex, yylineno);}
 #line 1901 "parser.tab.c"
     break;
 
   case 107: /* FUNC_CALL: IDENTIFIER $@26 '(' $@27 ARGUMENTS $@28 ')'  */
 #line 230 "./parser.y"
-                                                                                                                                                                                                                {quadCallFunction((yyvsp[-6].string_value));printf("Parsed Function Call\n");(yyval.nodePtr) = set_type(symbolTable[calledFuncIndex].datatype);}
+                                                                                                                                                                                                                    {quadCallFunction((yyvsp[-6].string_value));printf("Parsed Function Call\n");(yyval.nodePtr) = set_type(symbolTableArray[calledFuncIndex].datatype);}
 #line 1907 "parser.tab.c"
     break;
 
   case 108: /* $@29: %empty  */
 #line 233 "./parser.y"
-                   { argCount++; }
+                   { funcArgCount++; }
 #line 1913 "parser.tab.c"
     break;
 
   case 110: /* ARGUMENTS: EXPRESSION  */
 #line 234 "./parser.y"
-                     { argCount++; }
+                     { funcArgCount++; }
 #line 1919 "parser.tab.c"
     break;
 
