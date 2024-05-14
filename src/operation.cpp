@@ -13,13 +13,8 @@ typedef struct nodeType
 
 nodeType *set_type(char *type)
 {
-    nodeType *p;
-
-    if ((p = (nodeType *)malloc(sizeof(nodeType))) == NULL)
-    {
-        printf("out of memory");
-        exit(1);
-    }
+    
+    nodeType *p = (nodeType *)malloc(sizeof(nodeType));
     p->type = type;
     return p;
 }
