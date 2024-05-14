@@ -1788,13 +1788,13 @@ yyreduce:
 
   case 80: /* $@16: %empty  */
 #line 188 "./parser.y"
-                                                             {funcIndex = insert((yyvsp[-5].string_value), (yyvsp[-4].string_value),"func", yylineno, 0);}
+                                                             {funcIndex = insert((yyvsp[-5].string_value), (yyvsp[-4].string_value),"function", yylineno, 0);}
 #line 1793 "parser.tab.c"
     break;
 
   case 81: /* FUNC_DECLARATION_STATEMENT: TYPE IDENTIFIER $@15 '(' ARGS ')' $@16 BLOCK  */
 #line 188 "./parser.y"
-                                                                                                                     {quadEndFunction((yyvsp[-6].string_value));}
+                                                                                                                         {quadEndFunction((yyvsp[-6].string_value));}
 #line 1799 "parser.tab.c"
     break;
 

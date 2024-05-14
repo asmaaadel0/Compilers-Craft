@@ -185,7 +185,7 @@ CASES:
 //________________________________________________ FUNCTION DECLARATION STATEMENT ________________________________________________
 
 FUNC_DECLARATION_STATEMENT:
-        TYPE IDENTIFIER {quadStartFunction($2);} '(' ARGS ')'{funcIndex = insert($1, $2,"func", yylineno, 0);} BLOCK {quadEndFunction($2);}
+        TYPE IDENTIFIER {quadStartFunction($2);} '(' ARGS ')'{funcIndex = insert($1, $2,"function", yylineno, 0);} BLOCK {quadEndFunction($2);}
         ;
 ARGS:
         ARG_DECL ',' ARGS
