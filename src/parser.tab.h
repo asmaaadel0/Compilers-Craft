@@ -63,8 +63,8 @@ extern int yydebug;
     INT = 258,                     /* INT  */
     FLOAT = 259,                   /* FLOAT  */
     STRING = 260,                  /* STRING  */
-    BOOL = 261,                    /* BOOL  */
-    CHAR = 262,                    /* CHAR  */
+    CHAR = 261,                    /* CHAR  */
+    BOOL = 262,                    /* BOOL  */
     PRINT = 263,                   /* PRINT  */
     VOID = 264,                    /* VOID  */
     RETURN = 265,                  /* RETURN  */
@@ -78,18 +78,18 @@ extern int yydebug;
     FOR = 273,                     /* FOR  */
     WHILE = 274,                   /* WHILE  */
     DO = 275,                      /* DO  */
-    BOOL_LITERAL = 276,            /* BOOL_LITERAL  */
-    LOGIC_AND = 277,               /* LOGIC_AND  */
-    LOGIC_OR = 278,                /* LOGIC_OR  */
-    LOGIC_NOT = 279,               /* LOGIC_NOT  */
-    EQUALITY = 280,                /* EQUALITY  */
-    NEG_EQUALITY = 281,            /* NEG_EQUALITY  */
+    BOOL_VALUE = 276,              /* BOOL_VALUE  */
+    LOGICAL_AND = 277,             /* LOGICAL_AND  */
+    LOGICAL_OR = 278,              /* LOGICAL_OR  */
+    LOGICAL_NOT = 279,             /* LOGICAL_NOT  */
+    EQUAL = 280,                   /* EQUAL  */
+    NOT_EQUAL = 281,               /* NOT_EQUAL  */
     GT = 282,                      /* GT  */
     LT = 283,                      /* LT  */
     EQ = 284,                      /* EQ  */
     SEMICOLON = 285,               /* SEMICOLON  */
-    MODULO = 286,                  /* MODULO  */
-    PLUS = 287,                    /* PLUS  */
+    MOD = 286,                     /* MOD  */
+    ADD = 287,                     /* ADD  */
     SUB = 288,                     /* SUB  */
     MUL = 289,                     /* MUL  */
     DIV = 290,                     /* DIV  */
@@ -100,10 +100,10 @@ extern int yydebug;
     SHR = 295,                     /* SHR  */
     CONSTANT = 296,                /* CONSTANT  */
     IDENTIFIER = 297,              /* IDENTIFIER  */
-    STRING_LITERAL = 298,          /* STRING_LITERAL  */
-    CHAR_LITERAL = 299,            /* CHAR_LITERAL  */
-    DIGIT = 300,                   /* DIGIT  */
-    FLOAT_DIGIT = 301              /* FLOAT_DIGIT  */
+    STRING_VALUE = 298,            /* STRING_VALUE  */
+    CHAR_VALUE = 299,              /* CHAR_VALUE  */
+    INT_VALUE = 300,               /* INT_VALUE  */
+    FLOAT_VALUE = 301              /* FLOAT_VALUE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -114,12 +114,12 @@ union YYSTYPE
 {
 #line 17 "./parser.y"
  
- int num;
- char* str; 
- float float_val;
- bool bool_val;
+ int int_value;
+ char* string_value; 
+ float float_value;
+ bool bool_value;
 
- struct nodeType *nPtr;
+ struct nodeType *nodePtr;
 
 #line 125 "parser.tab.h"
 
