@@ -222,7 +222,7 @@ FOR_STATEMENT:
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
         IDENTIFIER EQ {insertResult = lookup($1, 1, yylineno);} EXPRESSION SEMICOLON {quadPopIdent($1);} 
-        | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", yylineno);exit(1);insertResult = -1;} EXPRESSION SEMICOLON   
+        | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", yylineno);exit(EXIT_FAILURE);insertResult = -1;} EXPRESSION SEMICOLON   
         ;
 
 //________________________________________________ FUNCTION CALL ________________________________________________

@@ -1878,7 +1878,7 @@ yyreduce:
 
   case 102: /* $@25: %empty  */
 #line 225 "./parser.y"
-                      {printf("Error at line: %d CONSTANTS must not be reassigned\n", yylineno);exit(1);insertResult = -1;}
+                      {printf("Error at line: %d CONSTANTS must not be reassigned\n", yylineno);exit(EXIT_FAILURE);insertResult = -1;}
 #line 1883 "parser.tab.c"
     break;
 
