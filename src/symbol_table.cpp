@@ -74,7 +74,7 @@ void leave_scope(int line_number)
     insertResult = -1;
     funcIndex = -1;
     returnExist = 0;
-    // make all variables in the end scope --> out of scope
+    // make all variables in the end scope --> scope ended
     for (int i = 0; i < symbolTableArrayIndex; i++)
     {
         if (symbolTableArray[i].scope == blockNumber)
