@@ -1530,13 +1530,13 @@ yyreduce:
 
   case 31: /* EXPRESSION: IDENTIFIER  */
 #line 120 "./parser.y"
-                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent((yyvsp[0].string_value));}
+                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_variable_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent((yyvsp[0].string_value));}
 #line 1535 "parser.tab.c"
     break;
 
   case 32: /* EXPRESSION: CONSTANT  */
 #line 121 "./parser.y"
-                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent((yyvsp[0].string_value));}
+                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_variable_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent((yyvsp[0].string_value));}
 #line 1541 "parser.tab.c"
     break;
 
@@ -1698,49 +1698,49 @@ yyreduce:
 
   case 60: /* $@7: %empty  */
 #line 160 "./parser.y"
-                         {insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value), "var", yylineno, false);}
+                         {insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value), "variable", yylineno, false);}
 #line 1703 "parser.tab.c"
     break;
 
   case 61: /* DECLARATION_STATEMENT: TYPE IDENTIFIER $@7 EQ EXPRESSION SEMICOLON  */
 #line 160 "./parser.y"
-                                                                                                          { insertResult = -1;quadPopIdent((yyvsp[-4].string_value));printf("Parsed Declaration\n");}
+                                                                                                               { insertResult = -1;quadPopIdent((yyvsp[-4].string_value));printf("Parsed Declaration\n");}
 #line 1709 "parser.tab.c"
     break;
 
   case 62: /* $@8: %empty  */
 #line 161 "./parser.y"
-                         {insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value), "var", yylineno, false);}
+                         {insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value), "variable", yylineno, false);}
 #line 1715 "parser.tab.c"
     break;
 
   case 63: /* DECLARATION_STATEMENT: TYPE IDENTIFIER $@8 SEMICOLON  */
 #line 161 "./parser.y"
-                                                                                            { insertResult = -1;printf("Parsed Declaration\n");}
+                                                                                                 { insertResult = -1;printf("Parsed Declaration\n");}
 #line 1721 "parser.tab.c"
     break;
 
   case 64: /* $@9: %empty  */
 #line 162 "./parser.y"
-                         {insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value), "const", yylineno, false);}
+                         {insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value), "constant", yylineno, false);}
 #line 1727 "parser.tab.c"
     break;
 
   case 65: /* DECLARATION_STATEMENT: TYPE CONSTANT $@9 EQ EXPRESSION SEMICOLON  */
 #line 162 "./parser.y"
-                                                                                                           { insertResult = -1;quadPopIdent((yyvsp[-4].string_value));printf("Parsed Const Declaration\n");}
+                                                                                                              { insertResult = -1;quadPopIdent((yyvsp[-4].string_value));printf("Parsed Const Declaration\n");}
 #line 1733 "parser.tab.c"
     break;
 
   case 66: /* $@10: %empty  */
 #line 163 "./parser.y"
-                         {insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value), "const", yylineno, false);}
+                         {insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value), "constant", yylineno, false);}
 #line 1739 "parser.tab.c"
     break;
 
   case 67: /* DECLARATION_STATEMENT: TYPE CONSTANT $@10 SEMICOLON  */
 #line 163 "./parser.y"
-                                                                                             { insertResult = -1;printf("Parsed Const Declaration\n");}
+                                                                                                { insertResult = -1;printf("Parsed Const Declaration\n");}
 #line 1745 "parser.tab.c"
     break;
 
@@ -1800,7 +1800,7 @@ yyreduce:
 
   case 85: /* ARG_DECL: TYPE IDENTIFIER  */
 #line 196 "./parser.y"
-                        {quadPopIdent((yyvsp[0].string_value));insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value),"var", yylineno, true);}
+                        {quadPopIdent((yyvsp[0].string_value));insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value),"variable", yylineno, true);}
 #line 1805 "parser.tab.c"
     break;
 
@@ -1884,25 +1884,25 @@ yyreduce:
 
   case 104: /* $@26: %empty  */
 #line 230 "./parser.y"
-                   {funcArgCount=0;calledFuncIndex = lookup((yyvsp[0].string_value), 0, yylineno);check_type(calledFuncIndex, yylineno);}
+                   {funcArgCount=0;calledFuncIndex = lookup((yyvsp[0].string_value), 0, yylineno);check_variable_type(calledFuncIndex, yylineno);}
 #line 1889 "parser.tab.c"
     break;
 
   case 105: /* $@27: %empty  */
 #line 230 "./parser.y"
-                                                                                                                         {isParameter=1;}
+                                                                                                                                  {isParameter=1;}
 #line 1895 "parser.tab.c"
     break;
 
   case 106: /* $@28: %empty  */
 #line 230 "./parser.y"
-                                                                                                                                                    {isParameter=0;arg_count_check(calledFuncIndex, yylineno);}
+                                                                                                                                                             {isParameter=0;check_arg_count(calledFuncIndex, yylineno);}
 #line 1901 "parser.tab.c"
     break;
 
   case 107: /* FUNC_CALL: IDENTIFIER $@26 '(' $@27 ARGUMENTS $@28 ')'  */
 #line 230 "./parser.y"
-                                                                                                                                                                                                                    {quadCallFunction((yyvsp[-6].string_value));printf("Parsed Function Call\n");(yyval.nodePtr) = set_type(symbolTableArray[calledFuncIndex].datatype);}
+                                                                                                                                                                                                                             {quadCallFunction((yyvsp[-6].string_value));printf("Parsed Function Call\n");(yyval.nodePtr) = set_type(symbolTableArray[calledFuncIndex].datatype);}
 #line 1907 "parser.tab.c"
     break;
 

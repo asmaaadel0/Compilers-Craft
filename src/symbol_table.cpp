@@ -20,7 +20,7 @@ typedef struct symbol
     bool isArgFunc, isUsed, isInitialized, isScopeEnded;
 
     char *identifierName;
-    // const, var, function.
+    // constant, variable, function.
     char *type;
     // int, float, string, char, bool.
     char *datatype;
@@ -351,11 +351,15 @@ void check_char_value(int index, char *value, int line_number)
 
 int lookup(char *identifierName, bool is_assignment, int line_number)
 {
+    // handle undeclared identifier, used identifier before initialization
     for (int i = 0; i < symbolTableArrayIndex; ++i)
     {
-        if (strcmp(symbolTableArray[i].identifierName, identifierName) == 0 && !symbolTableArray[i].isScopeEnded)
+        if (strcmp(symbolTableArray[i].identifierName, identifierName) == 0 &&
+            !symbolTableArray[i].isScopeEnded)
         {
-            if (!symbolTableArray[i].isInitialized && strcmp(symbolTableArray[i].type, "var") == 0 && !symbolTableArray[i].isArgFunc)
+            if (!symbolTableArray[i].isInitialized &&
+                strcmp(symbolTableArray[i].type, "variable") == 0 &&
+                !symbolTableArray[i].isArgFunc)
             {
                 if (!is_assignment)
                 {
@@ -376,7 +380,7 @@ int lookup(char *identifierName, bool is_assignment, int line_number)
     exit(EXIT_FAILURE);
 }
 
-void check_type(int i, int line_number)
+void check_variable_type(int i, int line_number)
 {
     if (isParameter == 1)
     {
@@ -393,7 +397,11 @@ void check_type(int i, int line_number)
     {
         return;
     }
-    if (symbolTableArray[i].datatype != symbolTableArray[insertResult].datatype && (symbolTableArray[insertResult].datatype == "string" || symbolTableArray[i].datatype == "string"))
+    if (symbolTableArray[i].datatype != symbolTableArray[insertResult].datatype &&
+        ((symbolTableArray[insertResult].datatype == "string" ||
+          symbolTableArray[i].datatype == "string") ||
+         (symbolTableArray[insertResult].datatype == "char" ||
+          symbolTableArray[i].datatype == "char")))
     {
         if (strcmp(symbolTableArray[i].type, "function") == 0)
         {
@@ -430,7 +438,7 @@ void check_type(int i, int line_number)
     }
 }
 
-void arg_count_check(int i, int line_number)
+void check_arg_count(int i, int line_number)
 {
     if (funcArgCount > symbolTableArray[i].funcArgCount)
     {
@@ -454,7 +462,7 @@ void display_symbol_table_to_file(const char *filename)
         printf("Error opening file.\n");
         exit(EXIT_FAILURE);
     }
-    fprintf(fp, "ID\tName\tType\tDataType\tLine\tScope\tisInitialized\n");
+    fprintf(fp, "ID\tName\tType\t\tDataType\tLine\tScope\tisInitialized\n");
     for (int i = 0; i < symbolTableArrayIndex; i++)
     {
         struct symbol node = symbolTableArray[i];
@@ -466,7 +474,7 @@ void display_symbol_table_to_file(const char *filename)
 
 void display_symbol_table()
 {
-    printf("ID\tName\tType\tDataType\tLine\tScope\tisInitialized\n");
+    printf("ID\tName\tType\t\tDataType\tLine\tScope\tisInitialized\n");
     for (int i = 0; i < symbolTableArrayIndex; i++)
     {
         struct symbol node = symbolTableArray[i];
@@ -485,20 +493,19 @@ void display_unused_variables_to_file(const char *filename)
     }
     for (int i = 0; i < symbolTableArrayIndex; ++i)
     {
-        symbol current = symbolTableArray[i];
-        if (current.isUsed == false)
+        if (symbolTableArray[i].isUsed == false)
         {
-            if (strcmp(current.type, "function") == 0)
+            if (strcmp(symbolTableArray[i].type, "function") == 0)
             {
-                fprintf(fp, "Function %s Declared at line %d but never called\n", current.identifierName, current.declarationLine);
+                fprintf(fp, "function %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
-            else if (current.isArgFunc == 1)
+            else if (symbolTableArray[i].isArgFunc == 1)
             {
-                fprintf(fp, "unused Argument %s Declared in Function at line %d\n", current.identifierName, current.declarationLine);
+                fprintf(fp, "argument %s Declared in function at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
             else
             {
-                fprintf(fp, "unused Identifier %s Declared at line %d\n", current.identifierName, current.declarationLine);
+                fprintf(fp, "identifier %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
         }
     }
@@ -508,20 +515,19 @@ void display_unused_variables()
 {
     for (int i = 0; i < symbolTableArrayIndex; ++i)
     {
-        symbol current = symbolTableArray[i];
-        if (current.isUsed == false)
+        if (symbolTableArray[i].isUsed == false)
         {
-            if (strcmp(current.type, "function") == 0)
+            if (strcmp(symbolTableArray[i].type, "function") == 0)
             {
-                printf("Function %s Declared at line %d but never called\n", current.identifierName, current.declarationLine);
+                printf("function %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
-            else if (current.isArgFunc == 1)
+            else if (symbolTableArray[i].isArgFunc == 1)
             {
-                printf("unused Argument %s Declared in Function at line %d\n", current.identifierName, current.declarationLine);
+                printf("argument %s Declared in function at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
             else
             {
-                printf("unused Identifier %s Declared at line %d\n", current.identifierName, current.declarationLine);
+                printf("identifier %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
         }
     }

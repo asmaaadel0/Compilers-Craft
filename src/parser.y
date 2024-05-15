@@ -117,8 +117,8 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-        IDENTIFIER    {int i = lookup($1, 0, yylineno);check_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent($1);}        
-        | CONSTANT    {int i = lookup($1, 0, yylineno);check_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent($1);}
+        IDENTIFIER    {int i = lookup($1, 0, yylineno);check_variable_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent($1);}        
+        | CONSTANT    {int i = lookup($1, 0, yylineno);check_variable_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent($1);}
         | INT_VALUE   {$$ = set_type("int");check_int_value(insertResult, $1, yylineno);}       
         | FLOAT_VALUE {$$ = set_type("float");check_float_value(insertResult, $1, yylineno);}         
         | BOOL_VALUE  {$$ = set_type("bool");check_bool_value(insertResult, $1, yylineno);}   
@@ -157,10 +157,10 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:
-        TYPE IDENTIFIER  {insertResult = insert($1, $2, "var", yylineno, false);} EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);printf("Parsed Declaration\n");}
-        | TYPE IDENTIFIER{insertResult = insert($1, $2, "var", yylineno, false);} SEMICOLON { insertResult = -1;printf("Parsed Declaration\n");}
-        | TYPE CONSTANT  {insertResult = insert($1, $2, "const", yylineno, false);}EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);printf("Parsed Const Declaration\n");}
-        | TYPE CONSTANT  {insertResult = insert($1, $2, "const", yylineno, false);}SEMICOLON { insertResult = -1;printf("Parsed Const Declaration\n");}
+        TYPE IDENTIFIER  {insertResult = insert($1, $2, "variable", yylineno, false);} EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);printf("Parsed Declaration\n");}
+        | TYPE IDENTIFIER{insertResult = insert($1, $2, "variable", yylineno, false);} SEMICOLON { insertResult = -1;printf("Parsed Declaration\n");}
+        | TYPE CONSTANT  {insertResult = insert($1, $2, "constant", yylineno, false);}EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);printf("Parsed Const Declaration\n");}
+        | TYPE CONSTANT  {insertResult = insert($1, $2, "constant", yylineno, false);}SEMICOLON { insertResult = -1;printf("Parsed Const Declaration\n");}
         ;
 
 
@@ -193,7 +193,7 @@ ARGS:
         | 
         ;
 ARG_DECL:
-        TYPE IDENTIFIER {quadPopIdent($2);insertResult = insert($1, $2,"var", yylineno, true);}
+        TYPE IDENTIFIER {quadPopIdent($2);insertResult = insert($1, $2,"variable", yylineno, true);}
         ;
 
 //________________________________________________ IF STATEMENT ________________________________________________
@@ -227,7 +227,7 @@ ASSIGNMENT_STATEMENT:
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-        IDENTIFIER {funcArgCount=0;calledFuncIndex = lookup($1, 0, yylineno);check_type(calledFuncIndex, yylineno);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;arg_count_check(calledFuncIndex, yylineno);} ')' {quadCallFunction($1);printf("Parsed Function Call\n");$$ = set_type(symbolTableArray[calledFuncIndex].datatype);}
+        IDENTIFIER {funcArgCount=0;calledFuncIndex = lookup($1, 0, yylineno);check_variable_type(calledFuncIndex, yylineno);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;check_arg_count(calledFuncIndex, yylineno);} ')' {quadCallFunction($1);printf("Parsed Function Call\n");$$ = set_type(symbolTableArray[calledFuncIndex].datatype);}
         ;       
 ARGUMENTS:      
         EXPRESSION { funcArgCount++; } ',' ARGUMENTS 
