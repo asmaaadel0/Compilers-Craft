@@ -33,73 +33,73 @@ FILE* create_file(char* path) {
   return file;
 }
 
-void set_quad_file_path(char *filePath, FILE *file) {
+void set_file_path(char *filePath, FILE *file) {
   quadFile = filePath;
   quadFileP = file;
 }
 
-void quad_start_function(char *function)
+void start_function(char *function)
 {
     fprintf(quadFileP, "%s:\n", function);
 }
 
-void quad_end_function(char *function)
+void end_function(char *function)
 {
     fprintf(quadFileP, "\tEND %s\n", function);
 }
 
-void quad_call_function(char *function)
+void call_function(char *function)
 {
     fprintf(quadFileP, "\tCALL %s\n", function);
 }
 
-void quad_return()
+void ret()
 {
     fprintf(quadFileP, "\tRET\n");
 }
 
-void quad_instruction(const char *instruction)
+void instruction(const char *instruction)
 {
     fprintf(quadFileP, "\t%s\n", instruction);
 }
 
-void quad_push_int(int val)
+void push_int(int val)
 {
     fprintf(quadFileP, "\tPUSH %d\n", val);
 }
 
-void quad_push_float(float val)
+void push_float(float val)
 {
     fprintf(quadFileP, "\tPUSH %f\n", val);
 }
 
-void quad_push_string_or_char(char *str)
+void push_string_or_char(char *str)
 {
     fprintf(quadFileP, "\tPUSH %s\n", str);
 }
 
-void quad_push_ident(char *symbol)
+void push_ident(char *symbol)
 {
     fprintf(quadFileP, "\tPUSH %s\n", symbol);
 }
 
-void quad_pop_ident(char *symbol)
+void pop_ident(char *symbol)
 {
     fprintf(quadFileP, "\tPOP %s\n", symbol);
 }
 
-void quad_push_end_label(int endLabelNum)
+void push_end_label(int endLabelNum)
 {
     endLabel[++endLabelIndex] = endLabelNum;
 }
 
-void quad_jump_end_label()
+void jump_end_label()
 {
     int endLabelNum = endLabel[endLabelIndex];
     fprintf(quadFileP, "\tJMP EndLabel_%d\n", endLabelNum);
 }
 
-void quad_pop_end_label()
+void pop_end_label()
 {
     if (endLabelIndex < 0)
     {
@@ -110,13 +110,13 @@ void quad_pop_end_label()
     fprintf(quadFileP, "EndLabel_%d:\n", endLabelNum);
 }
 
-void quad_jump_false_label(int labelNum)
+void jump_false_label(int labelNum)
 {
     fprintf(quadFileP, "\tJF Label_%d\n", labelNum);
     label[labelIndex++] = labelNum;
 }
 
-void quad_pop_label()
+void pop_label()
 {
     if (labelIndex < 0)
     {
@@ -128,12 +128,12 @@ void quad_pop_label()
     fprintf(quadFileP, "Label_%d:\n", labelNum);
 }
 
-void quad_push_switch_ident(char *identifier)
+void push_switch_ident(char *identifier)
 {
     switchIdent[++switchIdentIndex] = identifier;
 }
 
-void quad_peak_switch_ident()
+void peak_switch_ident()
 {
     if (switchIdentIndex < 0)
     {
@@ -144,7 +144,7 @@ void quad_peak_switch_ident()
     fprintf(quadFileP, "\tPUSH %s\n", switchIdent[switchIdentIndex]);
 }
 
-void quad_pop_switch_ident()
+void pop_switch_ident()
 {
     if (switchIdentIndex < 0)
     {
@@ -154,19 +154,19 @@ void quad_pop_switch_ident()
     switchIdentIndex--;
 }
 
-void quad_push_start_label(int startLabelNum, char *label)
+void push_start_label(int startLabelNum, char *label)
 {
     startLabel[++startLabelIndex] = startLabelNum;
     fprintf(quadFileP, "Start%s_%d:\n", label, startLabelNum);
 }
 
-void quad_jump_start_label(char *label)
+void jump_start_label(char *label)
 {
     int startLabelNum = startLabel[startLabelIndex];
     fprintf(quadFileP, "\tJMP Start%s_%d\n", label, startLabelNum);
 }
 
-void quad_pop_start_label()
+void pop_start_label()
 {
     if (startLabelIndex < 0)
     {

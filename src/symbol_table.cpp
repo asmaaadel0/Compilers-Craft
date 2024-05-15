@@ -157,7 +157,7 @@ void check_int_value(int index, int value, int line_number)
     if (index == -1)
     {
         if (!isPrint)
-            quad_push_int(value);
+            push_int(value);
         return;
     }
     if ((strcmp(symbolTableArray[index].datatype, "string") == 0 ||
@@ -178,17 +178,17 @@ void check_int_value(int index, int value, int line_number)
         if (strcmp(symbolTableArray[index].datatype, "float") == 0)
         {
             if (!isPrint)
-                quad_push_float((float)value);
+                push_float((float)value);
         }
         else if (strcmp(symbolTableArray[index].datatype, "bool") == 0)
         {
             if (!isPrint)
-                quad_push_int((bool)value);
+                push_int((bool)value);
         }
         else if (strcmp(symbolTableArray[index].datatype, "int") == 0)
         {
             if (!isPrint)
-                quad_push_int(value);
+                push_int(value);
         }
     }
     else
@@ -204,7 +204,7 @@ void check_float_value(int index, float value, int line_number)
     if (index == -1)
     {
         if (!isPrint)
-            quad_push_float(value);
+            push_float(value);
         return;
     }
     if ((strcmp(symbolTableArray[index].datatype, "string") == 0 ||
@@ -225,17 +225,17 @@ void check_float_value(int index, float value, int line_number)
         if (strcmp(symbolTableArray[index].datatype, "float") == 0)
         {
             if (!isPrint)
-                quad_push_float(value);
+                push_float(value);
         }
         else if (strcmp(symbolTableArray[index].datatype, "bool") == 0)
         {
             if (!isPrint)
-                quad_push_int((bool)value);
+                push_int((bool)value);
         }
         else if (strcmp(symbolTableArray[index].datatype, "int") == 0)
         {
             if (!isPrint)
-                quad_push_int((int)value);
+                push_int((int)value);
         }
     }
     else
@@ -251,7 +251,7 @@ void check_bool_value(int index, bool value, int line_number)
     if (index == -1)
     {
         if (!isPrint)
-            quad_push_int(value);
+            push_int(value);
         return;
     }
     if ((strcmp(symbolTableArray[index].datatype, "string") == 0 ||
@@ -268,17 +268,17 @@ void check_bool_value(int index, bool value, int line_number)
         if (strcmp(symbolTableArray[index].datatype, "float") == 0)
         {
             if (!isPrint)
-                quad_push_float((float)value);
+                push_float((float)value);
         }
         else if (strcmp(symbolTableArray[index].datatype, "bool") == 0)
         {
             if (!isPrint)
-                quad_push_int(value);
+                push_int(value);
         }
         else if (strcmp(symbolTableArray[index].datatype, "int") == 0)
         {
             if (!isPrint)
-                quad_push_int((int)value);
+                push_int((int)value);
         }
     }
     else
@@ -294,7 +294,7 @@ void check_string_value(int index, char *value, int line_number)
     if (index == -1)
     {
         if (!isPrint)
-            quad_push_string_or_char(value);
+            push_string_or_char(value);
         return;
     }
     if (strcmp(symbolTableArray[index].datatype, "string") != 0 &&
@@ -310,7 +310,7 @@ void check_string_value(int index, char *value, int line_number)
         isParameter)
     {
         if (!isPrint)
-            quad_push_string_or_char(value);
+            push_string_or_char(value);
     }
     else
     {
@@ -325,7 +325,7 @@ void check_char_value(int index, char *value, int line_number)
     if (index == -1)
     {
         if (!isPrint)
-            quad_push_string_or_char(value);
+            push_string_or_char(value);
         return;
     }
     if (strcmp(symbolTableArray[index].datatype, "char") != 0 &&
@@ -339,7 +339,7 @@ void check_char_value(int index, char *value, int line_number)
     if ((strcmp(symbolTableArray[index].datatype, "char") == 0 && !symbolTableArray[index].isScopeEnded) || isParameter)
     {
         if (!isPrint)
-            quad_push_string_or_char(value);
+            push_string_or_char(value);
     }
     else
     {
