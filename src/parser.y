@@ -87,15 +87,15 @@ STATEMENT:
        
         | PRINT_STATEMENT
         
-        | {quadPushEndLabel(++endLabelNum);}IF_STATEMENT{quadPopEndLabel();}
-        | {quadPushStartLabel(++startLabelNum, "While");}WHILE_STATEMENT{quadPopStartLabel();}         
-        | {quadPushStartLabel(++startLabelNum, "DoWhile");}DO_WHILE_STATEMENT{quadPopStartLabel();}      
-        | {quadPushEndLabel(++endLabelNum);}SWITCH_STATEMENT{quadPopEndLabel();}
-        | FOR_STATEMENT{quadPopStartLabel();}
+        | {quad_push_end_label(++endLabelNum);}IF_STATEMENT{quad_pop_end_label();}
+        | {quad_push_start_label(++startLabelNum, "While");}WHILE_STATEMENT{quad_pop_start_label();}         
+        | {quad_push_start_label(++startLabelNum, "DoWhile");}DO_WHILE_STATEMENT{quad_pop_start_label();}      
+        | {quad_push_end_label(++endLabelNum);}SWITCH_STATEMENT{quad_pop_end_label();}
+        | FOR_STATEMENT{quad_pop_start_label();}
         
-        | BREAK SEMICOLON{quadJumpEndLabel();}
+        | BREAK SEMICOLON{quad_jump_end_label();}
         
-        | RETURN_STATEMENT SEMICOLON{quadReturn();}
+        | RETURN_STATEMENT SEMICOLON{quad_return();}
         | BLOCK
         | FUNC_DECLARATION_STATEMENT
         
@@ -117,8 +117,8 @@ TYPE:
 
 //________________________________________________ EXPRESSION ________________________________________________
 EXPRESSION:
-        IDENTIFIER    {int i = lookup($1, 0, yylineno);check_variable_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent($1);}        
-        | CONSTANT    {int i = lookup($1, 0, yylineno);check_variable_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quadPushIdent($1);}
+        IDENTIFIER    {int i = lookup($1, 0, yylineno);check_variable_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quad_push_ident($1);}        
+        | CONSTANT    {int i = lookup($1, 0, yylineno);check_variable_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)quad_push_ident($1);}
         | INT_VALUE   {$$ = set_type("int");check_int_value(insertResult, $1, yylineno);}       
         | FLOAT_VALUE {$$ = set_type("float");check_float_value(insertResult, $1, yylineno);}         
         | BOOL_VALUE  {$$ = set_type("bool");check_bool_value(insertResult, $1, yylineno);}   
@@ -128,38 +128,38 @@ EXPRESSION:
         | '(' EXPRESSION ')'  {$$ = $2;}
         | FUNC_CALL
         
-        | SUB EXPRESSION        {$$ = arithmatic_operator_checker($2, NULL, yylineno);quadInstruction("NEG");}          
-        | LOGICAL_NOT EXPRESSION{$$ = boolean_operator_checker($2, NULL, yylineno);quadInstruction("LOGICAL_NOT");}
+        | SUB EXPRESSION        {$$ = arithmatic_operator_checker($2, NULL, yylineno);quad_instruction("NEG");}          
+        | LOGICAL_NOT EXPRESSION{$$ = boolean_operator_checker($2, NULL, yylineno);quad_instruction("LOGICAL_NOT");}
 
-        | EXPRESSION ADD EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quadInstruction("ADD");}
-        | EXPRESSION SUB EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quadInstruction("SUB");}           
-        | EXPRESSION MUL EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quadInstruction("MUL");}          
-        | EXPRESSION DIV EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quadInstruction("DIV");}           
-        | EXPRESSION POW EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quadInstruction("POW");}
-        | EXPRESSION MOD EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quadInstruction("MOD");}         
+        | EXPRESSION ADD EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quad_instruction("ADD");}
+        | EXPRESSION SUB EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quad_instruction("SUB");}           
+        | EXPRESSION MUL EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quad_instruction("MUL");}          
+        | EXPRESSION DIV EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quad_instruction("DIV");}           
+        | EXPRESSION POW EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quad_instruction("POW");}
+        | EXPRESSION MOD EXPRESSION{$$ = arithmatic_operator_checker($1, $3, yylineno);quad_instruction("MOD");}         
         
-        | EXPRESSION BITWISE_OR EXPRESSION  {$$ = bitwise_operator_checker($1, $3, yylineno);quadInstruction("BITWISE_OR");}
-        | EXPRESSION BITWISE_AND EXPRESSION {$$ = bitwise_operator_checker($1, $3, yylineno);quadInstruction("BITWISE_AND");}
-        | EXPRESSION SHL EXPRESSION         {$$ = bitwise_operator_checker($1, $3, yylineno);quadInstruction("SHL");}
-        | EXPRESSION SHR EXPRESSION         {$$ = bitwise_operator_checker($1, $3, yylineno);quadInstruction("SHR");}
+        | EXPRESSION BITWISE_OR EXPRESSION  {$$ = bitwise_operator_checker($1, $3, yylineno);quad_instruction("BITWISE_OR");}
+        | EXPRESSION BITWISE_AND EXPRESSION {$$ = bitwise_operator_checker($1, $3, yylineno);quad_instruction("BITWISE_AND");}
+        | EXPRESSION SHL EXPRESSION         {$$ = bitwise_operator_checker($1, $3, yylineno);quad_instruction("SHL");}
+        | EXPRESSION SHR EXPRESSION         {$$ = bitwise_operator_checker($1, $3, yylineno);quad_instruction("SHR");}
         
-        | EXPRESSION LOGICAL_AND EXPRESSION{$$ = boolean_operator_checker($1, $3, yylineno);quadInstruction("LOGICAL_AND");}    
-        | EXPRESSION LOGICAL_OR EXPRESSION {$$ = boolean_operator_checker($1, $3, yylineno);quadInstruction("LOGICAL_OR");} 
+        | EXPRESSION LOGICAL_AND EXPRESSION{$$ = boolean_operator_checker($1, $3, yylineno);quad_instruction("LOGICAL_AND");}    
+        | EXPRESSION LOGICAL_OR EXPRESSION {$$ = boolean_operator_checker($1, $3, yylineno);quad_instruction("LOGICAL_OR");} 
 
-        | EXPRESSION EQUAL EXPRESSION    {$$ = boolean_operator_checker($1, $3, yylineno);quadInstruction("EQ");}  
-        | EXPRESSION NOT_EQUAL EXPRESSION{$$ = boolean_operator_checker($1, $3, yylineno);quadInstruction("NEQ");} 
+        | EXPRESSION EQUAL EXPRESSION    {$$ = boolean_operator_checker($1, $3, yylineno);quad_instruction("EQ");}  
+        | EXPRESSION NOT_EQUAL EXPRESSION{$$ = boolean_operator_checker($1, $3, yylineno);quad_instruction("NEQ");} 
 
-        | EXPRESSION GT EXPRESSION    {$$ = boolean_operator_checker($1, $3, yylineno);quadInstruction("GT");}            
-        | EXPRESSION GT EQ EXPRESSION {$$ = boolean_operator_checker($1, $4, yylineno);quadInstruction("GEQ");}        
-        | EXPRESSION LT EXPRESSION    {$$ = boolean_operator_checker($1, $3, yylineno);quadInstruction("LT");}             
-        | EXPRESSION LT EQ EXPRESSION {$$ = boolean_operator_checker($1, $4, yylineno);quadInstruction("LEQ");}         
+        | EXPRESSION GT EXPRESSION    {$$ = boolean_operator_checker($1, $3, yylineno);quad_instruction("GT");}            
+        | EXPRESSION GT EQ EXPRESSION {$$ = boolean_operator_checker($1, $4, yylineno);quad_instruction("GEQ");}        
+        | EXPRESSION LT EXPRESSION    {$$ = boolean_operator_checker($1, $3, yylineno);quad_instruction("LT");}             
+        | EXPRESSION LT EQ EXPRESSION {$$ = boolean_operator_checker($1, $4, yylineno);quad_instruction("LEQ");}         
         ;               
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:
-        TYPE IDENTIFIER  {insertResult = insert($1, $2, "variable", yylineno, false);} EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);}
+        TYPE IDENTIFIER  {insertResult = insert($1, $2, "variable", yylineno, false);} EQ EXPRESSION SEMICOLON { insertResult = -1;quad_pop_ident($2);}
         | TYPE IDENTIFIER{insertResult = insert($1, $2, "variable", yylineno, false);} SEMICOLON { insertResult = -1;}
-        | TYPE CONSTANT  {insertResult = insert($1, $2, "constant", yylineno, false);}EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);}
+        | TYPE CONSTANT  {insertResult = insert($1, $2, "constant", yylineno, false);}EQ EXPRESSION SEMICOLON { insertResult = -1;quad_pop_ident($2);}
         | TYPE CONSTANT  {insertResult = insert($1, $2, "constant", yylineno, false);}SEMICOLON { insertResult = -1;}
         ;
 
@@ -171,13 +171,13 @@ RETURN_STATEMENT:
 
 //________________________________________________ SWITCH STATEMENT ________________________________________________
 SWITCH_STATEMENT:
-        SWITCH '(' IDENTIFIER {quadPushSwitchIdent($3);lookup($3, 0, yylineno);} ')' '{' CASES  '}' {quadPopSwitchIdent();}
+        SWITCH '(' IDENTIFIER {quad_push_switch_ident($3);lookup($3, 0, yylineno);} ')' '{' CASES  '}' {quad_pop_switch_ident();}
         ;
 DEFAULTCASE:
         DEFAULT ':' BLOCK
         ;
 CASES:
-        CASE EXPRESSION {quadPeakSwitchIdent();quadInstruction("EQ");quadJumpFalseLabel(++labelNum);}':' BLOCK {quadPopLabel();} CASES
+        CASE EXPRESSION {quad_peak_switch_ident();quad_instruction("EQ");quad_jump_false_label(++labelNum);}':' BLOCK {quad_pop_label();} CASES
         | DEFAULTCASE
         | 
         ;
@@ -185,7 +185,7 @@ CASES:
 //________________________________________________ FUNCTION DECLARATION STATEMENT ________________________________________________
 
 FUNC_DECLARATION_STATEMENT:
-        TYPE IDENTIFIER {quadStartFunction($2);} '(' ARGS ')'{funcIndex = insert($1, $2,"function", yylineno, 0);} BLOCK {quadEndFunction($2);}
+        TYPE IDENTIFIER {quad_start_function($2);} '(' ARGS ')'{funcIndex = insert($1, $2,"function", yylineno, 0);} BLOCK {quad_end_function($2);}
         ;
 ARGS:
         ARG_DECL ',' ARGS
@@ -193,7 +193,7 @@ ARGS:
         | 
         ;
 ARG_DECL:
-        TYPE IDENTIFIER {quadPopIdent($2);insertResult = insert($1, $2,"variable", yylineno, true);}
+        TYPE IDENTIFIER {quad_pop_ident($2);insertResult = insert($1, $2,"variable", yylineno, true);}
         ;
 
 //________________________________________________ IF STATEMENT ________________________________________________
@@ -203,31 +203,31 @@ IF_TAIL:
         | 
         ;
 IF_STATEMENT:
-        IF EXPRESSION {quadJumpFalseLabel(++labelNum);} BLOCK {quadJumpEndLabel();quadPopLabel();} IF_TAIL         
+        IF EXPRESSION {quad_jump_false_label(++labelNum);} BLOCK {quad_jump_end_label();quad_pop_label();} IF_TAIL         
         ;
 
 //________________________________________________ WHILE STATEMENT ________________________________________________
 WHILE_STATEMENT:
-        WHILE EXPRESSION {quadJumpFalseLabel(++labelNum);} BLOCK {quadJumpStartLabel("While");quadPopLabel();}
+        WHILE EXPRESSION {quad_jump_false_label(++labelNum);} BLOCK {quad_jump_start_label("While");quad_pop_label();}
         ;
 //________________________________________________ DO WHILE STATEMENT ________________________________________________
 DO_WHILE_STATEMENT:
-        DO BLOCK WHILE '(' EXPRESSION ')' SEMICOLON {quadJumpFalseLabel(++labelNum);quadJumpStartLabel("DoWhile");quadPopLabel();}
+        DO BLOCK WHILE '(' EXPRESSION ')' SEMICOLON {quad_jump_false_label(++labelNum);quad_jump_start_label("DoWhile");quad_pop_label();}
         ;
 //________________________________________________ FOR STATEMENT ________________________________________________
 FOR_STATEMENT:
-        FOR '(' {isLoop = 1;} STATEMENT {quadPushStartLabel(++startLabelNum, "For");} STATEMENT {quadJumpFalseLabel(++labelNum);} STATEMENT ')' {isLoop = 0;} BLOCK {quadJumpStartLabel("For");quadPopLabel();}
+        FOR '(' {isLoop = 1;} STATEMENT {quad_push_start_label(++startLabelNum, "For");} STATEMENT {quad_jump_false_label(++labelNum);} STATEMENT ')' {isLoop = 0;} BLOCK {quad_jump_start_label("For");quad_pop_label();}
         ;
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
 ASSIGNMENT_STATEMENT:
-        IDENTIFIER EQ {insertResult = lookup($1, 1, yylineno);} EXPRESSION SEMICOLON {quadPopIdent($1);} 
+        IDENTIFIER EQ {insertResult = lookup($1, 1, yylineno);} EXPRESSION SEMICOLON {quad_pop_ident($1);} 
         | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", yylineno);exit(EXIT_FAILURE);insertResult = -1;} EXPRESSION SEMICOLON   
         ;
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-        IDENTIFIER {funcArgCount=0;calledFuncIndex = lookup($1, 0, yylineno);check_variable_type(calledFuncIndex, yylineno);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;check_arg_count(calledFuncIndex, yylineno);} ')' {quadCallFunction($1);$$ = set_type(symbolTableArray[calledFuncIndex].datatype);}
+        IDENTIFIER {funcArgCount=0;calledFuncIndex = lookup($1, 0, yylineno);check_variable_type(calledFuncIndex, yylineno);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;check_arg_count(calledFuncIndex, yylineno);} ')' {quad_call_function($1);$$ = set_type(symbolTableArray[calledFuncIndex].datatype);}
         ;       
 ARGUMENTS:      
         EXPRESSION { funcArgCount++; } ',' ARGUMENTS 
@@ -248,7 +248,7 @@ int yywrap()
 int main(int argc, char *argv[])
 { 
     remove_file();
-    setQuadFilePath("./output/quadruples.txt", createFile("./output/quadruples.txt"));
+    set_quad_file_path("./output/quadruples.txt", create_file("./output/quadruples.txt"));
     error_file = fopen("./output/error_file.txt", "w");
     yyin = fopen(argv[1], "r");
     yyparse();
