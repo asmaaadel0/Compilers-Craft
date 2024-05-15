@@ -24,33 +24,32 @@ int startLabel[100];
 char *quadFile = NULL;
 FILE *quadFileP = NULL;
 
-FILE* create_file(char* path) {
-  FILE* file = fopen(path, "w");
-  if (file == NULL) {
-    printf("Error: File %s not found\n", path);
-    exit(0);
-  }
-  return file;
-}
-
-void set_file_path(char *filePath, FILE *file) {
-  quadFile = filePath;
-  quadFileP = file;
-}
-
-void start_function(char *function)
+FILE *create_file(char *path)
 {
-    fprintf(quadFileP, "%s:\n", function);
+    FILE *file = fopen(path, "w");
+    if (file == NULL)
+    {
+        printf("Error: File %s not found\n", path);
+        exit(0);
+    }
+    return file;
 }
 
-void end_function(char *function)
+void set_file_path(char *filePath, FILE *file)
 {
-    fprintf(quadFileP, "\tEND %s\n", function);
+    quadFile = filePath;
+    quadFileP = file;
 }
 
-void call_function(char *function)
+// ________________________________________________ Function ________________________________________________
+void handle_quad_function(char *function, char *type)
 {
-    fprintf(quadFileP, "\tCALL %s\n", function);
+    if (type == "start")
+        fprintf(quadFileP, "%s:\n", function);
+    else if (type == "end")
+        fprintf(quadFileP, "\tEND %s\n", function);
+    else if (type == "call")
+        fprintf(quadFileP, "\tCALL %s\n", function);
 }
 
 void ret()
@@ -73,7 +72,7 @@ void push_float(float val)
     fprintf(quadFileP, "\tPUSH %f\n", val);
 }
 
-void push_string_or_char(char *str)
+void push_string(char *str)
 {
     fprintf(quadFileP, "\tPUSH %s\n", str);
 }

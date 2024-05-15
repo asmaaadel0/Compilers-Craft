@@ -294,7 +294,7 @@ void check_string_value(int index, char *value, int line_number)
     if (index == -1)
     {
         if (!isPrint)
-            push_string_or_char(value);
+            push_string(value);
         return;
     }
     if (strcmp(symbolTableArray[index].datatype, "string") != 0 &&
@@ -310,7 +310,7 @@ void check_string_value(int index, char *value, int line_number)
         isParameter)
     {
         if (!isPrint)
-            push_string_or_char(value);
+            push_string(value);
     }
     else
     {
@@ -325,7 +325,7 @@ void check_char_value(int index, char *value, int line_number)
     if (index == -1)
     {
         if (!isPrint)
-            push_string_or_char(value);
+            push_string(value);
         return;
     }
     if (strcmp(symbolTableArray[index].datatype, "char") != 0 &&
@@ -339,7 +339,7 @@ void check_char_value(int index, char *value, int line_number)
     if ((strcmp(symbolTableArray[index].datatype, "char") == 0 && !symbolTableArray[index].isScopeEnded) || isParameter)
     {
         if (!isPrint)
-            push_string_or_char(value);
+            push_string(value);
     }
     else
     {

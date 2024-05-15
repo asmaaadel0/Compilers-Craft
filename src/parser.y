@@ -182,10 +182,20 @@ CASES:
         | 
         ;
 
+//________________________________________________ FUNCTION CALL ________________________________________________
+FUNC_CALL:
+        IDENTIFIER {funcArgCount=0;calledFuncIndex = lookup($1, 0, yylineno);check_variable_type(calledFuncIndex, yylineno);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;check_arg_count(calledFuncIndex, yylineno);} ')' {handle_quad_function($1, "call");$$ = set_type(symbolTableArray[calledFuncIndex].datatype);}
+        ;       
+ARGUMENTS:      
+        EXPRESSION { funcArgCount++; } ',' ARGUMENTS 
+        | EXPRESSION { funcArgCount++; } 
+        |  
+        ;
+
 //________________________________________________ FUNCTION DECLARATION STATEMENT ________________________________________________
 
 FUNC_DECLARATION_STATEMENT:
-        TYPE IDENTIFIER {start_function($2);} '(' ARGS ')'{funcIndex = insert($1, $2,"function", yylineno, 0);} BLOCK {end_function($2);}
+        TYPE IDENTIFIER {handle_quad_function($2, "start");} '(' ARGS ')'{funcIndex = insert($1, $2,"function", yylineno, 0);} BLOCK {handle_quad_function($2, "end");}
         ;
 ARGS:
         ARG_DECL ',' ARGS
@@ -225,15 +235,6 @@ ASSIGNMENT_STATEMENT:
         | CONSTANT EQ {printf("Error at line: %d CONSTANTS must not be reassigned\n", yylineno);exit(EXIT_FAILURE);insertResult = -1;} EXPRESSION SEMICOLON   
         ;
 
-//________________________________________________ FUNCTION CALL ________________________________________________
-FUNC_CALL:
-        IDENTIFIER {funcArgCount=0;calledFuncIndex = lookup($1, 0, yylineno);check_variable_type(calledFuncIndex, yylineno);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;check_arg_count(calledFuncIndex, yylineno);} ')' {call_function($1);$$ = set_type(symbolTableArray[calledFuncIndex].datatype);}
-        ;       
-ARGUMENTS:      
-        EXPRESSION { funcArgCount++; } ',' ARGUMENTS 
-        | EXPRESSION { funcArgCount++; } 
-        |  
-        ;
 %%
 
 void yyerror(char *s) { 
