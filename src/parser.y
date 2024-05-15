@@ -68,10 +68,10 @@
 %type <int_value> INT_VALUE
 %type <bool_value> BOOL_VALUE
 
-%type <nodePtr> STATEMENT EXPRESSION FUNC_CALL RETURN_STATEMENT DECLARATION_STATEMENT BREAK LOGICAL_NOT RETURN SUB '(' ')'
+%type <nodePtr> EXPRESSION FUNC_CALL RETURN_STATEMENT DECLARATION_STATEMENT BREAK LOGICAL_NOT RETURN SUB
 %%
 PROGRAM:
-        PROGRAM STATEMENT  {printf("Parsed Line %d Succesfully\n\n", yylineno);}        
+        PROGRAM STATEMENT  {printf("Parsed Line %d Succesfully\n", yylineno);}        
         |
         ;
 //________________________________________________ BLOCK ________________________________________________
@@ -82,22 +82,22 @@ BLOCK:
 //________________________________________________ STATEMENT ________________________________________________
 STATEMENT:
         DECLARATION_STATEMENT
-        | ASSIGNMENT_STATEMENT     {printf("Parsed Assignment statement\n");}
+        | ASSIGNMENT_STATEMENT
         | EXPRESSION SEMICOLON
        
-        | PRINT_STATEMENT            {printf("Parsed print statement\n");}
+        | PRINT_STATEMENT
         
-        | {quadPushEndLabel(++endLabelNum);}IF_STATEMENT{quadPopEndLabel();printf("Parsed if statement\n");}
-        | {quadPushStartLabel(++startLabelNum, "While");}WHILE_STATEMENT{quadPopStartLabel();printf("Parsed While LOOP\n");}         
-        | {quadPushStartLabel(++startLabelNum, "DoWhile");}DO_WHILE_STATEMENT{quadPopStartLabel();printf("Parsed Do While LOOP\n");}      
-        | {quadPushEndLabel(++endLabelNum);}SWITCH_STATEMENT{quadPopEndLabel();printf("Parsed Switch Statement\n");}
-        | FOR_STATEMENT{quadPopStartLabel();printf("Parsed For LOOP\n");}
+        | {quadPushEndLabel(++endLabelNum);}IF_STATEMENT{quadPopEndLabel();}
+        | {quadPushStartLabel(++startLabelNum, "While");}WHILE_STATEMENT{quadPopStartLabel();}         
+        | {quadPushStartLabel(++startLabelNum, "DoWhile");}DO_WHILE_STATEMENT{quadPopStartLabel();}      
+        | {quadPushEndLabel(++endLabelNum);}SWITCH_STATEMENT{quadPopEndLabel();}
+        | FOR_STATEMENT{quadPopStartLabel();}
         
         | BREAK SEMICOLON{quadJumpEndLabel();}
         
         | RETURN_STATEMENT SEMICOLON{quadReturn();}
-        | BLOCK                     {printf("Parsed Block\n");}
-        | FUNC_DECLARATION_STATEMENT{printf("Parsed Function Declaration\n");}
+        | BLOCK
+        | FUNC_DECLARATION_STATEMENT
         
         ;
 
@@ -157,10 +157,10 @@ EXPRESSION:
 
 //________________________________________________ DECLARATION STATEMENT ________________________________________________
 DECLARATION_STATEMENT:
-        TYPE IDENTIFIER  {insertResult = insert($1, $2, "variable", yylineno, false);} EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);printf("Parsed Declaration\n");}
-        | TYPE IDENTIFIER{insertResult = insert($1, $2, "variable", yylineno, false);} SEMICOLON { insertResult = -1;printf("Parsed Declaration\n");}
-        | TYPE CONSTANT  {insertResult = insert($1, $2, "constant", yylineno, false);}EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);printf("Parsed Const Declaration\n");}
-        | TYPE CONSTANT  {insertResult = insert($1, $2, "constant", yylineno, false);}SEMICOLON { insertResult = -1;printf("Parsed Const Declaration\n");}
+        TYPE IDENTIFIER  {insertResult = insert($1, $2, "variable", yylineno, false);} EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);}
+        | TYPE IDENTIFIER{insertResult = insert($1, $2, "variable", yylineno, false);} SEMICOLON { insertResult = -1;}
+        | TYPE CONSTANT  {insertResult = insert($1, $2, "constant", yylineno, false);}EQ EXPRESSION SEMICOLON { insertResult = -1;quadPopIdent($2);}
+        | TYPE CONSTANT  {insertResult = insert($1, $2, "constant", yylineno, false);}SEMICOLON { insertResult = -1;}
         ;
 
 
@@ -227,7 +227,7 @@ ASSIGNMENT_STATEMENT:
 
 //________________________________________________ FUNCTION CALL ________________________________________________
 FUNC_CALL:
-        IDENTIFIER {funcArgCount=0;calledFuncIndex = lookup($1, 0, yylineno);check_variable_type(calledFuncIndex, yylineno);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;check_arg_count(calledFuncIndex, yylineno);} ')' {quadCallFunction($1);printf("Parsed Function Call\n");$$ = set_type(symbolTableArray[calledFuncIndex].datatype);}
+        IDENTIFIER {funcArgCount=0;calledFuncIndex = lookup($1, 0, yylineno);check_variable_type(calledFuncIndex, yylineno);} '(' {isParameter=1;} ARGUMENTS {isParameter=0;check_arg_count(calledFuncIndex, yylineno);} ')' {quadCallFunction($1);$$ = set_type(symbolTableArray[calledFuncIndex].datatype);}
         ;       
 ARGUMENTS:      
         EXPRESSION { funcArgCount++; } ',' ARGUMENTS 
