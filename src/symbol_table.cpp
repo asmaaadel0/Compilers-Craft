@@ -550,15 +550,15 @@ void display_unused_variables_to_file(const char *filename)
         {
             if (strcmp(symbolTableArray[i].type, "function") == 0)
             {
-                fprintf(fp, "function %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
+                fprintf(fp, "warning: function %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
             else if (symbolTableArray[i].isArgFunc == 1)
             {
-                fprintf(fp, "argument %s Declared in function at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
+                fprintf(fp, "warning: argument %s Declared in function at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
             else
             {
-                fprintf(fp, "identifier %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
+                fprintf(fp, "warning: identifier %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
         }
     }
@@ -572,15 +572,15 @@ void display_unused_variables()
         {
             if (strcmp(symbolTableArray[i].type, "function") == 0)
             {
-                printf("function %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
+                printf("warning: function %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
             else if (symbolTableArray[i].isArgFunc == 1)
             {
-                printf("argument %s Declared in function at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
+                printf("warning: argument %s Declared in function at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
             else
             {
-                printf("identifier %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
+                printf("warning: identifier %s Declared at line %d but never used\n", symbolTableArray[i].identifierName, symbolTableArray[i].declarationLine);
             }
         }
     }

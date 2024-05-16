@@ -1,15 +1,15 @@
-identifier x Declared at line 2 but never used
-identifier y Declared at line 3 but never used
-identifier z Declared at line 4 but never used
-identifier w Declared at line 5 but never used
-identifier a Declared at line 8 but never used
-identifier b Declared at line 9 but never used
-identifier c Declared at line 10 but never used
-identifier d Declared at line 11 but never used
-identifier q Declared at line 14 but never used
-identifier r Declared at line 15 but never used
-identifier s Declared at line 16 but never used
-identifier t Declared at line 17 but never used
-identifier m Declared at line 18 but never used
-identifier n Declared at line 19 but never used
-identifier s1 Declared at line 22 but never used
+warning: identifier x Declared at line 2 but never used
+warning: identifier y Declared at line 3 but never used
+warning: identifier z Declared at line 4 but never used
+warning: identifier w Declared at line 5 but never used
+warning: identifier a Declared at line 8 but never used
+warning: identifier b Declared at line 9 but never used
+warning: identifier c Declared at line 10 but never used
+warning: identifier d Declared at line 11 but never used
+warning: identifier q Declared at line 14 but never used
+warning: identifier r Declared at line 15 but never used
+warning: identifier s Declared at line 16 but never used
+warning: identifier t Declared at line 17 but never used
+warning: identifier m Declared at line 18 but never used
+warning: identifier n Declared at line 19 but never used
+warning: identifier s1 Declared at line 22 but never used
