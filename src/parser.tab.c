@@ -1398,61 +1398,61 @@ yyreduce:
 
   case 10: /* $@2: %empty  */
 #line 90 "./parser.y"
-          {push_end_label(++endLabelNum);}
+          {push_end_loop(++endLoopNum);}
 #line 1403 "parser.tab.c"
     break;
 
   case 11: /* STATEMENT: $@2 IF_STATEMENT  */
 #line 90 "./parser.y"
-                                                      {pop_end_label();}
+                                                    {pop_end_loop();}
 #line 1409 "parser.tab.c"
     break;
 
   case 12: /* $@3: %empty  */
 #line 91 "./parser.y"
-          {push_start_label(++startLabelNum, "While");}
+          {push_start_loop(++startLoopNum, "While");}
 #line 1415 "parser.tab.c"
     break;
 
   case 13: /* STATEMENT: $@3 WHILE_STATEMENT  */
 #line 91 "./parser.y"
-                                                                      {pop_start_label();}
+                                                                    {pop_start_loop();}
 #line 1421 "parser.tab.c"
     break;
 
   case 14: /* $@4: %empty  */
 #line 92 "./parser.y"
-          {push_start_label(++startLabelNum, "DoWhile");}
+          {push_start_loop(++startLoopNum, "DoWhile");}
 #line 1427 "parser.tab.c"
     break;
 
   case 15: /* STATEMENT: $@4 DO_WHILE_STATEMENT  */
 #line 92 "./parser.y"
-                                                                           {pop_start_label();}
+                                                                         {pop_start_loop();}
 #line 1433 "parser.tab.c"
     break;
 
   case 16: /* $@5: %empty  */
 #line 93 "./parser.y"
-          {push_end_label(++endLabelNum);}
+          {push_end_loop(++endLoopNum);}
 #line 1439 "parser.tab.c"
     break;
 
   case 17: /* STATEMENT: $@5 SWITCH_STATEMENT  */
 #line 93 "./parser.y"
-                                                          {pop_end_label();}
+                                                        {pop_end_loop();}
 #line 1445 "parser.tab.c"
     break;
 
   case 18: /* STATEMENT: FOR_STATEMENT  */
 #line 94 "./parser.y"
-                       {pop_start_label();}
+                       {pop_start_loop();}
 #line 1451 "parser.tab.c"
     break;
 
   case 19: /* STATEMENT: BREAK SEMICOLON  */
 #line 96 "./parser.y"
-                         {jump_end_label();}
+                         {jump_end_loop();}
 #line 1457 "parser.tab.c"
     break;
 
@@ -1512,13 +1512,13 @@ yyreduce:
 
   case 31: /* EXPRESSION: IDENTIFIER  */
 #line 120 "./parser.y"
-                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_variable_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTableArray[i].datatype);if(!isPrint)push_ident((yyvsp[0].string_value));}
+                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_variable_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTableArray[i].datatype);if(!isPrint)handle_identifier((yyvsp[0].string_value), "PUSH");}
 #line 1517 "parser.tab.c"
     break;
 
   case 32: /* EXPRESSION: CONSTANT  */
 #line 121 "./parser.y"
-                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_variable_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTableArray[i].datatype);if(!isPrint)push_ident((yyvsp[0].string_value));}
+                      {int i = lookup((yyvsp[0].string_value), 0, yylineno);check_variable_type(i, yylineno);(yyval.nodePtr) = set_type(symbolTableArray[i].datatype);if(!isPrint)handle_identifier((yyvsp[0].string_value), "PUSH");}
 #line 1523 "parser.tab.c"
     break;
 
@@ -1560,121 +1560,121 @@ yyreduce:
 
   case 40: /* EXPRESSION: SUB EXPRESSION  */
 #line 131 "./parser.y"
-                                {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[0].nodePtr), NULL, yylineno);instruction("NEG");}
+                                {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[0].nodePtr), NULL, yylineno);handle_quad_operation("NEG");}
 #line 1565 "parser.tab.c"
     break;
 
   case 41: /* EXPRESSION: LOGICAL_NOT EXPRESSION  */
 #line 132 "./parser.y"
-                                {(yyval.nodePtr) = boolean_operator_checker((yyvsp[0].nodePtr), NULL, yylineno);instruction("LOGICAL_NOT");}
+                                {(yyval.nodePtr) = boolean_operator_checker((yyvsp[0].nodePtr), NULL, yylineno);handle_quad_operation("LOGICAL_NOT");}
 #line 1571 "parser.tab.c"
     break;
 
   case 42: /* EXPRESSION: EXPRESSION ADD EXPRESSION  */
 #line 134 "./parser.y"
-                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("ADD");}
+                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("ADD");}
 #line 1577 "parser.tab.c"
     break;
 
   case 43: /* EXPRESSION: EXPRESSION SUB EXPRESSION  */
 #line 135 "./parser.y"
-                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("SUB");}
+                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("SUB");}
 #line 1583 "parser.tab.c"
     break;
 
   case 44: /* EXPRESSION: EXPRESSION MUL EXPRESSION  */
 #line 136 "./parser.y"
-                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("MUL");}
+                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("MUL");}
 #line 1589 "parser.tab.c"
     break;
 
   case 45: /* EXPRESSION: EXPRESSION DIV EXPRESSION  */
 #line 137 "./parser.y"
-                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("DIV");}
+                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("DIV");}
 #line 1595 "parser.tab.c"
     break;
 
   case 46: /* EXPRESSION: EXPRESSION POW EXPRESSION  */
 #line 138 "./parser.y"
-                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("POW");}
+                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("POW");}
 #line 1601 "parser.tab.c"
     break;
 
   case 47: /* EXPRESSION: EXPRESSION MOD EXPRESSION  */
 #line 139 "./parser.y"
-                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("MOD");}
+                                   {(yyval.nodePtr) = arithmatic_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("MOD");}
 #line 1607 "parser.tab.c"
     break;
 
   case 48: /* EXPRESSION: EXPRESSION BITWISE_OR EXPRESSION  */
 #line 141 "./parser.y"
-                                            {(yyval.nodePtr) = bitwise_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("BITWISE_OR");}
+                                            {(yyval.nodePtr) = bitwise_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("BITWISE_OR");}
 #line 1613 "parser.tab.c"
     break;
 
   case 49: /* EXPRESSION: EXPRESSION BITWISE_AND EXPRESSION  */
 #line 142 "./parser.y"
-                                            {(yyval.nodePtr) = bitwise_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("BITWISE_AND");}
+                                            {(yyval.nodePtr) = bitwise_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("BITWISE_AND");}
 #line 1619 "parser.tab.c"
     break;
 
   case 50: /* EXPRESSION: EXPRESSION SHL EXPRESSION  */
 #line 143 "./parser.y"
-                                            {(yyval.nodePtr) = bitwise_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("SHL");}
+                                            {(yyval.nodePtr) = bitwise_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("SHL");}
 #line 1625 "parser.tab.c"
     break;
 
   case 51: /* EXPRESSION: EXPRESSION SHR EXPRESSION  */
 #line 144 "./parser.y"
-                                            {(yyval.nodePtr) = bitwise_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("SHR");}
+                                            {(yyval.nodePtr) = bitwise_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("SHR");}
 #line 1631 "parser.tab.c"
     break;
 
   case 52: /* EXPRESSION: EXPRESSION LOGICAL_AND EXPRESSION  */
 #line 146 "./parser.y"
-                                           {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("LOGICAL_AND");}
+                                           {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("LOGICAL_AND");}
 #line 1637 "parser.tab.c"
     break;
 
   case 53: /* EXPRESSION: EXPRESSION LOGICAL_OR EXPRESSION  */
 #line 147 "./parser.y"
-                                           {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("LOGICAL_OR");}
+                                           {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("LOGICAL_OR");}
 #line 1643 "parser.tab.c"
     break;
 
   case 54: /* EXPRESSION: EXPRESSION EQUAL EXPRESSION  */
 #line 149 "./parser.y"
-                                         {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("EQ");}
+                                         {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("EQ");}
 #line 1649 "parser.tab.c"
     break;
 
   case 55: /* EXPRESSION: EXPRESSION NOT_EQUAL EXPRESSION  */
 #line 150 "./parser.y"
-                                         {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("NEQ");}
+                                         {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("NEQ");}
 #line 1655 "parser.tab.c"
     break;
 
   case 56: /* EXPRESSION: EXPRESSION GT EXPRESSION  */
 #line 152 "./parser.y"
-                                      {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("GT");}
+                                      {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("GT");}
 #line 1661 "parser.tab.c"
     break;
 
   case 57: /* EXPRESSION: EXPRESSION GT EQ EXPRESSION  */
 #line 153 "./parser.y"
-                                      {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-3].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("GEQ");}
+                                      {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-3].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("GEQ");}
 #line 1667 "parser.tab.c"
     break;
 
   case 58: /* EXPRESSION: EXPRESSION LT EXPRESSION  */
 #line 154 "./parser.y"
-                                      {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("LT");}
+                                      {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-2].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("LT");}
 #line 1673 "parser.tab.c"
     break;
 
   case 59: /* EXPRESSION: EXPRESSION LT EQ EXPRESSION  */
 #line 155 "./parser.y"
-                                      {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-3].nodePtr), (yyvsp[0].nodePtr), yylineno);instruction("LEQ");}
+                                      {(yyval.nodePtr) = boolean_operator_checker((yyvsp[-3].nodePtr), (yyvsp[0].nodePtr), yylineno);handle_quad_operation("LEQ");}
 #line 1679 "parser.tab.c"
     break;
 
@@ -1686,7 +1686,7 @@ yyreduce:
 
   case 61: /* DECLARATION_STATEMENT: TYPE IDENTIFIER $@7 EQ EXPRESSION SEMICOLON  */
 #line 160 "./parser.y"
-                                                                                                               { insertResult = -1;pop_ident((yyvsp[-4].string_value));}
+                                                                                                               { insertResult = -1;handle_identifier((yyvsp[-4].string_value), "POP");}
 #line 1691 "parser.tab.c"
     break;
 
@@ -1710,7 +1710,7 @@ yyreduce:
 
   case 65: /* DECLARATION_STATEMENT: TYPE CONSTANT $@9 EQ EXPRESSION SEMICOLON  */
 #line 162 "./parser.y"
-                                                                                                              { insertResult = -1;pop_ident((yyvsp[-4].string_value));}
+                                                                                                              { insertResult = -1;handle_identifier((yyvsp[-4].string_value), "POP");}
 #line 1715 "parser.tab.c"
     break;
 
@@ -1752,13 +1752,13 @@ yyreduce:
 
   case 74: /* $@13: %empty  */
 #line 180 "./parser.y"
-                        {peak_switch_ident();instruction("EQ");jump_false_label(++labelNum);}
+                        {peak_switch_ident();handle_quad_operation("EQ");jump_false_condition(++falseLabelNum);}
 #line 1757 "parser.tab.c"
     break;
 
   case 75: /* $@14: %empty  */
 #line 180 "./parser.y"
-                                                                                                       {pop_label();}
+                                                                                                                          {pop_false_label();}
 #line 1763 "parser.tab.c"
     break;
 
@@ -1818,37 +1818,37 @@ yyreduce:
 
   case 93: /* ARG_DECL: TYPE IDENTIFIER  */
 #line 206 "./parser.y"
-                        {pop_ident((yyvsp[0].string_value));insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value),"variable", yylineno, true);}
+                        {handle_identifier((yyvsp[0].string_value), "POP");insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value),"variable", yylineno, true);}
 #line 1823 "parser.tab.c"
     break;
 
   case 97: /* $@21: %empty  */
 #line 216 "./parser.y"
-                      {jump_false_label(++labelNum);}
+                      {jump_false_condition(++falseLabelNum);}
 #line 1829 "parser.tab.c"
     break;
 
   case 98: /* $@22: %empty  */
 #line 216 "./parser.y"
-                                                            {jump_end_label();pop_label();}
+                                                                     {jump_end_loop();pop_false_label();}
 #line 1835 "parser.tab.c"
     break;
 
   case 100: /* $@23: %empty  */
 #line 221 "./parser.y"
-                         {jump_false_label(++labelNum);}
+                         {jump_false_condition(++falseLabelNum);}
 #line 1841 "parser.tab.c"
     break;
 
   case 101: /* WHILE_STATEMENT: WHILE EXPRESSION $@23 BLOCK  */
 #line 221 "./parser.y"
-                                                               {jump_start_label("While");pop_label();}
+                                                                        {jump_start_loop("While");pop_false_label();}
 #line 1847 "parser.tab.c"
     break;
 
   case 102: /* DO_WHILE_STATEMENT: DO BLOCK WHILE '(' EXPRESSION ')' SEMICOLON  */
 #line 225 "./parser.y"
-                                                    {jump_false_label(++labelNum);jump_start_label("DoWhile");pop_label();}
+                                                    {jump_false_condition(++falseLabelNum);jump_start_loop("DoWhile");pop_false_label();}
 #line 1853 "parser.tab.c"
     break;
 
@@ -1860,25 +1860,25 @@ yyreduce:
 
   case 104: /* $@25: %empty  */
 #line 229 "./parser.y"
-                                        {push_start_label(++startLabelNum, "For");}
+                                        {push_start_loop(++startLoopNum, "For");}
 #line 1865 "parser.tab.c"
     break;
 
   case 105: /* $@26: %empty  */
 #line 229 "./parser.y"
-                                                                                              {jump_false_label(++labelNum);}
+                                                                                            {jump_false_condition(++falseLabelNum);}
 #line 1871 "parser.tab.c"
     break;
 
   case 106: /* $@27: %empty  */
 #line 229 "./parser.y"
-                                                                                                                                            {isLoop = 0;}
+                                                                                                                                                   {isLoop = 0;}
 #line 1877 "parser.tab.c"
     break;
 
   case 107: /* FOR_STATEMENT: FOR '(' $@24 STATEMENT $@25 STATEMENT $@26 STATEMENT ')' $@27 BLOCK  */
 #line 229 "./parser.y"
-                                                                                                                                                                {jump_start_label("For");pop_label();}
+                                                                                                                                                                       {jump_start_loop("For");pop_false_label();}
 #line 1883 "parser.tab.c"
     break;
 
@@ -1890,7 +1890,7 @@ yyreduce:
 
   case 109: /* ASSIGNMENT_STATEMENT: IDENTIFIER EQ $@28 EXPRESSION SEMICOLON  */
 #line 234 "./parser.y"
-                                                                                     {pop_ident((yyvsp[-4].string_value));}
+                                                                                     {handle_identifier((yyvsp[-4].string_value), "POP");}
 #line 1895 "parser.tab.c"
     break;
 

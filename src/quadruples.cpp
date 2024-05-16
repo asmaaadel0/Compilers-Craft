@@ -6,20 +6,20 @@
 #include <string.h>
 #include <math.h>
 
-int labelNum = 0;
-int labelIndex = -1;
-int label[100];
+int falseLabelNum = 0;
+int falseLabelIndex = -1;
+int falseLabel[100];
 
-int endLabelNum = 0;
-int endLabelIndex = -1;
-int endLabel[100];
+int startLoopNum = 0;
+int startLoopIndex = -1;
+int startLoop[100];
+
+int endLoopNum = 0;
+int endLoopIndex = -1;
+int endLoop[100];
 
 int switchIdentIndex = -1;
 char *switchIdent[100];
-
-int startLabelNum = 0;
-int startLabelIndex = -1;
-int startLabel[100];
 
 char *quadFile = NULL;
 FILE *quadFileP = NULL;
@@ -57,11 +57,13 @@ void ret()
     fprintf(quadFileP, "\tRET\n");
 }
 
-void instruction(const char *instruction)
+// ________________________________________________ Operation ________________________________________________
+void handle_quad_operation(const char *instruction)
 {
     fprintf(quadFileP, "\t%s\n", instruction);
 }
 
+// ________________________________________________ Values ________________________________________________
 void push_int(int val)
 {
     fprintf(quadFileP, "\tPUSH %d\n", val);
@@ -77,56 +79,76 @@ void push_string(char *str)
     fprintf(quadFileP, "\tPUSH %s\n", str);
 }
 
-void push_ident(char *symbol)
+// ________________________________________________ Identifier ________________________________________________
+void handle_identifier(char *symbol, char *type)
 {
-    fprintf(quadFileP, "\tPUSH %s\n", symbol);
+    fprintf(quadFileP, "\t%s %s\n", type, symbol);
 }
 
-void pop_ident(char *symbol)
+// ________________________________________________ Unconditinal jump ________________________________________________
+void push_end_loop(int endLoopNum)
 {
-    fprintf(quadFileP, "\tPOP %s\n", symbol);
+    endLoop[++endLoopIndex] = endLoopNum;
 }
 
-void push_end_label(int endLabelNum)
+void jump_end_loop()
 {
-    endLabel[++endLabelIndex] = endLabelNum;
+    int endLoopNum = endLoop[endLoopIndex];
+    fprintf(quadFileP, "\tJMP EndLabel_%d\n", endLoopNum);
 }
 
-void jump_end_label()
+void pop_end_loop()
 {
-    int endLabelNum = endLabel[endLabelIndex];
-    fprintf(quadFileP, "\tJMP EndLabel_%d\n", endLabelNum);
-}
-
-void pop_end_label()
-{
-    if (endLabelIndex < 0)
+    if (endLoopIndex < 0)
     {
         fprintf(quadFileP, "Error: No end label to add. Segmentation Fault\n");
         return;
     }
-    int endLabelNum = endLabel[endLabelIndex--];
-    fprintf(quadFileP, "EndLabel_%d:\n", endLabelNum);
+    int endLoopNum = endLoop[endLoopIndex--];
+    fprintf(quadFileP, "EndLabel_%d:\n", endLoopNum);
 }
 
-void jump_false_label(int labelNum)
+// ________________________________________________ Start loops ________________________________________________
+void push_start_loop(int startLoopNum, char *label)
 {
-    fprintf(quadFileP, "\tJF Label_%d\n", labelNum);
-    label[labelIndex++] = labelNum;
+    startLoop[++startLoopIndex] = startLoopNum;
+    fprintf(quadFileP, "Start%s_%d:\n", label, startLoopNum);
 }
 
-void pop_label()
+void jump_start_loop(char *label)
 {
-    if (labelIndex < 0)
+    fprintf(quadFileP, "\tJMP Start%s_%d\n", label, startLoop[startLoopIndex]);
+}
+
+void pop_start_loop()
+{
+    if (startLoopIndex < 0)
+    {
+        fprintf(quadFileP, "Error: No start label to add. Segmentation Fault\n");
+        return;
+    }
+    int startLoopNum = startLoop[startLoopIndex--];
+}
+
+// ________________________________________________ Conditional jump ________________________________________________
+void jump_false_condition(int falseLabelNum)
+{
+    fprintf(quadFileP, "\tJF Label_%d\n", falseLabelNum);
+    falseLabel[falseLabelIndex++] = falseLabelNum;
+}
+
+void pop_false_label()
+{
+    if (falseLabelIndex < 0)
     {
         fprintf(quadFileP, "Error: No end label to add. Segmentation Fault\n");
         return;
     }
-    int labelNum = label[--labelIndex];
 
-    fprintf(quadFileP, "Label_%d:\n", labelNum);
+    fprintf(quadFileP, "Label_%d:\n", falseLabel[--falseLabelIndex]);
 }
 
+// ________________________________________________ Switch ________________________________________________
 void push_switch_ident(char *identifier)
 {
     switchIdent[++switchIdentIndex] = identifier;
@@ -151,26 +173,4 @@ void pop_switch_ident()
         return;
     }
     switchIdentIndex--;
-}
-
-void push_start_label(int startLabelNum, char *label)
-{
-    startLabel[++startLabelIndex] = startLabelNum;
-    fprintf(quadFileP, "Start%s_%d:\n", label, startLabelNum);
-}
-
-void jump_start_label(char *label)
-{
-    int startLabelNum = startLabel[startLabelIndex];
-    fprintf(quadFileP, "\tJMP Start%s_%d\n", label, startLabelNum);
-}
-
-void pop_start_label()
-{
-    if (startLabelIndex < 0)
-    {
-        fprintf(quadFileP, "Error: No start label to add. Segmentation Fault\n");
-        return;
-    }
-    int startLabelNum = startLabel[startLabelIndex--];
 }
