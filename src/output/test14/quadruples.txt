@@ -1,0 +1,40 @@
+	PUSH 0
+	POP a
+StartWhile_1:
+	PUSH a
+	PUSH 0
+	GT
+	JF FalseLabel_1
+	PUSH a
+	PUSH 1
+	SUB
+	POP a
+	JMP FalseLabel_1
+	PUSH a
+	PUSH 6
+	EQ
+	JF FalseLabel_2
+	JMP EndLoop_1
+FalseLabel_2:
+EndLoop_1:
+	JMP StartWhile_1
+FalseLabel_1:
+StartWhile_2:
+	PUSH a
+	PUSH 0
+	GT
+	JF FalseLabel_3
+	PUSH a
+	PUSH 1
+	SUB
+	POP a
+	JMP FalseLabel_3
+	PUSH a
+	PUSH 6
+	EQ
+	JF FalseLabel_4
+	JMP EndLoop_2
+FalseLabel_4:
+EndLoop_2:
+	JMP StartWhile_2
+FalseLabel_3:
