@@ -1398,49 +1398,49 @@ yyreduce:
 
   case 10: /* $@2: %empty  */
 #line 90 "./parser.y"
-          {push_end_loop(++endLoopNum);}
+          {break_type=0;push_end_loop(++endLoopNum);}
 #line 1403 "parser.tab.c"
     break;
 
   case 11: /* STATEMENT: $@2 IF_STATEMENT  */
 #line 90 "./parser.y"
-                                                    {pop_end_loop();}
+                                                                 {pop_end_loop();}
 #line 1409 "parser.tab.c"
     break;
 
   case 12: /* $@3: %empty  */
 #line 91 "./parser.y"
-          {push_start_loop(++startLoopNum, "While");}
+          {break_type=1;push_start_loop(++startLoopNum, "While");}
 #line 1415 "parser.tab.c"
     break;
 
   case 13: /* STATEMENT: $@3 WHILE_STATEMENT  */
 #line 91 "./parser.y"
-                                                                    {pop_start_loop();}
+                                                                                 {pop_start_loop();}
 #line 1421 "parser.tab.c"
     break;
 
   case 14: /* $@4: %empty  */
 #line 92 "./parser.y"
-          {push_start_loop(++startLoopNum, "DoWhile");}
+          {break_type=1;push_start_loop(++startLoopNum, "DoWhile");}
 #line 1427 "parser.tab.c"
     break;
 
   case 15: /* STATEMENT: $@4 DO_WHILE_STATEMENT  */
 #line 92 "./parser.y"
-                                                                         {pop_start_loop();}
+                                                                                      {pop_start_loop();}
 #line 1433 "parser.tab.c"
     break;
 
   case 16: /* $@5: %empty  */
 #line 93 "./parser.y"
-          {push_end_loop(++endLoopNum);}
+          {break_type=0;push_end_loop(++endLoopNum);}
 #line 1439 "parser.tab.c"
     break;
 
   case 17: /* STATEMENT: $@5 SWITCH_STATEMENT  */
 #line 93 "./parser.y"
-                                                        {pop_end_loop();}
+                                                                     {pop_end_loop();}
 #line 1445 "parser.tab.c"
     break;
 
@@ -1860,25 +1860,25 @@ yyreduce:
 
   case 104: /* $@25: %empty  */
 #line 229 "./parser.y"
-                                        {push_start_loop(++startLoopNum, "For");}
+                                        {break_type=1;push_start_loop(++startLoopNum, "For");}
 #line 1865 "parser.tab.c"
     break;
 
   case 105: /* $@26: %empty  */
 #line 229 "./parser.y"
-                                                                                            {jump_false_condition(++falseLabelNum);}
+                                                                                                         {jump_false_condition(++falseLabelNum);}
 #line 1871 "parser.tab.c"
     break;
 
   case 106: /* $@27: %empty  */
 #line 229 "./parser.y"
-                                                                                                                                                   {isLoop = 0;}
+                                                                                                                                                                {isLoop = 0;}
 #line 1877 "parser.tab.c"
     break;
 
   case 107: /* FOR_STATEMENT: FOR '(' $@24 STATEMENT $@25 STATEMENT $@26 STATEMENT ')' $@27 BLOCK  */
 #line 229 "./parser.y"
-                                                                                                                                                                       {jump_start_loop("For");pop_false_label();}
+                                                                                                                                                                                    {jump_start_loop("For");pop_false_label();}
 #line 1883 "parser.tab.c"
     break;
 

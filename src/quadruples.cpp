@@ -21,6 +21,8 @@ int endLoop[100];
 int switchIdentIndex = -1;
 char *switchIdent[100];
 
+int break_type = 0;
+
 char *quadFile = NULL;
 FILE *quadFileP = NULL;
 
@@ -93,7 +95,11 @@ void push_end_loop(int endLoopNum)
 
 void jump_end_loop()
 {
-    fprintf(quadFileP, "\tJMP EndLoop_%d\n", endLoop[endLoopIndex]);
+    if(break_type)
+        fprintf(quadFileP, "\tJMP FalseLabel_%d\n", falseLabelNum);
+    else 
+        fprintf(quadFileP, "\tJMP EndLoop_%d\n", endLoop[endLoopIndex]);
+
 }
 
 void pop_end_loop()

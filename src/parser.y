@@ -87,10 +87,10 @@ STATEMENT:
        
         | PRINT_STATEMENT
         
-        | {push_end_loop(++endLoopNum);}IF_STATEMENT{pop_end_loop();}
-        | {push_start_loop(++startLoopNum, "While");}WHILE_STATEMENT{pop_start_loop();}         
-        | {push_start_loop(++startLoopNum, "DoWhile");}DO_WHILE_STATEMENT{pop_start_loop();}      
-        | {push_end_loop(++endLoopNum);}SWITCH_STATEMENT{pop_end_loop();}
+        | {break_type=0;push_end_loop(++endLoopNum);}IF_STATEMENT{pop_end_loop();}
+        | {break_type=1;push_start_loop(++startLoopNum, "While");}WHILE_STATEMENT{pop_start_loop();}         
+        | {break_type=1;push_start_loop(++startLoopNum, "DoWhile");}DO_WHILE_STATEMENT{pop_start_loop();}      
+        | {break_type=0;push_end_loop(++endLoopNum);}SWITCH_STATEMENT{pop_end_loop();}
         | FOR_STATEMENT{pop_start_loop();}
         
         | BREAK SEMICOLON{jump_end_loop();}
@@ -226,7 +226,7 @@ DO_WHILE_STATEMENT:
         ;
 //________________________________________________ FOR STATEMENT ________________________________________________
 FOR_STATEMENT:
-        FOR '(' {isLoop = 1;} STATEMENT {push_start_loop(++startLoopNum, "For");} STATEMENT {jump_false_condition(++falseLabelNum);} STATEMENT ')' {isLoop = 0;} BLOCK {jump_start_loop("For");pop_false_label();}
+        FOR '(' {isLoop = 1;} STATEMENT {break_type=1;push_start_loop(++startLoopNum, "For");} STATEMENT {jump_false_condition(++falseLabelNum);} STATEMENT ')' {isLoop = 0;} BLOCK {jump_start_loop("For");pop_false_label();}
         ;
 
 //________________________________________________ ASSIGNMENT STATEMENT ________________________________________________
