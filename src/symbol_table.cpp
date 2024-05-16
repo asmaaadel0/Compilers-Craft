@@ -206,7 +206,7 @@ void check_int_value(int index, int value, int line_number)
          !symbolTableArray[index].isScopeEnded) ||
         isParameter)
     {
-        
+
         if (strcmp(symbolTableArray[index].datatype, "float") == 0)
         {
             if (!isPrint)
@@ -504,6 +504,15 @@ void check_arg_count(int i, int line_number)
         printf("Error at line %d : too few arguments for function call expected %d got %d\n", line_number, symbolTableArray[i].funcArgCount, funcArgCount);
         fprintf(error_file, "Error at line %d : too few arguments for function call expected %d got %d\n", line_number, symbolTableArray[i].funcArgCount, funcArgCount);
         exit(EXIT_FAILURE);
+    }
+}
+
+void pop_arg_identifier(int index)
+{
+    for (int i = symbolTableArray[index].funcArgCount - 1; i >= 0; --i)
+    {
+        int argIndex = symbolTableArray[index].funcArguments[i];
+        handle_identifier(symbolTableArray[argIndex].identifierName, "POP");
     }
 }
 

@@ -195,7 +195,7 @@ ARGUMENTS:
 //________________________________________________ FUNCTION DECLARATION STATEMENT ________________________________________________
 
 FUNC_DECLARATION_STATEMENT:
-        TYPE IDENTIFIER {handle_quad_function($2, "start");} '(' ARGS ')'{funcIndex = insert($1, $2,"function", yylineno, 0);} BLOCK {handle_quad_function($2, "end");}
+        TYPE IDENTIFIER {handle_quad_function($2, "start");} '(' ARGS ')'{funcIndex = insert($1, $2,"function", yylineno, 0);pop_arg_identifier(funcIndex);} BLOCK {handle_quad_function($2, "end");}
         ;
 ARGS:
         ARG_DECL ',' ARGS
@@ -203,7 +203,7 @@ ARGS:
         | 
         ;
 ARG_DECL:
-        TYPE IDENTIFIER {handle_identifier($2, "POP");insertResult = insert($1, $2,"variable", yylineno, true);}
+        TYPE IDENTIFIER {insertResult = insert($1, $2,"variable", yylineno, true);}
         ;
 
 //________________________________________________ IF STATEMENT ________________________________________________

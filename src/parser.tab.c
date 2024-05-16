@@ -1806,19 +1806,19 @@ yyreduce:
 
   case 88: /* $@20: %empty  */
 #line 198 "./parser.y"
-                                                                         {funcIndex = insert((yyvsp[-5].string_value), (yyvsp[-4].string_value),"function", yylineno, 0);}
+                                                                         {funcIndex = insert((yyvsp[-5].string_value), (yyvsp[-4].string_value),"function", yylineno, 0);pop_arg_identifier(funcIndex);}
 #line 1811 "parser.tab.c"
     break;
 
   case 89: /* FUNC_DECLARATION_STATEMENT: TYPE IDENTIFIER $@19 '(' ARGS ')' $@20 BLOCK  */
 #line 198 "./parser.y"
-                                                                                                                                     {handle_quad_function((yyvsp[-6].string_value), "end");}
+                                                                                                                                                                   {handle_quad_function((yyvsp[-6].string_value), "end");}
 #line 1817 "parser.tab.c"
     break;
 
   case 93: /* ARG_DECL: TYPE IDENTIFIER  */
 #line 206 "./parser.y"
-                        {handle_identifier((yyvsp[0].string_value), "POP");insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value),"variable", yylineno, true);}
+                        {insertResult = insert((yyvsp[-1].string_value), (yyvsp[0].string_value),"variable", yylineno, true);}
 #line 1823 "parser.tab.c"
     break;
 

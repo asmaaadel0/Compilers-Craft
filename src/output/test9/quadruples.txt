@@ -1,6 +1,6 @@
 add:
-	POP a
 	POP b
+	POP a
 	PUSH 5
 	RET
 	END add
