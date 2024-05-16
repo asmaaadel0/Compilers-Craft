@@ -94,7 +94,7 @@ void push_end_loop(int endLoopNum)
 void jump_end_loop()
 {
     int endLoopNum = endLoop[endLoopIndex];
-    fprintf(quadFileP, "\tJMP EndLabel_%d\n", endLoopNum);
+    fprintf(quadFileP, "\tJMP EndLoop_%d\n", endLoopNum);
 }
 
 void pop_end_loop()
@@ -105,7 +105,7 @@ void pop_end_loop()
         return;
     }
     int endLoopNum = endLoop[endLoopIndex--];
-    fprintf(quadFileP, "EndLabel_%d:\n", endLoopNum);
+    fprintf(quadFileP, "EndLoop_%d:\n", endLoopNum);
 }
 
 // ________________________________________________ Start loops ________________________________________________
@@ -133,7 +133,7 @@ void pop_start_loop()
 // ________________________________________________ Conditional jump ________________________________________________
 void jump_false_condition(int falseLabelNum)
 {
-    fprintf(quadFileP, "\tJF Label_%d\n", falseLabelNum);
+    fprintf(quadFileP, "\tJF FalseLabel_%d\n", falseLabelNum);
     falseLabel[falseLabelIndex++] = falseLabelNum;
 }
 
@@ -145,7 +145,7 @@ void pop_false_label()
         return;
     }
 
-    fprintf(quadFileP, "Label_%d:\n", falseLabel[--falseLabelIndex]);
+    fprintf(quadFileP, "FalseLabel_%d:\n", falseLabel[--falseLabelIndex]);
 }
 
 // ________________________________________________ Switch ________________________________________________

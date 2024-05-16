@@ -6,25 +6,25 @@ StartWhile_1:
 	PUSH x
 	PUSH 0
 	GT
-	JF Label_1
+	JF FalseLabel_1
 	PUSH x
 	PUSH 3
 	GT
-	JF Label_2
+	JF FalseLabel_2
 StartWhile_2:
 	PUSH x
 	PUSH 0
 	GT
-	JF Label_3
+	JF FalseLabel_3
 	PUSH x
 	PUSH 1
 	SUB
 	POP x
 	JMP StartWhile_2
-Label_3:
-	JMP EndLabel_1
-Label_2:
-EndLabel_1:
+FalseLabel_3:
+	JMP EndLoop_1
+FalseLabel_2:
+EndLoop_1:
 StartDoWhile_3:
 	PUSH c
 	PUSH 1
@@ -33,8 +33,8 @@ StartDoWhile_3:
 	PUSH c
 	PUSH 10
 	GT
-	JF Label_4
+	JF FalseLabel_4
 	JMP StartDoWhile_3
-Label_4:
+FalseLabel_4:
 	JMP StartWhile_1
-Label_1:
+FalseLabel_1:

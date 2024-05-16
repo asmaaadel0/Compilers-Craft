@@ -5,7 +5,7 @@ StartFor_1:
 	PUSH i
 	PUSH 10
 	LT
-	JF Label_1
+	JF FalseLabel_1
 	PUSH i
 	PUSH 1
 	ADD
@@ -13,20 +13,20 @@ StartFor_1:
 	PUSH 10
 	POP b
 	JMP StartFor_1
-Label_1:
+FalseLabel_1:
 	PUSH 0
 	POP x
 StartWhile_2:
 	PUSH x
 	PUSH 20
 	LT
-	JF Label_2
+	JF FalseLabel_2
 	PUSH x
 	PUSH 1
 	ADD
 	POP x
 	JMP StartWhile_2
-Label_2:
+FalseLabel_2:
 	PUSH 0
 	POP x
 StartDoWhile_3:
@@ -37,17 +37,17 @@ StartDoWhile_3:
 	PUSH x
 	PUSH 20
 	LT
-	JF Label_3
+	JF FalseLabel_3
 	JMP StartDoWhile_3
-Label_3:
+FalseLabel_3:
 	PUSH 1
 	PUSH x
 	EQ
-	JF Label_4
+	JF FalseLabel_4
 	PUSH 10
 	POP x
-	JMP EndLabel_1
-Label_4:
-	JMP EndLabel_1
-EndLabel_1:
+	JMP EndLoop_1
+FalseLabel_4:
+	JMP EndLoop_1
+EndLoop_1:
 	END main

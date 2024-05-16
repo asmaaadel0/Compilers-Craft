@@ -17,40 +17,40 @@
 	PUSH a
 	PUSH B
 	GT
-	JF Label_1
+	JF FalseLabel_1
 	PUSH c
 	PUSH 2
 	MOD
 	POP c
-	JMP EndLabel_1
-Label_1:
+	JMP EndLoop_1
+FalseLabel_1:
 	PUSH 5
 	PUSH 2
 	DIV
 	POP c
 	PUSH "C = C / 2"
 	POP aaa
-EndLabel_1:
+EndLoop_1:
 	PUSH a
 	PUSH 2
 	LT
-	JF Label_2
+	JF FalseLabel_2
 	PUSH 0
 	POP bo
-	JMP EndLabel_2
-Label_2:
-EndLabel_2:
+	JMP EndLoop_2
+FalseLabel_2:
+EndLoop_2:
 StartWhile_1:
 	PUSH a
 	PUSH 0
 	GT
-	JF Label_3
+	JF FalseLabel_3
 	PUSH a
 	PUSH 1
 	SUB
 	POP a
 	JMP StartWhile_1
-Label_3:
+FalseLabel_3:
 func:
 	POP a
 	POP b
@@ -65,7 +65,7 @@ StartFor_2:
 	PUSH i
 	PUSH 10
 	LT
-	JF Label_4
+	JF FalseLabel_4
 	PUSH i
 	PUSH 1
 	ADD
@@ -75,7 +75,7 @@ StartFor_2:
 	ADD
 	POP c
 	JMP StartFor_2
-Label_4:
+FalseLabel_4:
 StartDoWhile_3:
 	PUSH c
 	PUSH 1
@@ -84,9 +84,9 @@ StartDoWhile_3:
 	PUSH c
 	PUSH 10
 	GT
-	JF Label_5
+	JF FalseLabel_5
 	JMP StartDoWhile_3
-Label_5:
+FalseLabel_5:
 	PUSH 2
 	PUSH 3
 	CALL func
