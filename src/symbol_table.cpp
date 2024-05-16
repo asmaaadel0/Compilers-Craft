@@ -151,6 +151,37 @@ int insert(char *datatype, char *identifier, char *type, int line_number, bool i
     return newItem.id;
 }
 
+int lookup(char *identifierName, bool is_assignment, int line_number)
+{
+    // handle undeclared identifier, used identifier before initialization
+    for (int i = 0; i < symbolTableArrayIndex; ++i)
+    {
+        if (strcmp(symbolTableArray[i].identifierName, identifierName) == 0 &&
+            !symbolTableArray[i].isScopeEnded)
+        {
+            if (!symbolTableArray[i].isInitialized &&
+                strcmp(symbolTableArray[i].type, "variable") == 0 &&
+                !symbolTableArray[i].isArgFunc)
+            {
+                if (!is_assignment)
+                {
+                    printf("Error at line %d: %s used before initialization\n", line_number, identifierName);
+                    fprintf(error_file, "Error at line %d: %s used before initialization\n", line_number, identifierName);
+                    exit(EXIT_FAILURE);
+                }
+            }
+            if (!is_assignment)
+            {
+                symbolTableArray[i].isUsed = true;
+            }
+            return symbolTableArray[i].id;
+        }
+    }
+    printf("Error at line %d: %s undeclared identifier\n", line_number, identifierName);
+    fprintf(error_file, "Error at line %d: %s undeclared identifier\n", line_number, identifierName);
+    exit(EXIT_FAILURE);
+}
+
 void check_int_value(int index, int value, int line_number)
 {
     // not assignment operator
@@ -349,37 +380,6 @@ void check_char_value(int index, char *value, int line_number)
     }
 }
 
-int lookup(char *identifierName, bool is_assignment, int line_number)
-{
-    // handle undeclared identifier, used identifier before initialization
-    for (int i = 0; i < symbolTableArrayIndex; ++i)
-    {
-        if (strcmp(symbolTableArray[i].identifierName, identifierName) == 0 &&
-            !symbolTableArray[i].isScopeEnded)
-        {
-            if (!symbolTableArray[i].isInitialized &&
-                strcmp(symbolTableArray[i].type, "variable") == 0 &&
-                !symbolTableArray[i].isArgFunc)
-            {
-                if (!is_assignment)
-                {
-                    printf("Error at line %d: %s used before initialization\n", line_number, identifierName);
-                    fprintf(error_file, "Error at line %d: %s used before initialization\n", line_number, identifierName);
-                    exit(EXIT_FAILURE);
-                }
-            }
-            if (!is_assignment)
-            {
-                symbolTableArray[i].isUsed = true;
-            }
-            return symbolTableArray[i].id;
-        }
-    }
-    printf("Error at line %d: %s undeclared identifier\n", line_number, identifierName);
-    fprintf(error_file, "Error at line %d: %s undeclared identifier\n", line_number, identifierName);
-    exit(EXIT_FAILURE);
-}
-
 void check_variable_type(int i, int line_number)
 {
     if (isParameter == 1)
@@ -435,6 +435,38 @@ void check_variable_type(int i, int line_number)
     if (isParameter == 0)
     {
         insertResult = -1;
+    }
+}
+
+void check_parameter_type(char *datatype, int line_number)
+{
+    if (isParameter == 1)
+    {
+        if (funcArgCount < symbolTableArray[calledFuncIndex].funcArgCount)
+        {
+            insertResult = symbolTableArray[calledFuncIndex].funcArguments[funcArgCount];
+        }
+        else
+        {
+            insertResult = -1;
+        }
+    }
+    if (insertResult == -1)
+    {
+        return;
+    }
+    if (datatype != symbolTableArray[insertResult].datatype &&
+        ((symbolTableArray[insertResult].datatype == "string" ||
+          datatype == "string") ||
+         (symbolTableArray[insertResult].datatype == "char" ||
+          datatype == "char")))
+    {
+        if (isParameter == 1)
+        {
+            printf("Error at line %d: Incorrect argument type %s is %s variable but assign to %s value\n", line_number, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype, datatype);
+            fprintf(error_file, "Error at line %d: Incorrect argument type %s is %s variable but assign to %s value\n", line_number, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype, datatype);
+            exit(EXIT_FAILURE);
+        }
     }
 }
 

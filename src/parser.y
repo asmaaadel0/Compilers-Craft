@@ -119,11 +119,11 @@ TYPE:
 EXPRESSION:
         IDENTIFIER    {int i = lookup($1, 0, yylineno);check_variable_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)handle_identifier($1, "PUSH");}        
         | CONSTANT    {int i = lookup($1, 0, yylineno);check_variable_type(i, yylineno);$$ = set_type(symbolTableArray[i].datatype);if(!isPrint)handle_identifier($1, "PUSH");}
-        | INT_VALUE   {$$ = set_type("int");check_int_value(insertResult, $1, yylineno);}       
-        | FLOAT_VALUE {$$ = set_type("float");check_float_value(insertResult, $1, yylineno);}         
-        | BOOL_VALUE  {$$ = set_type("bool");check_bool_value(insertResult, $1, yylineno);}   
-        | STRING_VALUE{$$ = set_type("string");check_string_value(insertResult, $1, yylineno);}        
-        | CHAR_VALUE  {$$ = set_type("char");check_char_value(insertResult, $1, yylineno);} 
+        | INT_VALUE   {$$ = set_type("int");check_parameter_type("int", yylineno);check_int_value(insertResult, $1, yylineno);}       
+        | FLOAT_VALUE {$$ = set_type("float");check_parameter_type("float", yylineno);check_float_value(insertResult, $1, yylineno);}         
+        | BOOL_VALUE  {$$ = set_type("bool");check_parameter_type("bool", yylineno);check_bool_value(insertResult, $1, yylineno);}   
+        | STRING_VALUE{$$ = set_type("string");check_parameter_type("string", yylineno);check_string_value(insertResult, $1, yylineno);}        
+        | CHAR_VALUE  {$$ = set_type("char");check_parameter_type("char", yylineno);check_char_value(insertResult, $1, yylineno);} 
         
         | '(' EXPRESSION ')'  {$$ = $2;}
         | FUNC_CALL

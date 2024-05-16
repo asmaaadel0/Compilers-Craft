@@ -1524,31 +1524,31 @@ yyreduce:
 
   case 33: /* EXPRESSION: INT_VALUE  */
 #line 122 "./parser.y"
-                      {(yyval.nodePtr) = set_type("int");check_int_value(insertResult, (yyvsp[0].int_value), yylineno);}
+                      {(yyval.nodePtr) = set_type("int");check_parameter_type("int", yylineno);check_int_value(insertResult, (yyvsp[0].int_value), yylineno);}
 #line 1529 "parser.tab.c"
     break;
 
   case 34: /* EXPRESSION: FLOAT_VALUE  */
 #line 123 "./parser.y"
-                      {(yyval.nodePtr) = set_type("float");check_float_value(insertResult, (yyvsp[0].float_value), yylineno);}
+                      {(yyval.nodePtr) = set_type("float");check_parameter_type("float", yylineno);check_float_value(insertResult, (yyvsp[0].float_value), yylineno);}
 #line 1535 "parser.tab.c"
     break;
 
   case 35: /* EXPRESSION: BOOL_VALUE  */
 #line 124 "./parser.y"
-                      {(yyval.nodePtr) = set_type("bool");check_bool_value(insertResult, (yyvsp[0].bool_value), yylineno);}
+                      {(yyval.nodePtr) = set_type("bool");check_parameter_type("bool", yylineno);check_bool_value(insertResult, (yyvsp[0].bool_value), yylineno);}
 #line 1541 "parser.tab.c"
     break;
 
   case 36: /* EXPRESSION: STRING_VALUE  */
 #line 125 "./parser.y"
-                      {(yyval.nodePtr) = set_type("string");check_string_value(insertResult, (yyvsp[0].string_value), yylineno);}
+                      {(yyval.nodePtr) = set_type("string");check_parameter_type("string", yylineno);check_string_value(insertResult, (yyvsp[0].string_value), yylineno);}
 #line 1547 "parser.tab.c"
     break;
 
   case 37: /* EXPRESSION: CHAR_VALUE  */
 #line 126 "./parser.y"
-                      {(yyval.nodePtr) = set_type("char");check_char_value(insertResult, (yyvsp[0].string_value), yylineno);}
+                      {(yyval.nodePtr) = set_type("char");check_parameter_type("char", yylineno);check_char_value(insertResult, (yyvsp[0].string_value), yylineno);}
 #line 1553 "parser.tab.c"
     break;
 
