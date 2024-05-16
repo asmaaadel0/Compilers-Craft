@@ -229,6 +229,10 @@ void check_int_value(int index, int value, int line_number)
         fprintf(error_file, "Error at line %d: %s '%s' variable assigned 'int' value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
+    if (isParameter == 1)
+    {
+        insertResult = -1;
+    }
 }
 
 void check_float_value(int index, float value, int line_number)
@@ -276,6 +280,10 @@ void check_float_value(int index, float value, int line_number)
         fprintf(error_file, "Error at line %d: %s '%s' variable assigned 'float' value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
+    if (isParameter == 1)
+    {
+        insertResult = -1;
+    }
 }
 
 void check_bool_value(int index, bool value, int line_number)
@@ -319,6 +327,10 @@ void check_bool_value(int index, bool value, int line_number)
         fprintf(error_file, "Error at line %d: %s '%s' variable assigned 'bool' value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
+    if (isParameter == 1)
+    {
+        insertResult = -1;
+    }
 }
 
 void check_string_value(int index, char *value, int line_number)
@@ -350,6 +362,10 @@ void check_string_value(int index, char *value, int line_number)
         fprintf(error_file, "Error at line %d: %s '%s' variable assigned 'string' value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
     }
+    if (isParameter == 1)
+    {
+        insertResult = -1;
+    }
 }
 
 void check_char_value(int index, char *value, int line_number)
@@ -378,6 +394,10 @@ void check_char_value(int index, char *value, int line_number)
         printf("Error at line %d: %s '%s' variable assigned 'char' value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         fprintf(error_file, "Error at line %d: %s '%s' variable assigned 'char' value\n", line_number, symbolTableArray[index].identifierName, symbolTableArray[index].datatype);
         exit(EXIT_FAILURE);
+    }
+    if (isParameter == 1)
+    {
+        insertResult = -1;
     }
 }
 
@@ -468,10 +488,6 @@ void check_parameter_type(char *datatype, int line_number)
             fprintf(error_file, "Error at line %d: Incorrect argument type %s is %s variable but assign to %s value\n", line_number, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype, datatype);
             exit(EXIT_FAILURE);
         }
-    }
-    if (isParameter == 1)
-    {
-        insertResult = -1;
     }
 }
 

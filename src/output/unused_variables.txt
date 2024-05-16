@@ -1,5 +1,6 @@
-identifier test1 Declared at line 6 but never used
-identifier y Declared at line 16 but never used
-identifier sum Declared at line 29 but never used
-identifier temp Declared at line 34 but never used
-identifier h Declared at line 44 but never used
+argument x Declared in function at line 1 but never used
+argument y Declared in function at line 1 but never used
+identifier o Declared at line 2 but never used
+argument x Declared in function at line 6 but never used
+argument y Declared in function at line 6 but never used
+identifier o Declared at line 7 but never used
