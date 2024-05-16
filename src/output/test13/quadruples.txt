@@ -1,6 +1,6 @@
 add:
-	POP x
 	POP y
+	POP x
 	PUSH x
 	PUSH y
 	ADD

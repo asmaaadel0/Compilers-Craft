@@ -52,8 +52,8 @@ StartWhile_1:
 	JMP StartWhile_1
 FalseLabel_3:
 func:
-	POP a
 	POP b
+	POP a
 	PUSH a
 	PUSH b
 	ADD

@@ -19,8 +19,8 @@ main:
 	POP x
 	END main
 func:
-	POP x
 	POP y
+	POP x
 	PUSH 5
 	POP x
 	PUSH x

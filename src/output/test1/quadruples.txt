@@ -1,6 +1,6 @@
 sum:
-	POP x
 	POP y
+	POP x
 	PUSH x
 	POP res
 	PUSH res
@@ -11,8 +11,8 @@ sum:
 	RET
 	END sum
 print2:
-	POP x
 	POP y
+	POP x
 	PUSH 30
 	POP z
 	PUSH 40

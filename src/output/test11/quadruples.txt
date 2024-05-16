@@ -1,6 +1,6 @@
 sum:
-	POP x
 	POP y
+	POP x
 	PUSH 0
 	POP o
 	END sum
@@ -8,8 +8,8 @@ sum:
 	PUSH '5'
 	CALL sum
 sum2:
-	POP x
 	POP y
+	POP x
 	PUSH 0
 	POP o
 	END sum2
