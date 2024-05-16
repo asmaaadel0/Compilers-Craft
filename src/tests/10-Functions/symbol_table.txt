@@ -1,0 +1,15 @@
+ID	Name	Type		DataType	Line	Scope	isInitialized
+0	x	variable	int		1	1	1	
+1	y	variable	int		1	1	1	
+2	sum	function	int		1	0	0	
+3	s	variable	int		6	0	1	
+4	hello	function	string		17	0	0	
+5	text	variable	string		19	1	1	
+6	hello2	function	void		23	0	0	
+7	text	variable	string		25	1	1	
+8	test	function	int		29	0	0	
+9	aaaa	variable	int		30	1	1	
+10	test2	function	int		35	0	1	
+11	str	variable	string		36	1	1	
+12	useless	function	void		43	0	0	
+13	test	variable	int		45	1	1	

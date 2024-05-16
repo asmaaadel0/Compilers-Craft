@@ -1,0 +1,6 @@
+ID	Name	Type		DataType	Line	Scope	isInitialized
+0	i	variable	int		1	0	1	
+1	c	variable	int		2	0	1	
+2	j	variable	int		7	1	1	
+3	h	variable	int		16	1	1	
+4	l	variable	int		17	2	1	

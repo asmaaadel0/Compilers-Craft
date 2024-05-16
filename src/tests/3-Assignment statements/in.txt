@@ -1,0 +1,4 @@
+int x = 4 + 10 - 11 * 12;
+int y = x;
+int a = true;
+int b = (a + 6) * 12;

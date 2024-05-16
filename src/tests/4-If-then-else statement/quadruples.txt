@@ -1,0 +1,51 @@
+	PUSH 2
+	POP a
+	PUSH 3
+	POP B
+	PUSH 3
+	POP c
+	PUSH a
+	PUSH B
+	GT
+	JF FalseLabel_1
+	PUSH a
+	PUSH 2
+	GT
+	JF FalseLabel_2
+	PUSH c
+	PUSH 2
+	MOD
+	POP c
+	JMP EndLoop_2
+FalseLabel_2:
+	PUSH 5
+	POP c
+EndLoop_2:
+	JMP EndLoop_1
+FalseLabel_1:
+	PUSH c
+	PUSH 2
+	DIV
+	POP c
+EndLoop_1:
+	PUSH ""
+	POP var
+	PUSH a
+	PUSH 2
+	LT
+	JF FalseLabel_3
+	PUSH "a less than 2"
+	POP var
+	JMP EndLoop_3
+FalseLabel_3:
+	PUSH a
+	PUSH 2
+	GT
+	JF FalseLabel_4
+	PUSH "a greater than 2"
+	POP var
+	JMP EndLoop_3
+FalseLabel_4:
+	PUSH "a equal 2"
+	POP var
+EndLoop_3:
