@@ -206,6 +206,7 @@ void check_int_value(int index, int value, int line_number)
          !symbolTableArray[index].isScopeEnded) ||
         isParameter)
     {
+        
         if (strcmp(symbolTableArray[index].datatype, "float") == 0)
         {
             if (!isPrint)
@@ -467,6 +468,10 @@ void check_parameter_type(char *datatype, int line_number)
             fprintf(error_file, "Error at line %d: Incorrect argument type %s is %s variable but assign to %s value\n", line_number, symbolTableArray[insertResult].identifierName, symbolTableArray[insertResult].datatype, datatype);
             exit(EXIT_FAILURE);
         }
+    }
+    if (isParameter == 1)
+    {
+        insertResult = -1;
     }
 }
 
