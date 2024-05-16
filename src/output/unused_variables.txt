@@ -1,3 +1,0 @@
-warning: function useless Declared at line 14 but never used
-warning: identifier bla Declared at line 16 but never used
-warning: identifier c Declared at line 21 but never used

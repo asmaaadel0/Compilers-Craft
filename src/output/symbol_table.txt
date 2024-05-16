@@ -1,12 +1,2 @@
 ID	Name	Type		DataType	Line	Scope	isInitialized
-0	x	variable	int		1	1	1	
-1	y	variable	int		1	1	1	
-2	add	function	int		1	0	0	
-3	z	variable	int		3	1	1	
-4	hello	function	string		8	0	0	
-5	text	variable	string		10	1	1	
-6	useless	function	void		14	0	0	
-7	bla	variable	int		16	1	1	
-8	a	variable	int		19	0	1	
-9	b	variable	int		20	0	1	
-10	c	variable	int		21	0	1	
+0	a	variable	int		1	0	1	

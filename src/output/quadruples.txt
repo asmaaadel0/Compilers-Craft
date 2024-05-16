@@ -1,30 +1,13 @@
-add:
-	POP y
-	POP x
-	PUSH x
-	PUSH y
-	ADD
-	POP z
-	PUSH z
-	RET
-	END add
-hello:
-	PUSH "hello"
-	POP text
-	PUSH text
-	RET
-	END hello
-useless:
-	PUSH 1
-	NEG
-	POP bla
-	END useless
-	PUSH 3
+	PUSH 0
 	POP a
-	PUSH 7
-	POP b
+StartWhile_1:
 	PUSH a
-	PUSH b
-	CALL add
-	POP c
-	CALL hello
+	PUSH 0
+	GT
+	JF FalseLabel_1
+	PUSH a
+	PUSH 1
+	SUB
+	POP a
+	JMP StartWhile_1
+FalseLabel_1:
