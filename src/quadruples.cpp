@@ -93,8 +93,7 @@ void push_end_loop(int endLoopNum)
 
 void jump_end_loop()
 {
-    int endLoopNum = endLoop[endLoopIndex];
-    fprintf(quadFileP, "\tJMP EndLoop_%d\n", endLoopNum);
+    fprintf(quadFileP, "\tJMP EndLoop_%d\n", endLoop[endLoopIndex]);
 }
 
 void pop_end_loop()
