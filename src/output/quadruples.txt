@@ -1,40 +1,40 @@
-	PUSH 0
-	POP a
+	PUSH 5
+	POP x
+	PUSH 20
+	POP c
 StartWhile_1:
-	PUSH a
+	PUSH x
 	PUSH 0
 	GT
 	JF FalseLabel_1
-	PUSH a
-	PUSH 1
-	SUB
-	POP a
-	JMP FalseLabel_1
-	PUSH a
-	PUSH 6
-	EQ
+	PUSH x
+	PUSH 3
+	GT
 	JF FalseLabel_2
-	JMP EndLoop_1
-FalseLabel_2:
-EndLoop_1:
-	JMP StartWhile_1
-FalseLabel_1:
 StartWhile_2:
-	PUSH a
+	PUSH x
 	PUSH 0
 	GT
 	JF FalseLabel_3
-	PUSH a
+	PUSH x
 	PUSH 1
 	SUB
-	POP a
-	JMP FalseLabel_3
-	PUSH a
-	PUSH 6
-	EQ
-	JF FalseLabel_4
-	JMP EndLoop_2
-FalseLabel_4:
-EndLoop_2:
+	POP x
 	JMP StartWhile_2
 FalseLabel_3:
+	JMP EndLoop_1
+FalseLabel_2:
+EndLoop_1:
+StartDoWhile_3:
+	PUSH c
+	PUSH 1
+	ADD
+	POP c
+	PUSH c
+	PUSH 10
+	GT
+	JF FalseLabel_4
+	JMP StartDoWhile_3
+FalseLabel_4:
+	JMP StartWhile_1
+FalseLabel_1:
