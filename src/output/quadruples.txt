@@ -1,18 +1,30 @@
-sum:
-	POP x
-	POP y
-	PUSH 0
-	POP o
-	END sum
-	PUSH "5"
-	PUSH '5'
-	CALL sum
-sum2:
-	POP x
-	POP y
-	PUSH 0
-	POP o
-	END sum2
 	PUSH 5
-	PUSH 5.000000
-	CALL sum2
+	POP x
+	PUSH 6
+	POP y
+	PUSH 1
+	POP z
+	PUSH 0
+	POP w
+	PUSH 7.700000
+	POP a
+	PUSH 6.000000
+	POP b
+	PUSH 1.000000
+	POP c
+	PUSH 0.000000
+	POP d
+	PUSH 1
+	POP q
+	PUSH 0
+	POP r
+	PUSH 1
+	POP s
+	PUSH 1
+	POP t
+	PUSH 0
+	POP m
+	PUSH 0
+	POP n
+	PUSH "hello"
+	POP s1

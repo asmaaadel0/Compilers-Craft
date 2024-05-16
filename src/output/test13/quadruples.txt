@@ -1,0 +1,30 @@
+add:
+	POP x
+	POP y
+	PUSH x
+	PUSH y
+	ADD
+	POP z
+	PUSH z
+	RET
+	END add
+hello:
+	PUSH "hello"
+	POP text
+	PUSH text
+	RET
+	END hello
+useless:
+	PUSH 1
+	NEG
+	POP bla
+	END useless
+	PUSH 3
+	POP a
+	PUSH 7
+	POP b
+	PUSH a
+	PUSH b
+	CALL add
+	POP c
+	CALL hello
