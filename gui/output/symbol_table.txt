@@ -1,2 +1,2 @@
-ID	Name	Type	DataType	Line	Scope	isInitialized	Value		Args
-0	x	var	int		1	0	1	5		-
+ID	Name	Type		DataType	Line	Scope	isInitialized
+0	x	variable	int		1	0	1	
