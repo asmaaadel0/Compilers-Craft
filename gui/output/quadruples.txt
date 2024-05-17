@@ -1,2 +1,1 @@
 	PUSH 5
-	POP x

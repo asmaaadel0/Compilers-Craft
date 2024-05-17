@@ -1,6 +1,6 @@
 //int
 int test;
-// error use variable before declaration
+// error use variable before initialization
 //int a = test;
 int a = 5;
 //type conversion
