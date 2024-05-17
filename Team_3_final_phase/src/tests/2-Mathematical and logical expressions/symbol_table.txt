@@ -1,0 +1,10 @@
+ID	Name	Type		DataType	Line	Scope	isInitialized
+0	x	variable	int		2	0	1	
+1	y	variable	bool		15	0	1	
+2	z	variable	int		23	0	1	
+3	a	variable	int		32	0	1	
+4	b	variable	int		33	0	1	
+5	c	variable	int		34	0	1	
+6	d	variable	int		35	0	1	
+7	e	variable	int		36	0	1	
+8	f	variable	int		37	0	1	

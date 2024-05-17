@@ -1,0 +1,25 @@
+int x = 3;
+int test = 10;
+switch (x)
+{
+    case 1 :
+    {
+     float sum = - x + test;
+     break;
+    }
+    case 2 :
+    {
+      bool temp = test and (x>5);
+      break;
+    }
+    default:
+    {
+        x = x / 10;
+    }
+    // error default twise
+    default:
+    {
+        x = x / 10;
+    }
+
+}

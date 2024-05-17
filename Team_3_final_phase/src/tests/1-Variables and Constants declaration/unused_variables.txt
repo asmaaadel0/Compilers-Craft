@@ -1,0 +1,13 @@
+warning: identifier test Declared at line 2 but never used
+warning: identifier a Declared at line 5 but never used
+warning: identifier b Declared at line 7 but never used
+warning: identifier c Declared at line 8 but never used
+warning: identifier g Declared at line 14 but never used
+warning: identifier h Declared at line 15 but never used
+warning: identifier i Declared at line 16 but never used
+warning: identifier n Declared at line 22 but never used
+warning: identifier o Declared at line 23 but never used
+warning: identifier p Declared at line 24 but never used
+warning: identifier u Declared at line 30 but never used
+warning: identifier z Declared at line 38 but never used
+warning: identifier PI Declared at line 50 but never used

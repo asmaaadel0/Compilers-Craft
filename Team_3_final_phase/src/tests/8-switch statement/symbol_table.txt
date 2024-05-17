@@ -1,0 +1,5 @@
+ID	Name	Type		DataType	Line	Scope	isInitialized
+0	x	variable	int		1	0	1	
+1	test	variable	int		2	0	1	
+2	sum	variable	float		7	1	1	
+3	temp	variable	bool		12	1	1	

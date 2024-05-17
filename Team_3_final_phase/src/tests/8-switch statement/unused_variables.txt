@@ -1,0 +1,2 @@
+warning: identifier sum Declared at line 7 but never used
+warning: identifier temp Declared at line 12 but never used

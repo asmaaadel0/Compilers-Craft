@@ -1,0 +1,2 @@
+ID	Name	Type		DataType	Line	Scope	isInitialized
+0	x	variable	int		1	0	1	

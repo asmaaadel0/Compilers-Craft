@@ -1,0 +1,22 @@
+int a = 2;
+int B = 3;
+int c = 3;
+
+if (a > B) {
+  if (a > 2) {
+    c = c % 2;
+  } else {
+    c = 5;
+  }
+} else {  
+  c = c / 2;
+}
+
+string var = "";
+if (a < 2) {
+  var = "a less than 2";
+} else if (a > 2) {  
+  var = "a greater than 2";
+} else {  
+  var = "a equal 2";
+}

@@ -1,0 +1,11 @@
+warning: identifier test0 Declared at line 1 but never used
+warning: identifier test1 Declared at line 3 but never used
+warning: identifier test2 Declared at line 8 but never used
+warning: identifier y Declared at line 9 but never used
+warning: identifier test2 Declared at line 16 but never used
+warning: identifier y Declared at line 17 but never used
+warning: identifier y Declared at line 19 but never used
+warning: identifier test1 Declared at line 25 but never used
+warning: identifier test2 Declared at line 27 but never used
+warning: identifier test3 Declared at line 31 but never used
+warning: identifier test3 Declared at line 40 but never used
