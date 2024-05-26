@@ -1,1 +1,0 @@
-warning: identifier x Declared at line 1 but never used

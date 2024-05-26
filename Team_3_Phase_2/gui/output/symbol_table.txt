@@ -1,2 +1,14 @@
 ID	Name	Type		DataType	Line	Scope	isInitialized
-0	x	variable	int		1	0	1	
+0	test	variable	int		2	0	0	
+1	a	variable	int		5	0	1	
+2	b	variable	int		7	0	1	
+3	c	variable	int		8	0	1	
+4	g	variable	float		14	0	1	
+5	h	variable	float		15	0	1	
+6	i	variable	float		16	0	1	
+7	n	variable	bool		22	0	1	
+8	o	variable	bool		23	0	1	
+9	p	variable	bool		24	0	1	
+10	u	variable	string		30	0	1	
+11	z	variable	char		38	0	1	
+12	PI	constant	float		50	0	1	

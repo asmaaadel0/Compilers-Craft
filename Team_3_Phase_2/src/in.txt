@@ -1,40 +1,48 @@
-int test0;
-{
-    int test1;
-    {
-
-        test0=7;
-        test1=8;
-        int test2;
-        int y=5;
-    }
-    //test2=4;
-    test1=10;
-    {
-        test1=5;
-        test0=9;
-        int test2=7;
-        int y=9;
-        {
-            int y =8;
-        }
-
-    }
+int sum(int x, int y) {
+    return x + y;
 }
-//test1=8;
-int test1=8;
-//test2=4;
-int test2=4;
+//type mismatch error
+//sum("string",'g');
+int x = 5;
+int s = sum (x, 5);
+
+//too many arguments
+//int ss = sum (5, 5, 5);
+
+//too few arguments
+//int sss = sum (5);
+
+//type mismatch error
+//string ssss = sum (5, 5);
+
+string hello()
 {
-    test2=4;
-    test1=5;
-    int test3;
-    test3=8;
-    {
-        test3=-9;
-        test0=9;
-    }
+    string text ="hello";
+    return text;
 }
-test0=4;
-//test3=0;
-int test3=0;
+
+void hello2()
+{
+    string text ="hello";
+    //void return error
+    //return text;
+}
+int test () {
+    int aaaa = 4;
+    // error missing return 
+    return aaaa;
+}
+
+int test2 () {
+    string str = "string";
+    // error mismatch return type
+    //return str;
+    return 5;
+}
+
+
+void useless()
+{
+    int test=-1;
+}
+hello();

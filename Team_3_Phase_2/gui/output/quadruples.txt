@@ -1,2 +1,24 @@
 	PUSH 5
-	POP x
+	POP a
+	PUSH 5
+	POP b
+	PUSH 0
+	POP c
+	PUSH 5.500000
+	POP g
+	PUSH 5.000000
+	POP h
+	PUSH 1.000000
+	POP i
+	PUSH 0
+	POP n
+	PUSH 1
+	POP o
+	PUSH 1
+	POP p
+	PUSH "hello"
+	POP u
+	PUSH 'c'
+	POP z
+	PUSH 3.140000
+	POP PI

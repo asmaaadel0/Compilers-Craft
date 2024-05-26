@@ -1,15 +1,15 @@
-//syntax error
-int x = 5
-for (int i = 0; i < 10; i = i + 1; ){
-    if(x == 5) {
-        x = x + 1;
-    //syntax error
-    } els {
-        x = x - 1;
-    }
+int i;
+int c = 6;
+for (i = 0; i < 10; i = i + 1;) {
+  c = c + 1;
 }
 
-//syntax error
-else {
-        x = x - 1;
+for (int j = 0; j < 10; j = j + 1;) {
+  c = c + 1;
+}
+
+for (int h = 0; h < 10; h = h + 1;) {
+    for (int l = 0; l < 10; l = l + 1;) {
+        c = h + l;
+    }
 }
