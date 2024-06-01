@@ -1,8 +1,0 @@
-warning: identifier s Declared at line 6 but never used
-warning: function hello2 Declared at line 23 but never used
-warning: identifier text Declared at line 25 but never used
-warning: function test Declared at line 29 but never used
-warning: function test2 Declared at line 35 but never used
-warning: identifier str Declared at line 36 but never used
-warning: function useless Declared at line 43 but never used
-warning: identifier test Declared at line 45 but never used

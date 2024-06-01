@@ -1,6 +1,0 @@
-warning: identifier a Declared at line 32 but never used
-warning: identifier b Declared at line 33 but never used
-warning: identifier c Declared at line 34 but never used
-warning: identifier d Declared at line 35 but never used
-warning: identifier e Declared at line 36 but never used
-warning: identifier f Declared at line 37 but never used

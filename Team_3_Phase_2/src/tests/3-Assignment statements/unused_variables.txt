@@ -1,2 +1,0 @@
-warning: identifier y Declared at line 2 but never used
-warning: identifier b Declared at line 4 but never used
