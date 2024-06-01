@@ -8,9 +8,9 @@
 
 ## About <a name = "about"></a>
 
-- CompilersCraft is a simple programming language compiler similar to C++.
-- CompilersCraft is handling the most common data types like integers, floats, bools, char and strings.
-- CompilersCraft is supporting:
+- Compilers Craft is a simple programming language compiler similar to C++.
+- Compilers Craft is handling the most common data types like integers, floats, bools, char and strings.
+- Compilers Craft is supporting:
     - Variables and Constants declaration. 
     - Mathematical, logical, and bitwise expressions.
     - Assignment statements.
